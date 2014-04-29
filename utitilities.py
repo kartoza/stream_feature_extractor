@@ -119,10 +119,32 @@ def get_nearby_nodes(layer, node_id, threshold):
     :param threshold: distance threshold
     :type threshold: float
 
-    :returns: list of node
+    :returns: list of node_id of all nearby nodes
     :rtype: list
     """
-    raise NotImplementedError
+    # get location of the node_id
+    nodes = layer.getFeatures()
+    center_node = None
+    id_index = layer.fieldNameIndex('id')
+    for node in nodes:
+        if node.attributes()[id_index] == node_id:
+            center_node = node
+            break
+    if center_node is None:
+        raise Exception('node id is not found')
+
+    center_node_point = center_node.geometry().asPoint()
+    # iterate through all nodes
+    nearby_nodes = []
+    for node in nodes:
+        if node.attributes()[id_index] == node_id:
+            continue
+        node_point = node.geometry().asPoint()
+        if center_node_point.sqrDist(node_point) < threshold:
+            nearby_nodes.append(node.attributes()[id_index])
+    return nearby_nodes
+
+    # raise NotImplementedError
 
 
 def add_associated_nodes(layer):

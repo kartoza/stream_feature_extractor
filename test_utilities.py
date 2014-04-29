@@ -90,7 +90,7 @@ class TestUtilities(unittest.TestCase):
             'Number of nodes should be %d' % len(expected_nodes))
 
     def test_create_nodes_layer(self):
-        """Test for creating nodes layer"""
+        """Test for creating nodes layer."""
         layer = self.layer
         nodes = extract_node(layer, 'id')
         point_layer = create_nodes_layer(nodes)
@@ -100,7 +100,6 @@ class TestUtilities(unittest.TestCase):
             'Feature count is not equal to 12')
         assert point_layer.geometryType() == QGis.Point, (
             'Geometry type should be %s' % QGis.Point)
-
 
 if __name__ == '__main__':
     unittest.main()
