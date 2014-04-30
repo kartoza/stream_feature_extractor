@@ -17,6 +17,51 @@ __copyright__ = ''
 from exceptions import NotImplementedError
 from qgis.core import *
 
+
+def list_to_str(the_list, sep=','):
+    """Convert a list to str. If empty, return empty string.
+
+    :param the_list: a list
+    :type the_list: list
+
+    :param sep: separator for each element in the result.
+    :type sep: str
+
+    :returns: string represent the_list
+    :rtype: str
+    """
+    if len(the_list) > 0:
+        return sep.join([str(x) for x in the_list])
+    else:
+        return ''
+
+def str_to_list(the_str, sep=',', the_type=None):
+    """Convert the_str to list.
+
+    :param the_str: string represents a list
+    :type the_str: str
+
+    :param sep: separator for each element in the_str.
+    :type sep: str
+
+    :param the_type: type of the element
+    :type the_type: type
+
+    :returns: list from the_str
+    :rtype: list
+    """
+    if len(the_str) == 0:
+        return []
+    the_list = the_str.split(sep)
+    if the_type is None:
+        return the_list
+    else:
+        try:
+            return [the_type(x) for x in the_list]
+        except TypeError:
+            raise TypeError('%s is not valid type' % the_type)
+
+
 def extract_node(layer, line_id_attribute='id'):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
@@ -79,9 +124,11 @@ def create_nodes_layer(nodes=None, name=None):
         QgsField('node_type', QVariant.String)
     ])
 
+    # Start edit layer
+    layer.startEditing()
+
     # For creating node_id
     node_id = 0
-
     # Add features
     for node in nodes:
         line_id = node[0]
@@ -103,12 +150,16 @@ def create_nodes_layer(nodes=None, name=None):
         feature.setAttributes([node_id, line_id, 'downstream'])
         data_provider.addFeatures([feature])
         node_id += 1
-
+    # Commit changes
+    layer.commitChanges()
     return layer
 
 
 def get_nearby_nodes(layer, node_id, threshold):
     """Return all nodes that has distance less than threshold from node_id.
+
+    The list will be divided into two groups, upstream nodes and downstream
+    nodes.
 
     :param layer: A vector point layer.
     :type layer: QGISVectorLayer
@@ -119,13 +170,14 @@ def get_nearby_nodes(layer, node_id, threshold):
     :param threshold: distance threshold
     :type threshold: float
 
-    :returns: list of node_id of all nearby nodes
-    :rtype: list
+    :returns: tuple of list of nodes. (upstream_nodes, downstream_nodes)
+    :rtype: tuple
     """
     # get location of the node_id
     nodes = layer.getFeatures()
     center_node = None
     id_index = layer.fieldNameIndex('id')
+    node_type_index = layer.fieldNameIndex('node_type')
     for node in nodes:
         if node.attributes()[id_index] == node_id:
             center_node = node
@@ -136,30 +188,86 @@ def get_nearby_nodes(layer, node_id, threshold):
     center_node_point = center_node.geometry().asPoint()
     # iterate through all nodes
     nearby_nodes = []
+    upstream_nodes = []
+    downstream_nodes = []
     for node in nodes:
-        if node.attributes()[id_index] == node_id:
+        node_attributes = node.attributes()
+        if node_attributes[id_index] == node_id:
             continue
         node_point = node.geometry().asPoint()
         if center_node_point.sqrDist(node_point) < threshold:
-            nearby_nodes.append(node.attributes()[id_index])
-    return nearby_nodes
+            if node_attributes[node_type_index] == 'upstream':
+                upstream_nodes.append(node.attributes()[id_index])
+            if node_attributes[node_type_index] == 'downstream':
+                downstream_nodes.append(node.attributes()[id_index])
+    return upstream_nodes, downstream_nodes
 
-    # raise NotImplementedError
 
-
-def add_associated_nodes(layer):
+def add_associated_nodes(layer, threshold):
     """Add node_list and node_count attribute to every node in layer.
 
-    node_list is list of node that is near from a node.
-    node_count is the number of node in node_list plus 1.
+    node_list is list of node that is near from a node. There are two node
+    list; upstream_node_list and downstream_node_list. There are also two
+    node_count; upstream_node_count and downstream_node_count.
+    node_count will have the same value as the number of the element in
+    node_list. But, will be add by one according to the type of the node.
 
-    This method will add new attributes (node_list and node_count) to the
+
+    This method will add new attributes (upstream_node_list,
+    upstream_node_count, downstream_node_list, downstream_node_count) to the
     layer and populate those attributes with the right value.
+
+    it will use get_nearby_nodes function to populate them.
 
     :param layer: A vector point layer.
     :type layer: QGISVectorLayer
+
+    :param threshold: distance threshold
+    :type threshold: float
+
     """
-    raise NotImplementedError
+    nodes = layer.getFeatures()
+    id_index = layer.fieldNameIndex('id')
+    node_type_index = layer.fieldNameIndex('node_type')
+
+    # add attributes
+    layer.startEditing()
+    data_provider = layer.dataProvider()
+    data_provider.addAttributes([
+        QgsField('up_nodes', QVariant.String),
+        QgsField('down_nodes', QVariant.String),
+        QgsField('up_num', QVariant.Int),
+        QgsField('down_num', QVariant.Int)
+    ])
+
+    up_nodes_index = layer.fieldNameIndex('up_nodes')
+    down_nodes_index = layer.fieldNameIndex('down_nodes')
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+
+    layer.commitChanges()
+
+    for node in nodes:
+        node_attributes = node.attributes()
+        print node_attributes, 'ahhahaa'
+        node_id = node_attributes[id_index]
+        node_type = node_attributes[node_type_index]
+        upstream_nodes, downstream_nodes = get_nearby_nodes(
+            layer, node_id, threshold)
+        upstream_count = len(upstream_nodes)
+        downstream_count = len(downstream_nodes)
+        if node_type == 'upstream':
+            upstream_count += 1
+        if node_type == 'downstream':
+            downstream_count += 1
+        a = ','.join(upstream_nodes)
+        print a, type(a)
+        node.setAttribute('up_nodes', a)
+        # node.changeAttribute(down_nodes_index, ','.join(downstream_nodes))
+        # node.changeAttribute(up_num_index, upstream_count)
+        # node.changeAttribute(down_num_index, downstream_count)
+    layer.commitChanges()
+
 
 
 def count_upstream_nodes(layer):
