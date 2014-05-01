@@ -30,7 +30,8 @@ from utitilities import (
     add_associated_nodes
 )
 
-TEMP_DIR = '~/temp'
+TEMP_DIR = os.path.join(
+    os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
 DATA_TEST_DIR = 'data_test'
 sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
 nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
