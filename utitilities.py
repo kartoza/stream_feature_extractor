@@ -35,6 +35,7 @@ def list_to_str(the_list, sep=','):
     else:
         return ''
 
+
 def str_to_list(the_str, sep=',', the_type=None):
     """Convert the_str to list.
 
@@ -60,6 +61,26 @@ def str_to_list(the_str, sep=',', the_type=None):
             return [the_type(x) for x in the_list]
         except TypeError:
             raise TypeError('%s is not valid type' % the_type)
+
+
+def add_layer_attribute(layer, attribute_name, qvariant):
+    """Add new attribute called attribute_name to layer.
+
+    :param layer: A Vector layer
+    :type layer: QGISVectorLayer
+
+    :param attribute_name: the name of the new attribute
+    :type attribute_name: str
+
+    :param qvariant: attribute type
+    :type qvariant: QVariant
+    """
+    id_index = layer.fieldNameIndex(attribute_name)
+    if id_index == -1:
+        data_provider = layer.dataProvider()
+        layer.startEditing()
+        data_provider.addAttributes([QgsField(attribute_name, qvariant)])
+        layer.commitChanges()
 
 
 def extract_node(layer, line_id_attribute='id'):
@@ -117,15 +138,15 @@ def create_nodes_layer(nodes=None, name=None):
     layer = QgsVectorLayer('Point', name, 'memory')
     data_provider = layer.dataProvider()
 
+    # Start edit layer
+    layer.startEditing()
+
     # Add fields
     data_provider.addAttributes([
         QgsField('id', QVariant.Int),
         QgsField('line_id', QVariant.Int),
         QgsField('node_type', QVariant.String)
     ])
-
-    # Start edit layer
-    layer.startEditing()
 
     # For creating node_id
     node_id = 0
@@ -187,7 +208,6 @@ def get_nearby_nodes(layer, node_id, threshold):
 
     center_node_point = center_node.geometry().asPoint()
     # iterate through all nodes
-    nearby_nodes = []
     upstream_nodes = []
     downstream_nodes = []
     for node in nodes:
@@ -388,13 +408,3 @@ def identify_watershed(layer):
     """
     raise NotImplementedError
 
-def add_attribute(layer, attribute_name):
-    """Add new attribute called attribute_name to layer.
-
-    :param layer: A Vector layer
-    :type layer: QGISVectorLayer
-
-    :param attribute_name: the name of the new attribute
-    :type attribute_name: str
-    """
-    raise NotImplementedError
