@@ -80,6 +80,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         data_provider = layer.dataProvider()
         layer.startEditing()
         data_provider.addAttributes([QgsField(attribute_name, qvariant)])
+        layer.updateFields()
         layer.commitChanges()
 
 
@@ -210,12 +211,13 @@ def get_nearby_nodes(layer, node_id, threshold):
     # iterate through all nodes
     upstream_nodes = []
     downstream_nodes = []
+    nodes = layer.getFeatures()
     for node in nodes:
         node_attributes = node.attributes()
         if node_attributes[id_index] == node_id:
             continue
         node_point = node.geometry().asPoint()
-        if center_node_point.sqrDist(node_point) < threshold:
+        if center_node_point.sqrDist(node_point) <= threshold:
             if node_attributes[node_type_index] == 'upstream':
                 upstream_nodes.append(node.attributes()[id_index])
             if node_attributes[node_type_index] == 'downstream':
@@ -251,25 +253,23 @@ def add_associated_nodes(layer, threshold):
     node_type_index = layer.fieldNameIndex('node_type')
 
     # add attributes
-    layer.startEditing()
     data_provider = layer.dataProvider()
-    data_provider.addAttributes([
-        QgsField('up_nodes', QVariant.String),
-        QgsField('down_nodes', QVariant.String),
-        QgsField('up_num', QVariant.Int),
-        QgsField('down_num', QVariant.Int)
-    ])
+
+    add_layer_attribute(layer, 'up_nodes', QVariant.String)
+    add_layer_attribute(layer, 'down_nodes', QVariant.String)
+    add_layer_attribute(layer, 'up_num', QVariant.Int)
+    add_layer_attribute(layer, 'down_num', QVariant.Int)
 
     up_nodes_index = layer.fieldNameIndex('up_nodes')
     down_nodes_index = layer.fieldNameIndex('down_nodes')
     up_num_index = layer.fieldNameIndex('up_num')
     down_num_index = layer.fieldNameIndex('down_num')
 
-    layer.commitChanges()
+    layer.startEditing()
 
     for node in nodes:
+        node_fid = int(node.id())
         node_attributes = node.attributes()
-        print node_attributes, 'ahhahaa'
         node_id = node_attributes[id_index]
         node_type = node_attributes[node_type_index]
         upstream_nodes, downstream_nodes = get_nearby_nodes(
@@ -280,14 +280,36 @@ def add_associated_nodes(layer, threshold):
             upstream_count += 1
         if node_type == 'downstream':
             downstream_count += 1
-        a = ','.join(upstream_nodes)
-        print a, type(a)
-        node.setAttribute('up_nodes', a)
-        # node.changeAttribute(down_nodes_index, ','.join(downstream_nodes))
-        # node.changeAttribute(up_num_index, upstream_count)
-        # node.changeAttribute(down_num_index, downstream_count)
+        attributes = {
+            up_nodes_index: list_to_str(upstream_nodes),
+            down_nodes_index: list_to_str(downstream_nodes),
+            up_num_index: upstream_count,
+            down_num_index: downstream_count
+        }
+        data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
 
+
+def check_associated_attributes(layer):
+    """Check whether there have been associated attributes or not.
+
+    Associated attributed : up_nodes, down_nodes, up_num, down_num
+
+    :param layer: A vector point layer
+    :type layer: QGISVectorLayer
+
+    :returns: True if so, else False
+    :rtype: bool
+    """
+    up_nodes_index = layer.fieldNameIndex('up_nodes')
+    down_nodes_index = layer.fieldNameIndex('down_nodes')
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+
+    if -1 in [up_nodes_index, down_nodes_index, up_num_index, down_num_index]:
+        return False
+    else:
+        return True
 
 
 def count_upstream_nodes(layer):
@@ -324,7 +346,31 @@ def identify_well(layer):
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'well', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    well_index = layer.fieldNameIndex('well')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num == 0 and down_num > 0:
+            well_value = 1
+        else:
+            well_value = 0
+        attributes = {well_index: well_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 
 
 def identify_sink(layer):
@@ -337,7 +383,31 @@ def identify_sink(layer):
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'sink', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    sink_index = layer.fieldNameIndex('sink')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num > 0 and down_num == 0:
+            sink_value = 1
+        else:
+            sink_value = 0
+        attributes = {sink_index: sink_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 
 
 def identify_branch(layer):
@@ -350,7 +420,31 @@ def identify_branch(layer):
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'branch', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    branch_index = layer.fieldNameIndex('branch')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num > 0 and down_num > 1:
+            branch_value = 1
+        else:
+            branch_value = 0
+        attributes = {branch_index: branch_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 
 def identify_confluence(layer):
     """Mark nodes from the layer if it is a confluence
@@ -362,7 +456,31 @@ def identify_confluence(layer):
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'confluence', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    confluence_index = layer.fieldNameIndex('confluence')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num > 1 and down_num > 0:
+            confluence_value = 1
+        else:
+            confluence_value = 0
+        attributes = {confluence_index: confluence_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 
 
 def identify_pseudo_node(layer):
@@ -375,7 +493,31 @@ def identify_pseudo_node(layer):
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'pseudo', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    pseudo_node_index = layer.fieldNameIndex('pseudo')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num == 1 and down_num == 1:
+            pseudo_node_value = 1
+        else:
+            pseudo_node_value = 0
+        attributes = {pseudo_node_index: pseudo_node_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 
 
 def identify_self_intersection(layer):
@@ -401,10 +543,34 @@ def identify_watershed(layer):
 
     A node is identified as a watershed if the number of upstream nodes > 0
     and the number downstream node > 1.
-    And add attribute `pseudo_node` for marking.
+    And add attribute `water_shed` for marking.
 
     :param layer: A vector point layer
     :type layer: QGISVectorLayer
     """
-    raise NotImplementedError
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+
+    add_layer_attribute(layer, 'watershed', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    watershed_index = layer.fieldNameIndex('watershed')
+
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num > 0 and down_num > 1:
+            watershed_value = 1
+        else:
+            watershed_value = 0
+        attributes = {watershed_index: watershed_value}
+        data_provider.changeAttributeValues({node_fid: attributes})
+    layer.commitChanges()
 

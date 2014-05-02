@@ -27,7 +27,14 @@ from utitilities import (
     extract_node,
     create_nodes_layer,
     get_nearby_nodes,
-    add_associated_nodes
+    add_associated_nodes,
+    check_associated_attributes,
+    identify_well,
+    identify_sink,
+    identify_branch,
+    identify_confluence,
+    identify_pseudo_node,
+    identify_watershed
 )
 
 TEMP_DIR = os.path.join(
@@ -129,6 +136,7 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
 
     """
     temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
+    print 'temporary file: ', temp_shapefile, title
     return get_shapefile_layer(temp_shapefile, title)
 
 
@@ -144,6 +152,9 @@ class TestUtilities(unittest.TestCase):
         cls.sungai_layer = get_temp_shapefile_layer(
             sungai_di_jawa_shp, 'sungai_di_jawa')
         cls.nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        cls.prepared_nodes_layer = get_temp_shapefile_layer(
+            nodes_shp, 'prepared_nodes')
+        add_associated_nodes(cls.prepared_nodes_layer, 0.0005)
 
     @classmethod
     def tearDownClass(cls):
@@ -299,15 +310,187 @@ class TestUtilities(unittest.TestCase):
             expected_downstream_nodes, downstream_nodes))
         self.assertItemsEqual(downstream_nodes, expected_downstream_nodes, msg)
 
-    @unittest.skip('Not yet finished')
+    def test_check_associated_attributes(self):
+        """Test for check_associated_attributes"""
+        nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        msg = 'Should be False.'
+        assert not check_associated_attributes(nodes_layer), msg
+
+        add_associated_nodes(nodes_layer, 0.0005)
+        msg = 'Should be True.'
+        assert check_associated_attributes(nodes_layer), msg
+
     def test_add_associated_nodes(self):
         """test for add_associated_nodes"""
         nodes_layer = self.nodes_layer
         add_associated_nodes(nodes_layer, 0.0005)
-        # a = nodes_layer.getFeatures()
-        # for b in a:
-        #     print b.attributes()
+        features = nodes_layer.getFeatures()
+        expected_attributes = [
+            [0, 5, u'upstream', None, None, 1, 0],
+            [1, 5, u'downstream', u'2', u'5', 1, 2],
+            [2, 6, u'upstream', None, u'1,5', 1, 2],
+            [3, 6, u'downstream', None, None, 0, 1],
+            [4, 4, u'upstream', u'6', u'9', 2, 1],
+            [5, 4, u'downstream', u'2', u'1', 1, 2],
+            [6, 3, u'upstream', u'4', u'9', 2, 1],
+            [7, 3, u'downstream', None, None, 0, 1],
+            [8, 2, u'upstream', None, u'11', 1, 1],
+            [9, 2, u'downstream', u'4,6', None, 2, 1],
+            [10, 1, u'upstream', None, None, 1, 0],
+            [11, 1, u'downstream', u'8', None, 1, 1]
+        ]
+        i = 0
+        for feature in features:
+            i += 1
+            msg = feature.attributes()
+            self.assertIn(feature.attributes(), expected_attributes, msg)
+        msg = ('There should be %s features but I got %s.' % (
+            len(expected_attributes), i))
+        self.assertEqual(len(expected_attributes), i, msg)
 
+    def test_identify_well(self):
+        """Test for identify_well method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_well(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        well_index = nodes_layer.fieldNameIndex('well')
+
+        expected_well = [3, 7]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            well_value = node_attributes[well_index]
+            if node_id in expected_well:
+                self.assertEqual(
+                    1, well_value, 'Node %s Should be a well' % node_id)
+            else:
+                self.assertEqual(
+                    0, well_value, 'Node %s Should not be a well' % node_id)
+
+    def test_identify_sink(self):
+        """Test for identify_sink method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_sink(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        sink_index = nodes_layer.fieldNameIndex('sink')
+
+        expected_sink = [0, 10]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            sink_value = node_attributes[sink_index]
+            if node_id in expected_sink:
+                self.assertEqual(
+                    1, sink_value, 'Node %s Should be a sink' % node_id)
+            else:
+                self.assertEqual(
+                    0, sink_value, 'Node %s Should not be a sink' % node_id)
+
+    def test_identify_branch(self):
+        """Test for identify_branch method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_branch(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        branch_index = nodes_layer.fieldNameIndex('branch')
+
+        expected_branch = [1, 2, 5]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            branch_value = node_attributes[branch_index]
+            if node_id in expected_branch:
+                self.assertEqual(
+                    1, branch_value, 'Node %s Should be a branch' % node_id)
+            else:
+                self.assertEqual(0, branch_value,
+                                 'Node %s Should not be a branch' % node_id)
+
+    def test_identify_confluence(self):
+        """Test for identify_confluence method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_confluence(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        confluence_index = nodes_layer.fieldNameIndex('confluence')
+
+        expected_confluence = [4, 6, 9]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            confluence_value = node_attributes[confluence_index]
+            if node_id in expected_confluence:
+                self.assertEqual(
+                    1,
+                    confluence_value,
+                    'Node %s Should be a confluence' % node_id)
+            else:
+                self.assertEqual(
+                    0,
+                    confluence_value,
+                    'Node %s Should not be a confluence' % node_id)
+
+    def test_identify_pseudo_node(self):
+        """Test for identify_pseudo_node method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_pseudo_node(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        pseudo_node_index = nodes_layer.fieldNameIndex('pseudo')
+
+        expected_pseudo_node = [8, 11]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            pseudo_node_value = node_attributes[pseudo_node_index]
+            if node_id in expected_pseudo_node:
+                self.assertEqual(
+                    1,
+                    pseudo_node_value,
+                    'Node %s Should be a pseudo_node' % node_id)
+            else:
+                self.assertEqual(
+                    0,
+                    pseudo_node_value,
+                    'Node %s Should not be a pseudo_node' % node_id)
+
+    def test_identify_watershed(self):
+        """Test for identify_watershed method."""
+        nodes_layer = self.prepared_nodes_layer
+        identify_watershed(nodes_layer)
+        features = nodes_layer.getFeatures()
+
+        id_index = nodes_layer.fieldNameIndex('id')
+        watershed_index = nodes_layer.fieldNameIndex('watershed')
+
+        expected_watershed = [1, 2, 5]
+
+        for feature in features:
+            node_attributes = feature.attributes()
+            node_id = node_attributes[id_index]
+            watershed_value = node_attributes[watershed_index]
+            if node_id in expected_watershed:
+                self.assertEqual(
+                    1,
+                    watershed_value,
+                    'Node %s Should be a watershed' % node_id)
+            else:
+                self.assertEqual(
+                    0,
+                    watershed_value,
+                    'Node %s Should not be a watershed' % node_id)
 
 if __name__ == '__main__':
     unittest.main()
