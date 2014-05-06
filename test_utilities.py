@@ -165,52 +165,52 @@ class TestUtilities(unittest.TestCase):
         """test for get_random_string function."""
         length_str = 7
         random_str = get_random_string(length_str)
-        msg = 'Length of the string should be %s I got %s' % (
+        message = 'Length of the string should be %s I got %s' % (
             length_str, len(random_str))
-        self.assertTrue(len(random_str) == length_str, msg)
+        self.assertTrue(len(random_str) == length_str, message)
 
         random_strings = set()
         num_string = 1000
         for i in range(num_string):
             random_strings.add(get_random_string(7))
-        msg = 'There should be %s unique strings' % num_string
-        self.assertTrue(len(random_strings) == num_string, msg)
+        message = 'There should be %s unique strings' % num_string
+        self.assertTrue(len(random_strings) == num_string, message)
 
     def test_list_to_str(self):
         """test for list to str."""
         the_list = [1, 2, 3, 3, 5]
         the_str = list_to_str(the_list)
         expected_str = '1,2,3,3,5'
-        msg = 'Expected %s but I got %s' % (expected_str, the_str)
-        self.assertEqual(the_str, expected_str, msg)
+        message = 'Expected %s but I got %s' % (expected_str, the_str)
+        self.assertEqual(the_str, expected_str, message)
 
         the_str = list_to_str(the_list, sep='++')
         expected_str = '1++2++3++3++5'
-        msg = 'Expected %s but I got %s' % (expected_str, the_str)
-        self.assertEqual(the_str, expected_str, msg)
+        message = 'Expected %s but I got %s' % (expected_str, the_str)
+        self.assertEqual(the_str, expected_str, message)
 
     def test_str_to_list(self):
         """test for str_to_list."""
         the_str = '1,2,3,3,5'
         the_list = str_to_list(the_str, ',', int)
         expected_list = [1, 2, 3, 3, 5]
-        msg = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,msg)
+        message = 'Expected %s but I got %s' % (expected_list, the_list)
+        self.assertEqual(the_list, expected_list,message)
 
         the_str = ''
         the_list = str_to_list(the_str, ',', int)
         expected_list = []
-        msg = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,msg)
+        message = 'Expected %s but I got %s' % (expected_list, the_list)
+        self.assertEqual(the_list, expected_list,message)
 
         the_str = '1.5X4.5'
         the_list = str_to_list(the_str, 'X', float)
         expected_list = [1.5, 4.5]
-        msg = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,msg)
+        message = 'Expected %s but I got %s' % (expected_list, the_list)
+        self.assertEqual(the_list, expected_list,message)
 
         the_str = '1.5X4.5'
-        msg = 'Expect TypeError, but not found'
+        message = 'Expect TypeError, but not found'
         # noinspection PyTypeChecker
         self.assertRaises(
             TypeError, lambda: str_to_list(the_str, 'X', 'integer'))
@@ -218,11 +218,11 @@ class TestUtilities(unittest.TestCase):
     def test_layer_add_attribute(self):
         """test add_layer_attribute."""
         layer = self.nodes_layer
-        att_name = 'new_att'
-        add_layer_attribute(layer, att_name, QVariant.Int)
-        id_index = layer.fieldNameIndex(att_name)
-        msg = 'New attribute has not been added yet.'
-        self.assertTrue(id_index > -1, msg)
+        attribute_name = 'new_att'
+        add_layer_attribute(layer, attribute_name, QVariant.Int)
+        id_index = layer.fieldNameIndex(attribute_name)
+        message = 'New attribute has not been added yet.'
+        self.assertTrue(id_index > -1, message)
 
     def check_data_test(self):
         """Test for checking the data test."""
@@ -287,8 +287,8 @@ class TestUtilities(unittest.TestCase):
         real_nodes = point_layer.getFeatures()
         for node in real_nodes:
             node_attributes = node.attributes()
-            msg = 'Node %s should not be found.' % node_attributes
-            self.assertIn(node_attributes, expected_nodes, msg)
+            message = 'Node %s should not be found.' % node_attributes
+            self.assertIn(node_attributes, expected_nodes, message)
 
         # error = QgsVectorFileWriter.writeAsVectorFormat(
         #     point_layer, nodes_shp, "CP1250", None, "ESRI Shapefile")
@@ -303,22 +303,22 @@ class TestUtilities(unittest.TestCase):
             nodes_layer, 1, 0.0005)
         expected_upstream_nodes = [2]
         expected_downstream_nodes = [5]
-        msg = ('Expect upstream nearby nodes %s but got %s' % (
+        message = ('Expect upstream nearby nodes %s but got %s' % (
             expected_upstream_nodes, upstream_nodes))
-        self.assertItemsEqual(upstream_nodes, expected_upstream_nodes, msg)
-        msg = ('Expect downstream nearby nodes %s but got %s' % (
+        self.assertItemsEqual(upstream_nodes, expected_upstream_nodes, message)
+        message = ('Expect downstream nearby nodes %s but got %s' % (
             expected_downstream_nodes, downstream_nodes))
-        self.assertItemsEqual(downstream_nodes, expected_downstream_nodes, msg)
+        self.assertItemsEqual(downstream_nodes, expected_downstream_nodes, message)
 
     def test_check_associated_attributes(self):
         """Test for check_associated_attributes"""
         nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
-        msg = 'Should be False.'
-        assert not check_associated_attributes(nodes_layer), msg
+        message = 'Should be False.'
+        assert not check_associated_attributes(nodes_layer), message
 
         add_associated_nodes(nodes_layer, 0.0005)
-        msg = 'Should be True.'
-        assert check_associated_attributes(nodes_layer), msg
+        message = 'Should be True.'
+        assert check_associated_attributes(nodes_layer), message
 
     def test_add_associated_nodes(self):
         """test for add_associated_nodes"""
@@ -342,11 +342,11 @@ class TestUtilities(unittest.TestCase):
         i = 0
         for feature in features:
             i += 1
-            msg = feature.attributes()
-            self.assertIn(feature.attributes(), expected_attributes, msg)
-        msg = ('There should be %s features but I got %s.' % (
+            message = feature.attributes()
+            self.assertIn(feature.attributes(), expected_attributes, message)
+        message = ('There should be %s features but I got %s.' % (
             len(expected_attributes), i))
-        self.assertEqual(len(expected_attributes), i, msg)
+        self.assertEqual(len(expected_attributes), i, message)
 
     def test_identify_well(self):
         """Test for identify_well method."""

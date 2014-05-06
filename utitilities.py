@@ -21,13 +21,13 @@ from qgis.core import *
 def list_to_str(the_list, sep=','):
     """Convert a list to str. If empty, return empty string.
 
-    :param the_list: a list
+    :param the_list: A list.
     :type the_list: list
 
-    :param sep: separator for each element in the result.
+    :param sep: Separator for each element in the result.
     :type sep: str
 
-    :returns: string represent the_list
+    :returns: String represent the_list.
     :rtype: str
     """
     if len(the_list) > 0:
@@ -39,16 +39,16 @@ def list_to_str(the_list, sep=','):
 def str_to_list(the_str, sep=',', the_type=None):
     """Convert the_str to list.
 
-    :param the_str: string represents a list
+    :param the_str: String represents a list.
     :type the_str: str
 
-    :param sep: separator for each element in the_str.
+    :param sep: Separator for each element in the_str.
     :type sep: str
 
-    :param the_type: type of the element
+    :param the_type: Type of the element.
     :type the_type: type
 
-    :returns: list from the_str
+    :returns: List from the_str.
     :rtype: list
     """
     if len(the_str) == 0:
@@ -66,13 +66,13 @@ def str_to_list(the_str, sep=',', the_type=None):
 def add_layer_attribute(layer, attribute_name, qvariant):
     """Add new attribute called attribute_name to layer.
 
-    :param layer: A Vector layer
+    :param layer: A Vector layer.
     :type layer: QGISVectorLayer
 
-    :param attribute_name: the name of the new attribute
+    :param attribute_name: The name of the new attribute.
     :type attribute_name: str
 
-    :param qvariant: attribute type
+    :param qvariant: Attribute type of the new attribute.
     :type qvariant: QVariant
     """
     id_index = layer.fieldNameIndex(attribute_name)
@@ -93,11 +93,11 @@ def extract_node(layer, line_id_attribute='id'):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
 
-    :param line_id_attribute: the name of attribute that represent line id
+    :param line_id_attribute: The name of attribute that represent line id.
     :type line_id_attribute: str
 
     :returns: list of tuple. The tuple contains line_id, first_point of the
-    line, and last_point of the line.
+        line, and last_point of the line.
     :rtype: list
     """
     nodes = []
@@ -125,7 +125,7 @@ def create_nodes_layer(nodes=None, name=None):
     node_type : upstream (first point) or downstream (last point).
 
     :param nodes: A list of nodes. Represent as line_id, first_point,
-    and last_point in a tuple.
+        and last_point in a tuple.
     :type nodes: list, None
 
     :param name: The name of the layer. If None, set to Nodes.
@@ -186,13 +186,13 @@ def get_nearby_nodes(layer, node_id, threshold):
     :param layer: A vector point layer.
     :type layer: QGISVectorLayer
 
-    :param node_id: id of a point/node
+    :param node_id: The id of a point/node.
     :type node_id: int
 
-    :param threshold: distance threshold
+    :param threshold: Distance threshold.
     :type threshold: float
 
-    :returns: tuple of list of nodes. (upstream_nodes, downstream_nodes)
+    :returns: Tuple of list of nodes. (upstream_nodes, downstream_nodes).
     :rtype: tuple
     """
     # get location of the node_id
@@ -244,7 +244,7 @@ def add_associated_nodes(layer, threshold):
     :param layer: A vector point layer.
     :type layer: QGISVectorLayer
 
-    :param threshold: distance threshold
+    :param threshold: Distance threshold.
     :type threshold: float
 
     """
@@ -295,10 +295,10 @@ def check_associated_attributes(layer):
 
     Associated attributed : up_nodes, down_nodes, up_num, down_num
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
 
-    :returns: True if so, else False
+    :returns: True if so, else False.
     :rtype: bool
     """
     up_nodes_index = layer.fieldNameIndex('up_nodes')
@@ -312,38 +312,14 @@ def check_associated_attributes(layer):
         return True
 
 
-def count_upstream_nodes(layer):
-    """Return the number of upstream nodes from a layer.
-
-    :param layer: A vector point layer
-    :type layer: QGISVectorLayer
-
-    :returns: The number of upstream nodes
-    :rtype: int
-    """
-    raise NotImplementedError
-
-
-def count_downstream_nodes(layer):
-    """Return the number of downstream nodes from a layer.
-
-    :param layer: A vector point layer
-    :type layer: QGISVectorLayer
-
-    :returns: The number of downstream nodes
-    :rtype: int
-    """
-    raise NotImplementedError
-
-
 def identify_well(layer):
-    """Mark nodes from the layer if it is a well
+    """Mark nodes from the layer if it is a well.
 
     A node is identified as a well if the number of upstream nodes = 0 and
     the number downstream node > 0.
     And add attribute `well` for marking.
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
     """
     if not check_associated_attributes(layer):
@@ -374,13 +350,13 @@ def identify_well(layer):
 
 
 def identify_sink(layer):
-    """Mark nodes from the layer if it is a sink
+    """Mark nodes from the layer if it is a sink.
 
     A node is identified as a sink if the number of upstream nodes > 0 and
     the number downstream node = 0.
     And add attribute `sink` for marking.
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
     """
     if not check_associated_attributes(layer):
@@ -411,13 +387,13 @@ def identify_sink(layer):
 
 
 def identify_branch(layer):
-    """Mark nodes from the layer if it is a branch
+    """Mark nodes from the layer if it is a branch.
 
     A node is identified as a branch if the number of upstream nodes > 0 and
     the number downstream node > 1.
     And add attribute `branch` for marking.
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
     """
     if not check_associated_attributes(layer):
@@ -447,13 +423,13 @@ def identify_branch(layer):
     layer.commitChanges()
 
 def identify_confluence(layer):
-    """Mark nodes from the layer if it is a confluence
+    """Mark nodes from the layer if it is a confluence.
 
     A node is identified as a confluence if the number of upstream nodes > 1
     and the number downstream node > 0.
     And add attribute `confluence` for marking.
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
     """
     if not check_associated_attributes(layer):
@@ -484,13 +460,13 @@ def identify_confluence(layer):
 
 
 def identify_pseudo_node(layer):
-    """Mark nodes from the layer if it is a pseudo_node
+    """Mark nodes from the layer if it is a pseudo_node.
 
     A node is identified as a pseudo_node if the number of upstream nodes == 1
     and the number downstream node == 1.
     And add attribute `pseudo_node` for marking.
 
-    :param layer: A vector point layer
+    :param layer: A vector point layer.
     :type layer: QGISVectorLayer
     """
     if not check_associated_attributes(layer):
@@ -521,25 +497,25 @@ def identify_pseudo_node(layer):
 
 
 def identify_self_intersection(layer):
-    """Mark nodes from the layer if self intersection is found
+    """Mark nodes from the layer if self intersection is found.
 
-    :param layer: A vector line layer
+    :param layer: A vector line layer.
     :type layer: QGISVectorLayer
     """
     raise NotImplementedError
 
 
 def identify_segment_center(layer):
-    """Mark nodes from the layer if segment center is found
+    """Mark nodes from the layer if segment center is found.
 
-    :param layer: A vector line layer
+    :param layer: A vector line layer.
     :type layer: QGISVectorLayer
     """
     raise NotImplementedError
 
 
 def identify_watershed(layer):
-    """Mark nodes from the layer if it is a watershed
+    """Mark nodes from the layer if it is a watershed.
 
     A node is identified as a watershed if the number of upstream nodes > 0
     and the number downstream node > 1.
