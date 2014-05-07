@@ -35,7 +35,8 @@ from utitilities import (
     identify_confluence,
     identify_pseudo_node,
     identify_watershed,
-    identify_self_intersection
+    identify_self_intersection,
+    identify_segment_center
 )
 
 TEMP_DIR = os.path.join(
@@ -43,6 +44,8 @@ TEMP_DIR = os.path.join(
 DATA_TEST_DIR = 'data_test'
 sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
 nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
+
+THRESHOLD = 0.025
 
 
 def get_random_string(length=7):
@@ -55,6 +58,21 @@ def get_random_string(length=7):
     :rtype: str
     """
     return hashlib.sha512(str(datetime.now())).hexdigest()[:length]
+
+
+def remove_temp_layer(shapefile_path):
+    """Remove temporary layer that created on this test.
+
+    :param shapefile_path: path to shapefile
+    :type shapefile_path: str
+    """
+    exts = ['cpg', 'dbf', 'prj', 'qpj', 'shp', 'shx']
+    filename = os.path.basename(shapefile_path)
+    basename, _ = os.path.splitext(filename)
+
+    for ext in exts:
+        if os.path.exists(shapefile_path[:3] + ext):
+            os.remove(shapefile_path[:3] + ext)
 
 
 def copy_temp_layer(shapefile_path, temp_dir=TEMP_DIR):
@@ -138,6 +156,7 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
     return get_shapefile_layer(temp_shapefile, title)
 
 
+# noinspection PyUnresolvedReferences,PyStatementEffect
 class TestUtilities(unittest.TestCase):
     """Class for testing utilities."""
 
@@ -154,13 +173,15 @@ class TestUtilities(unittest.TestCase):
 
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
             nodes_shp, 'prepared_nodes')
-        add_associated_nodes(cls.prepared_nodes_layer, 0.0005)
+        add_associated_nodes(cls.prepared_nodes_layer, THRESHOLD)
 
     @classmethod
     def tearDownClass(cls):
         # noinspection PyArgumentList
         QgsApplication.exitQgis()
-        # os.remove(cls.sungai_layer.source())
+        remove_temp_layer(cls.sungai_layer.source())
+        remove_temp_layer(cls.nodes_layer.source())
+        remove_temp_layer(cls.prepared_nodes_layer.source())
 
     def test_random_string(self):
         """test for get_random_string function."""
@@ -301,7 +322,7 @@ class TestUtilities(unittest.TestCase):
         """Test for get_nearby_nodes function."""
         nodes_layer = self.nodes_layer
         upstream_nodes, downstream_nodes = get_nearby_nodes(
-            nodes_layer, 1, 0.0005)
+            nodes_layer, 1, THRESHOLD)
         expected_upstream_nodes = [2]
         expected_downstream_nodes = [5]
         message = ('Expect upstream nearby nodes %s but got %s' % (
@@ -318,14 +339,14 @@ class TestUtilities(unittest.TestCase):
         message = 'Should be False.'
         assert not check_associated_attributes(nodes_layer), message
 
-        add_associated_nodes(nodes_layer, 0.0005)
+        add_associated_nodes(nodes_layer, THRESHOLD)
         message = 'Should be True.'
         assert check_associated_attributes(nodes_layer), message
 
     def test_add_associated_nodes(self):
         """test for add_associated_nodes"""
         nodes_layer = self.nodes_layer
-        add_associated_nodes(nodes_layer, 0.0005)
+        add_associated_nodes(nodes_layer, THRESHOLD)
         features = nodes_layer.getFeatures()
         expected_attributes = [
             [0, 5, u'upstream', None, None, 1, 0],
@@ -518,6 +539,36 @@ class TestUtilities(unittest.TestCase):
             self.assertItemsEqual(
                 intersections, expected_intersections, message)
 
+    # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+    def test_identify_segment_center(self):
+        """Test for identify_segment_center."""
+        points = [
+            (QgsPoint(0, 0)),
+            (QgsPoint(1, 0)),
+            (QgsPoint(2, 0)),
+        ]
+
+        geom = QgsGeometry.fromPolyline(points)
+        line = QgsFeature()
+        line.setGeometry(geom)
+
+        center = identify_segment_center(line)
+        expected_center = QgsPoint(1, 0)
+        message = 'Expected %s but I got %s' % (expected_center, center)
+        self.assertEqual(expected_center, center, message)
+
+        points.append(QgsPoint(5, 0))
+
+        geom = QgsGeometry.fromPolyline(points)
+        line = QgsFeature()
+        line.setGeometry(geom)
+
+        center = identify_segment_center(line)
+        expected_center = QgsPoint(2.5, 0)
+        message = 'Expected %s but I got %s' % (expected_center, center)
+        self.assertEqual(expected_center, center, message)
+
+        print self.nodes_layer.source()
 
 if __name__ == '__main__':
     unittest.main()

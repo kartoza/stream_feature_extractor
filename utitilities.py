@@ -5,6 +5,8 @@
    Detailed multi-paragraph description...
 
 """
+from __future__ import division
+from math import sqrt
 from PyQt4.QtCore import QVariant
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
@@ -14,7 +16,6 @@ __license__ = "GPL"
 __copyright__ = ''
 
 
-from exceptions import NotImplementedError
 from qgis.core import *
 
 
@@ -195,6 +196,7 @@ def get_nearby_nodes(layer, node_id, threshold):
     :returns: Tuple of list of nodes. (upstream_nodes, downstream_nodes).
     :rtype: tuple
     """
+    threshold *= threshold
     # get location of the node_id
     nodes = layer.getFeatures()
     center_node = None
@@ -541,23 +543,58 @@ def identify_self_intersection(line):
             k = (dy * w[0] - dx * w[1]) / float(d)
 
             intersection = vertices[i][0] + v[0] * k, vertices[i][1] + v[1] * k
-            if not between(vertices[i][0], intersection[0], vertices[i + 1][0]):
+            if not between(
+                    vertices[i][0], intersection[0], vertices[i + 1][0]):
                 continue
-            if not between(vertices[i][1], intersection[1], vertices[i + 1][1]):
+            if not between(
+                    vertices[i][1], intersection[1], vertices[i + 1][1]):
                     continue
             intersections.append(QgsPoint(intersection[0], intersection[1]))
 
     return intersections
 
 
-def identify_segment_center(layer):
-    """Mark nodes from the layer if segment center is found.
+def identify_segment_center(line):
+    """Return a QgsPoint of linear segment center of the line.
 
-    :param layer: A vector line layer.
-    :type layer: QGISVectorLayer
+    :param line: A line to be identified.
+    :type line: QgsFeature
+
+    :returns: A linear segment center
+    :rtype: QgsPoint
     """
+    geometry = line.geometry()
+    vertices = geometry.asPolyline()
 
-    raise NotImplementedError
+    part_length = []
+    for i in range(len(vertices) - 1):
+        length = vertices[i].sqrDist(vertices[i + 1])
+        part_length.append(sqrt(length))
+
+    line_length = sum(part_length)
+    half_length = 0.5 * line_length
+
+    current_length = 0
+    i = 0
+    add_length = 0
+    while current_length <= half_length:
+        add_length = part_length[i]
+        current_length += add_length
+        i += 1
+
+    current_length -= add_length
+    delta_length = half_length - current_length
+    i -= 1
+
+    ratio = float(delta_length) / float(add_length)
+
+    center_x = vertices[i].x()
+    center_x += ratio * (vertices[i + 1].x() - vertices[i].x())
+
+    center_y = vertices[i].y()
+    center_y += ratio * (vertices[i + 1].y() - vertices[i].y())
+
+    return QgsPoint(center_x, center_y)
 
 
 def identify_watershed(layer):
