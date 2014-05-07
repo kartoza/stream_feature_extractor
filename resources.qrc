@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/StreamFeatureTool" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
