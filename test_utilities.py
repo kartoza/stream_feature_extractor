@@ -35,8 +35,7 @@ from utitilities import (
     identify_confluence,
     identify_pseudo_node,
     identify_watershed,
-    identify_self_intersection,
-    line_intersection
+    identify_self_intersection
 )
 
 TEMP_DIR = os.path.join(
@@ -113,9 +112,6 @@ def get_shapefile_layer(shapefile_path, title):
 
     :param title: the title of the layer
     :type title: str
-
-    :param temp_dir: temporary directory for saving the temporary shapefile
-    :type temp_dir: str
 
     :returns: A layer
     :rtype: QGISVectorLayer
@@ -200,25 +196,25 @@ class TestUtilities(unittest.TestCase):
         the_list = str_to_list(the_str, ',', int)
         expected_list = [1, 2, 3, 3, 5]
         message = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,message)
+        self.assertEqual(the_list, expected_list, message)
 
         the_str = ''
         the_list = str_to_list(the_str, ',', int)
         expected_list = []
         message = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,message)
+        self.assertEqual(the_list, expected_list, message)
 
         the_str = '1.5X4.5'
         the_list = str_to_list(the_str, 'X', float)
         expected_list = [1.5, 4.5]
         message = 'Expected %s but I got %s' % (expected_list, the_list)
-        self.assertEqual(the_list, expected_list,message)
+        self.assertEqual(the_list, expected_list, message)
 
         the_str = '1.5X4.5'
         message = 'Expect TypeError, but not found'
         # noinspection PyTypeChecker
         self.assertRaises(
-            TypeError, lambda: str_to_list(the_str, 'X', 'integer'))
+            TypeError, lambda: str_to_list(the_str, 'X', 'integer'), message)
 
     def test_layer_add_attribute(self):
         """test add_layer_attribute."""
@@ -313,7 +309,8 @@ class TestUtilities(unittest.TestCase):
         self.assertItemsEqual(upstream_nodes, expected_upstream_nodes, message)
         message = ('Expect downstream nearby nodes %s but got %s' % (
             expected_downstream_nodes, downstream_nodes))
-        self.assertItemsEqual(downstream_nodes, expected_downstream_nodes, message)
+        self.assertItemsEqual(
+            downstream_nodes, expected_downstream_nodes, message)
 
     def test_check_associated_attributes(self):
         """Test for check_associated_attributes"""
@@ -497,46 +494,6 @@ class TestUtilities(unittest.TestCase):
                     watershed_value,
                     'Node %s Should not be a watershed' % node_id)
 
-    def test_line_intersection(self):
-        """Test for line_intersection."""
-        point1 = [0, 2]
-        point2 = [2, 0]
-        point3 = [0, 0]
-        point4 = [2, 2]
-
-        expected_intersect1 = (1, 1)
-        intersect1 = line_intersection([point1, point2], [point3, point4])
-        message = 'Expected %s but I got %s' % (
-            expected_intersect1, intersect1)
-        self.assertEqual(intersect1, expected_intersect1, message)
-
-        intersect2 = line_intersection([point3, point1], [point2, point4])
-        message = 'Should not intersect'
-        self.assertEqual(intersect2, None, message)
-
-        point1 = [0, 2]
-        point2 = [1, 0]
-        point3 = [0, 0]
-        point4 = [-1, -1]
-
-        expected_intersect1 = (1, 1)
-        intersect1 = line_intersection([point1, point2], [point3, point4])
-        message = 'Expected %s but I got %s' % (
-            expected_intersect1, intersect1)
-        self.assertEqual(intersect1, expected_intersect1, message)
-
-        intersect2 = line_intersection([point3, point1], [point2, point4])
-        message = 'Should not intersect'
-        self.assertEqual(intersect2, None, message)
-
-        point_a = [134.045089, -0.8661982808]
-        point_b = [134.0444396, -0.8671800527]
-        point_c = [134.046169, -0.8672555736]
-        point_d = [134.0457385, -0.8665909895]
-
-        intersect3 = line_intersection([point_a, point_b], [point_c, point_d])
-        print intersect3, 'intersect 3'
-
     # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
     def test_identify_self_intersection(self):
         """Test for identify_self_intersection."""
@@ -547,9 +504,9 @@ class TestUtilities(unittest.TestCase):
         features = data_provider.getFeatures()
 
         expected_intersections = [
-            (134.0448322208192, -0.8665865028884477),
-            (134.04461808806883, -0.8669101919296638),
-            (134.04498200744285, -0.8672037401540066)
+            QgsPoint(134.0448322208192, -0.8665865028884477),
+            QgsPoint(134.04461808806883, -0.8669101919296638),
+            QgsPoint(134.04498200744285, -0.8672037401540066)
         ]
 
         for feature in features:
@@ -562,8 +519,5 @@ class TestUtilities(unittest.TestCase):
                 intersections, expected_intersections, message)
 
 
-
 if __name__ == '__main__':
     unittest.main()
-
-

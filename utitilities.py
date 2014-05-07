@@ -422,6 +422,7 @@ def identify_branch(layer):
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
 
+
 def identify_confluence(layer):
     """Mark nodes from the layer if it is a confluence.
 
@@ -496,41 +497,12 @@ def identify_pseudo_node(layer):
     layer.commitChanges()
 
 
-def line_intersection(line_1, line_2):
-    """Return an intersection point of line_1 and line_2.
-
-    Return None if the lines do not intersect.
-
-    :param line_1: First line that represent by start point and end point.
-    :type line_1: tuple, list
-
-    :param line_2: Second line that represent by start point and end point.
-    :type line_2: tuple, list
-
-    :returns: The intersection point of the lines.
-    :rtype: None, tuple
-    """
-
-    x_diff = (line_1[0][0] - line_1[1][0], line_2[0][0] - line_2[1][0])
-    y_diff = (line_1[0][1] - line_1[1][1], line_2[0][1] - line_2[1][1])
-
-
-    def det(a, b):
-        return a[0] * b[1] - a[1] * b[0]
-
-    div = det(x_diff, y_diff)
-    if div == 0:
-        return None
-
-    d = (det(*line_1), det(*line_2))
-    x = det(d, x_diff) / div
-    y = det(d, y_diff) / div
-
-    return x, y
-
 # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
 def identify_self_intersection(line):
     """Return all self intersection points of a line.
+
+    Adapted from:
+    http://qgis.osgeo.org/api/qgsgeometryvalidator_8cpp_source.html#l00371
 
     :param line: A line to be identified.
     :type line: QgsFeature
@@ -549,7 +521,6 @@ def identify_self_intersection(line):
     intersections = []
 
     geometry = line.geometry()
-
     vertices = geometry.asPolyline()
     if len(vertices) <= 2:
         return intersections
@@ -574,7 +545,7 @@ def identify_self_intersection(line):
                 continue
             if not between(vertices[i][1], intersection[1], vertices[i + 1][1]):
                     continue
-            intersections.append(intersection)
+            intersections.append(QgsPoint(intersection[0], intersection[1]))
 
     return intersections
 
@@ -585,6 +556,7 @@ def identify_segment_center(layer):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
     """
+
     raise NotImplementedError
 
 
@@ -623,4 +595,3 @@ def identify_watershed(layer):
         attributes = {watershed_index: watershed_value}
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
-
