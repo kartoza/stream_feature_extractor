@@ -34,7 +34,9 @@ from utitilities import (
     identify_branch,
     identify_confluence,
     identify_pseudo_node,
-    identify_watershed
+    identify_watershed,
+    identify_self_intersection,
+    line_intersection
 )
 
 TEMP_DIR = os.path.join(
@@ -151,7 +153,9 @@ class TestUtilities(unittest.TestCase):
         QgsApplication.initQgis()
         cls.sungai_layer = get_temp_shapefile_layer(
             sungai_di_jawa_shp, 'sungai_di_jawa')
+
         cls.nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
             nodes_shp, 'prepared_nodes')
         add_associated_nodes(cls.prepared_nodes_layer, 0.0005)
@@ -160,6 +164,7 @@ class TestUtilities(unittest.TestCase):
     def tearDownClass(cls):
         # noinspection PyArgumentList
         QgsApplication.exitQgis()
+        # os.remove(cls.sungai_layer.source())
 
     def test_random_string(self):
         """test for get_random_string function."""
@@ -491,6 +496,72 @@ class TestUtilities(unittest.TestCase):
                     0,
                     watershed_value,
                     'Node %s Should not be a watershed' % node_id)
+
+    def test_line_intersection(self):
+        """Test for line_intersection."""
+        point1 = [0, 2]
+        point2 = [2, 0]
+        point3 = [0, 0]
+        point4 = [2, 2]
+
+        expected_intersect1 = (1, 1)
+        intersect1 = line_intersection([point1, point2], [point3, point4])
+        message = 'Expected %s but I got %s' % (
+            expected_intersect1, intersect1)
+        self.assertEqual(intersect1, expected_intersect1, message)
+
+        intersect2 = line_intersection([point3, point1], [point2, point4])
+        message = 'Should not intersect'
+        self.assertEqual(intersect2, None, message)
+
+        point1 = [0, 2]
+        point2 = [1, 0]
+        point3 = [0, 0]
+        point4 = [-1, -1]
+
+        expected_intersect1 = (1, 1)
+        intersect1 = line_intersection([point1, point2], [point3, point4])
+        message = 'Expected %s but I got %s' % (
+            expected_intersect1, intersect1)
+        self.assertEqual(intersect1, expected_intersect1, message)
+
+        intersect2 = line_intersection([point3, point1], [point2, point4])
+        message = 'Should not intersect'
+        self.assertEqual(intersect2, None, message)
+
+        point_a = [134.045089, -0.8661982808]
+        point_b = [134.0444396, -0.8671800527]
+        point_c = [134.046169, -0.8672555736]
+        point_d = [134.0457385, -0.8665909895]
+
+        intersect3 = line_intersection([point_a, point_b], [point_c, point_d])
+        print intersect3, 'intersect 3'
+
+    # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+    def test_identify_self_intersection(self):
+        """Test for identify_self_intersection."""
+        line_intersect = os.path.join(DATA_TEST_DIR, 'line_intersect.shp')
+        line_intersect = get_temp_shapefile_layer(line_intersect, 'lines')
+
+        data_provider = line_intersect.dataProvider()
+        features = data_provider.getFeatures()
+
+        expected_intersections = [
+            (134.0448322208192, -0.8665865028884477),
+            (134.04461808806883, -0.8669101919296638),
+            (134.04498200744285, -0.8672037401540066)
+        ]
+
+        for feature in features:
+            intersections = identify_self_intersection(feature)
+            message = 'The number of intersections points should be 3.'
+            self.assertEqual(len(intersections), 3, message)
+            message = 'There is item not equal in %s and %s.' % (
+                expected_intersections, intersections)
+            self.assertItemsEqual(
+                intersections, expected_intersections, message)
+
+
 
 if __name__ == '__main__':
     unittest.main()

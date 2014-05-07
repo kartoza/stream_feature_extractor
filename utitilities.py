@@ -496,13 +496,87 @@ def identify_pseudo_node(layer):
     layer.commitChanges()
 
 
-def identify_self_intersection(layer):
-    """Mark nodes from the layer if self intersection is found.
+def line_intersection(line_1, line_2):
+    """Return an intersection point of line_1 and line_2.
 
-    :param layer: A vector line layer.
-    :type layer: QGISVectorLayer
+    Return None if the lines do not intersect.
+
+    :param line_1: First line that represent by start point and end point.
+    :type line_1: tuple, list
+
+    :param line_2: Second line that represent by start point and end point.
+    :type line_2: tuple, list
+
+    :returns: The intersection point of the lines.
+    :rtype: None, tuple
     """
-    raise NotImplementedError
+
+    x_diff = (line_1[0][0] - line_1[1][0], line_2[0][0] - line_2[1][0])
+    y_diff = (line_1[0][1] - line_1[1][1], line_2[0][1] - line_2[1][1])
+
+
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
+
+    div = det(x_diff, y_diff)
+    if div == 0:
+        return None
+
+    d = (det(*line_1), det(*line_2))
+    x = det(d, x_diff) / div
+    y = det(d, y_diff) / div
+
+    return x, y
+
+# noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+def identify_self_intersection(line):
+    """Return all self intersection points of a line.
+
+    :param line: A line to be identified.
+    :type line: QgsFeature
+
+    :returns: List of QgsPoint that represent the intersection point.
+    :rtype: list
+    """
+    def between(a, b, c):
+        """True if c is between a and b."""
+        if a <= b <= c:
+            return True
+        if c <= b <= a:
+            return True
+        return False
+
+    intersections = []
+
+    geometry = line.geometry()
+
+    vertices = geometry.asPolyline()
+    if len(vertices) <= 2:
+        return intersections
+
+    for i in range(len(vertices) - 2):
+        v = (vertices[i + 1].x() - vertices[i].x(),
+             vertices[i + 1].y() - vertices[i].y())
+        for j in range(i + 2, len(vertices) - 1):
+            w = (vertices[j + 1].x() - vertices[j].x(),
+                 vertices[j + 1].y() - vertices[j].y())
+            d = v[1] * w[0] - v[0] * w[1]
+            if d == 0:
+                return None
+
+            dx = vertices[j].x() - vertices[i].x()
+            dy = vertices[j].y() - vertices[i].y()
+
+            k = (dy * w[0] - dx * w[1]) / float(d)
+
+            intersection = vertices[i][0] + v[0] * k, vertices[i][1] + v[1] * k
+            if not between(vertices[i][0], intersection[0], vertices[i + 1][0]):
+                continue
+            if not between(vertices[i][1], intersection[1], vertices[i + 1][1]):
+                    continue
+            intersections.append(intersection)
+
+    return intersections
 
 
 def identify_segment_center(layer):
