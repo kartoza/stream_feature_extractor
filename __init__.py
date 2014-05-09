@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- StreamFeatureTool
+ StreamFeatureExtractor
                                  A QGIS plugin
  A tool to extract features from a stream network.
                              -------------------
-        begin                : 2014-05-07
+        begin                : 2014-05-09
         copyright            : (C) 2014 by Linfiniti Consulting CC.
         email                : tim@linfiniti.com
  ***************************************************************************/
@@ -21,7 +21,14 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
-def classFactory(iface):
-    # load StreamFeatureTool class from file StreamFeatureTool
-    from stream_feature_extractor import StreamFeatureTool
-    return StreamFeatureTool(iface)
+
+# noinspection PyPep8Naming
+def classFactory(iface):  # pylint: disable=invalid-name
+    """Load StreamFeatureExtractor class from file StreamFeatureExtractor.
+
+    :param iface: A QGIS interface instance.
+    :type iface: QgsInterface
+    """
+    #
+    from .stream_feature_extractor import StreamFeatureExtractor
+    return StreamFeatureExtractor(iface)

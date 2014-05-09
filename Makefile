@@ -1,9 +1,9 @@
 #/***************************************************************************
-# StreamFeatureTool
+# StreamFeatureExtractor
 #
 # A tool to extract features from a stream network.
 #							 -------------------
-#		begin				: 2014-05-07
+#		begin				: 2014-05-09
 #		copyright			: (C) 2014 by Linfiniti Consulting CC.
 #		email				: tim@linfiniti.com
 # ***************************************************************************/
@@ -31,7 +31,7 @@ SOURCES = \
 	stream_feature_extractor.py \
 	stream_feature_extractor_dialog.py
 
-PLUGINNAME = StreamFeatureTool
+PLUGINNAME = StreamFeatureExtractor
 
 PY_FILES = \
 	stream_feature_extractor.py \
@@ -75,6 +75,11 @@ test: compile transcompile
 		export QGIS_LOG_FILE=/dev/null; \
 		nosetests -v --with-id --with-coverage --cover-package=. \
 		3>&1 1>&2 2>&3 3>&- || true
+	@echo "----------------------"
+	@echo "If you get a 'no module named qgis.core error, try sourcing"
+	@echo "the helper script we have provided first then run make test."
+	@echo "e.g. source run-env-linux.sh <path to qgis install>; make test"
+	@echo "----------------------"
 
 deploy: compile doc transcompile
 	@echo
@@ -146,6 +151,7 @@ transup:
 	@echo "------------------------------------------------"
 	@echo "Updating translation files with any new strings."
 	@echo "------------------------------------------------"
+	@chmod +x scripts/update-strings.sh
 	@scripts/update-strings.sh $(LOCALES)
 
 transcompile:
@@ -153,6 +159,7 @@ transcompile:
 	@echo "----------------------------------------"
 	@echo "Compiled translation files to .qm files."
 	@echo "----------------------------------------"
+	@chmod +x scripts/compile-strings.sh
 	@scripts/compile-strings.sh $(LOCALES)
 
 transclean:
@@ -181,7 +188,13 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc safe . || true
+	@pylint --reports=n --rcfile=pylintrc . || true
+	@echo
+	@echo "----------------------"
+	@echo "If you get a 'no module named qgis.core error, try sourcing"
+	@echo "the helper script we have provided first then run make pylint."
+	@echo "e.g. source run-env-linux.sh <path to qgis install>; make pylint"
+	@echo "----------------------"
 
 
 # Run pep8 style checking
@@ -191,4 +204,4 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,resources_rc.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,resources_rc.py,conf.py . || true

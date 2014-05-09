@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- StreamFeatureTool
+ StreamFeatureExtractor
                                  A QGIS plugin
  A tool to extract features from a stream network.
                               -------------------
-        begin                : 2014-05-07
+        begin                : 2014-05-09
         copyright            : (C) 2014 by Linfiniti Consulting CC.
         email                : tim@linfiniti.com
  ***************************************************************************/
@@ -24,11 +24,11 @@ from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
-from stream_feature_extractor_dialog import StreamFeatureToolDialog
+from stream_feature_extractor_dialog import StreamFeatureExtractorDialog
 import os.path
 
 
-class StreamFeatureTool:
+class StreamFeatureExtractor:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -48,7 +48,7 @@ class StreamFeatureTool:
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'StreamFeatureTool_{}.qm'.format(locale))
+            'StreamFeatureExtractor_{}.qm'.format(locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -58,7 +58,7 @@ class StreamFeatureTool:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = StreamFeatureToolDialog()
+        self.dlg = StreamFeatureExtractorDialog()
 
         # Declare instance attributes
         self.action = None
@@ -67,8 +67,8 @@ class StreamFeatureTool:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
         self.action = QAction(
-            QIcon(":/plugins/streamfeaturetool/icon.png"),
-            u"Stream Features",
+            QIcon(":/plugins/StreamFeatureExtractor/icon.png"),
+            u"Stream feature extractor",
             self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)

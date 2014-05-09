@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- StreamFeatureToolDialog
+ StreamFeatureExtractorDialog
                                  A QGIS plugin
  A tool to extract features from a stream network.
                              -------------------
-        begin                : 2014-05-07
+        begin                : 2014-05-09
         copyright            : (C) 2014 by Linfiniti Consulting CC.
         email                : tim@linfiniti.com
  ***************************************************************************/
@@ -28,10 +28,10 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'stream_feature_extractor_dialog_base.ui'))
 
 
-class StreamFeatureToolDialog(QtGui.QDialog, FORM_CLASS):
+class StreamFeatureExtractorDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
-        super(StreamFeatureToolDialog, self).__init__(parent)
+        super(StreamFeatureExtractorDialog, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
