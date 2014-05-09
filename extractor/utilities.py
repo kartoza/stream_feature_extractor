@@ -15,7 +15,7 @@ __copyright__ = ''
 
 
 from exceptions import NotImplementedError
-from qgis.core import *
+from qgis.core import QgsFeature, QgsGeometry, QgsField, QgsVectorLayer
 
 
 def list_to_str(the_list, sep=','):
@@ -422,6 +422,7 @@ def identify_branch(layer):
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
 
+
 def identify_confluence(layer):
     """Mark nodes from the layer if it is a confluence.
 
@@ -502,6 +503,7 @@ def identify_self_intersection(layer):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
     """
+    _ = layer
     raise NotImplementedError
 
 
@@ -511,6 +513,7 @@ def identify_segment_center(layer):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
     """
+    _ = layer
     raise NotImplementedError
 
 
@@ -549,4 +552,3 @@ def identify_watershed(layer):
         attributes = {watershed_index: watershed_value}
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
-

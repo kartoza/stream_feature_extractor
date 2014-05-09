@@ -22,9 +22,8 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
-import resources_rc
 # Import the code for the dialog
-from stream_feature_extractor_dialog import StreamFeatureExtractorDialog
+from extractor.extractor_dialog import ExtractorDialog
 import os.path
 
 
@@ -58,7 +57,7 @@ class StreamFeatureExtractor:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = StreamFeatureExtractorDialog()
+        self.dlg = ExtractorDialog()
 
         # Declare instance attributes
         self.action = None

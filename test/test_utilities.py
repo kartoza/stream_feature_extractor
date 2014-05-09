@@ -13,14 +13,13 @@ __license__ = "GPL"
 __copyright__ = ''
 
 import os
-import hashlib
-from datetime import datetime
-from shutil import copy2
 import unittest
-from qgis.core import *
+
 from PyQt4.QtCore import QVariant
 
-from utitilities import (
+from qgis.core import QGis, QgsPoint
+
+from .extractor.utilities import (
     list_to_str,
     str_to_list,
     add_layer_attribute,
@@ -36,108 +35,15 @@ from utitilities import (
     identify_pseudo_node,
     identify_watershed
 )
+from test.utilities import (
+    get_temp_shapefile_layer,
+    get_qgis_app,
+    get_random_string)
 
-TEMP_DIR = os.path.join(
-    os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
 DATA_TEST_DIR = 'data_test'
 sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
 nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
-
-
-def get_random_string(length=7):
-    """Return random string with length=length.
-
-    :param length: length of the produced string
-    :type length: int
-
-    :returns: random string
-    :rtype: str
-    """
-    return hashlib.sha512(str(datetime.now())).hexdigest()[:length]
-
-
-def copy_temp_layer(shapefile_path, temp_dir=TEMP_DIR):
-    """Copy shapefile_path to temp directory and weird name.
-
-    :param shapefile_path: a path to shapefile
-    :type shapefile_path: str
-
-    :param temp_dir: temporary directory for saving the temporary shapefile
-    :type temp_dir: str
-
-    :returns: path to temporary shapefile
-    :rtype: str
-    """
-    # Avoid error
-    if not os.path.exists(shapefile_path):
-        raise OSError('Failed to copy.')
-
-    current_date = datetime.now().strftime('%Y%m%d')
-    temp_dir = os.path.join(temp_dir, current_date)
-
-    if not os.path.exists(temp_dir):
-        try:
-            os.makedirs(temp_dir)
-        except OSError:
-            raise OSError('Failed to create dirs %s.' % temp_dir)
-
-    exts = ['cpg', 'dbf', 'prj', 'qpj', 'shp', 'shx']
-    filename = os.path.basename(shapefile_path)
-    basename, ext = os.path.splitext(filename)
-    parent_dir = os.path.dirname(shapefile_path)
-
-    random_basename = get_random_string()
-    for ext in exts:
-        real_file = os.path.join(parent_dir, basename + '.' + ext)
-        if not os.path.exists(real_file):
-            continue
-        # copy file
-        temp_file = os.path.join(temp_dir, random_basename + '.' + ext)
-        copy2(real_file, temp_file)
-
-    # Checking
-    temp_shapefile = os.path.join(temp_dir, random_basename + '.shp')
-    if os.path.exists(temp_shapefile):
-        return temp_shapefile
-    else:
-        raise OSError('Failed to copy.')
-
-
-def get_shapefile_layer(shapefile_path, title):
-    """Return a layer of shapefile from shapefile_path.
-
-    :param shapefile_path: a file path to the shapefile
-    :type shapefile_path: str
-
-    :param title: the title of the layer
-    :type title: str
-
-    :param temp_dir: temporary directory for saving the temporary shapefile
-    :type temp_dir: str
-
-    :returns: A layer
-    :rtype: QGISVectorLayer
-    """
-    layer = QgsVectorLayer(shapefile_path, title, 'ogr')
-    return layer
-
-
-def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
-    """Return a copy of layer of shapefile from shapefile_path.
-
-    :param shapefile_path: a file path to the shapefile
-    :type shapefile_path: str
-
-    :param title: the title of the layer
-    :type title: str
-
-    :returns: A layer
-    :rtype: QGISVectorLayer
-
-    """
-    temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
-    print 'temporary file: ', temp_shapefile, title
-    return get_shapefile_layer(temp_shapefile, title)
+QGIS_APP = get_qgis_app()
 
 
 class TestUtilities(unittest.TestCase):
@@ -145,10 +51,6 @@ class TestUtilities(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # noinspection PyCallByClass,PyTypeChecker
-        QgsApplication.setPrefixPath('/usr', True)
-        # noinspection PyArgumentList
-        QgsApplication.initQgis()
         cls.sungai_layer = get_temp_shapefile_layer(
             sungai_di_jawa_shp, 'sungai_di_jawa')
         cls.nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
@@ -158,8 +60,7 @@ class TestUtilities(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # noinspection PyArgumentList
-        QgsApplication.exitQgis()
+        pass
 
     def test_random_string(self):
         """test for get_random_string function."""

@@ -30,5 +30,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .stream_feature_extractor import StreamFeatureExtractor
+    from .plugin import StreamFeatureExtractor
     return StreamFeatureExtractor(iface)

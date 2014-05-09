@@ -28,14 +28,14 @@ LOCALES = af
 # translation
 SOURCES = \
 	__init__.py \
-	stream_feature_extractor.py \
-	stream_feature_extractor_dialog.py
+	extractor.py \
+	extractor_dialog.py
 
 PLUGINNAME = StreamFeatureExtractor
 
 PY_FILES = \
-	stream_feature_extractor.py \
-	stream_feature_extractor_dialog.py \
+	extractor.py \
+	extractor_dialog.py \
 	__init__.py
 
 EXTRAS = icon.png metadata.txt

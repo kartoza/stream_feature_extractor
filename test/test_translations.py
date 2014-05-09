@@ -9,10 +9,9 @@
 """
 from utilities import get_qgis_app
 
-__author__ = 'ismailsunni@yahoo.co.id'
-__date__ = '12/10/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+__author__ = 'tim@linfiniti.com'
+__date__ = '9/5/2014'
+__copyright__ = 'Copyright 2014, Linfiniti Consulting CC'
 import unittest
 import os
 
@@ -21,7 +20,7 @@ from PyQt4.QtCore import QCoreApplication, QTranslator
 QGIS_APP = get_qgis_app()
 
 
-class SafeTranslationsTest(unittest.TestCase):
+class TranslationsTest(unittest.TestCase):
     """Test translations work."""
 
     def setUp(self):
@@ -50,6 +49,6 @@ class SafeTranslationsTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(SafeTranslationsTest)
+    suite = unittest.makeSuite(TranslationsTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

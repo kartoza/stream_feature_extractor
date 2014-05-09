@@ -16,18 +16,17 @@ import unittest
 
 from PyQt4.QtGui import QDialogButtonBox, QDialog
 
-from stream_feature_extractor_dialog import StreamFeatureExtractorDialog
-
+from extractor.extractor_dialog import ExtractorDialog
 from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
-class StreamFeatureExtractorDialogTest(unittest.TestCase):
+class ExtractorDialogTest(unittest.TestCase):
     """Test dialog works."""
 
     def setUp(self):
         """Runs before each test."""
-        self.dialog = StreamFeatureExtractorDialog(None)
+        self.dialog = ExtractorDialog(None)
 
     def tearDown(self):
         """Runs after each test."""
@@ -49,7 +48,7 @@ class StreamFeatureExtractorDialogTest(unittest.TestCase):
         self.assertEqual(result, QDialog.Rejected)
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(StreamFeatureExtractorDialogTest)
+    suite = unittest.makeSuite(ExtractorDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
 
