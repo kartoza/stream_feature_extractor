@@ -1,0 +1,36 @@
+# This file contains metadata for your plugin. Since 
+# version 2.0 of QGIS this is the proper way to supply 
+# information about a plugin. The old method of 
+# embedding metadata in __init__.py will 
+# is no longer supported since version 2.0.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Stream Feature Extractor
+qgisMinimumVersion=2.0
+description=A tool to extract features from a stream network.
+version=0.1
+author=Linfiniti Consulting CC.
+email=tim@linfiniti.com
+
+# End of mandatory metadata
+
+# Optional items:
+
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=stream,well,catchment,sink,confluence,branch
+
+homepage=https://github.com/timlinux/stream-feature-extractor
+tracker=https://github.com/timlinux/stream-feature-extractor/issues
+repository=git://github.com/timlinux/stream-feature-extractor.git
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
