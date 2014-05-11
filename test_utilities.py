@@ -36,8 +36,8 @@ from utilities import (
     identify_pseudo_node,
     identify_watershed,
     identify_self_intersection,
-    identify_segment_center
-)
+    identify_segment_center,
+    identify_features)
 
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
@@ -369,6 +369,7 @@ class TestUtilities(unittest.TestCase):
         message = ('There should be %s features but I got %s.' % (
             len(expected_attributes), i))
         self.assertEqual(len(expected_attributes), i, message)
+        print nodes_layer.source()
 
     def test_identify_well(self):
         """Test for identify_well method."""
@@ -566,6 +567,20 @@ class TestUtilities(unittest.TestCase):
         expected_center = QgsPoint(2.5, 0)
         message = 'Expected %s but I got %s' % (expected_center, center)
         self.assertEqual(expected_center, center, message)
+
+    def test_identify_features(self):
+        """Test for identify_features."""
+        sungai_layer = get_temp_shapefile_layer(
+            sungai_di_jawa_shp, 'sungai_di_jawa')
+        output_layer = identify_features(sungai_layer, THRESHOLD)
+
+        i = 0
+        for f in output_layer.getFeatures():
+            print f.id(), f.attributes(), f.geometry().asPoint()
+            i += 1
+        message = 'There should be 22 features, but I got %s' % i
+        self.assertEqual(i, 22, message)
+
 
 if __name__ == '__main__':
     unittest.main()

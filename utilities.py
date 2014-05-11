@@ -520,12 +520,12 @@ def identify_self_intersection(line):
             return True
         return False
 
-    intersections = []
+    self_intersections = []
 
     geometry = line.geometry()
     vertices = geometry.asPolyline()
     if len(vertices) <= 2:
-        return intersections
+        return self_intersections
 
     for i in range(len(vertices) - 2):
         v = (vertices[i + 1].x() - vertices[i].x(),
@@ -549,9 +549,10 @@ def identify_self_intersection(line):
             if not between(
                     vertices[i][1], intersection[1], vertices[i + 1][1]):
                     continue
-            intersections.append(QgsPoint(intersection[0], intersection[1]))
+            self_intersections.append(
+                QgsPoint(intersection[0], intersection[1]))
 
-    return intersections
+    return self_intersections
 
 
 def identify_segment_center(line):
@@ -632,3 +633,140 @@ def identify_watershed(layer):
         attributes = {watershed_index: watershed_value}
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
+
+
+# noinspection PyPep8Naming
+def identify_features(input_layer, threshold):
+    """Identify almost features in one functions and put it in a layer.
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QGISVectorLayer
+
+    :param threshold: Distance threshold for node snapping.
+    :type threshold: float
+
+    """
+    nodes = extract_node(input_layer)
+    memory_layer = create_nodes_layer(nodes)
+    add_associated_nodes(memory_layer, threshold)
+
+    identify_well(memory_layer)
+    identify_sink(memory_layer)
+    identify_branch(memory_layer)
+    identify_confluence(memory_layer)
+    identify_pseudo_node(memory_layer)
+    identify_watershed(memory_layer)
+
+    self_intersections = []
+    segment_centers = []
+
+    data_provider = input_layer.dataProvider()
+
+    features = data_provider.getFeatures()
+    for feature in features:
+        self_intersections.extend(identify_self_intersection(feature))
+        segment_centers.append(identify_segment_center(feature))
+
+    # create output layer
+    output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
+
+    # Start edit layer
+    output_layer.startEditing()
+    output_data_provider = output_layer.dataProvider()
+    # Add fields
+    output_data_provider.addAttributes([
+        QgsField('ID', QVariant.Int),
+        QgsField('X', QVariant.LongLong),
+        QgsField('Y', QVariant.LongLong),
+        QgsField('ART', QVariant.String)
+    ])
+
+    ID_index = output_layer.fieldNameIndex('ID')
+    X_index = output_layer.fieldNameIndex('X')
+    Y_index = output_layer.fieldNameIndex('Y')
+    ART_index = output_layer.fieldNameIndex('ART')
+
+    id_index = memory_layer.fieldNameIndex('id')
+    upstream_index = memory_layer.fieldNameIndex('up_nodes')
+    downstream_index = memory_layer.fieldNameIndex('down_nodes')
+    well_index = memory_layer.fieldNameIndex('well')
+    sink_index = memory_layer.fieldNameIndex('sink')
+    branch_index = memory_layer.fieldNameIndex('branch')
+    confluence_index = memory_layer.fieldNameIndex('pseudo')
+    pseudo_node_index = memory_layer.fieldNameIndex('confluence')
+    watershed_index = memory_layer.fieldNameIndex('watershed')
+
+    feature_indexes = [
+        well_index,
+        sink_index,
+        branch_index,
+        confluence_index,
+        pseudo_node_index,
+        watershed_index]
+
+    feature_names = [
+        'WELL',
+        'SINK',
+        'BRANCH',
+        'CONFLUENCE',
+        'PSEUDO_NODE',
+        'WATERSHED']
+
+    memory_data_provider = memory_layer.dataProvider()
+    nodes = memory_data_provider.getFeatures()
+
+    new_node_id = 1
+    expired_node_id = set()
+    for node in nodes:
+        # get data from memory layers
+        node_attribute = node.attributes()
+        node_id = node_attribute[id_index]
+        if node_id in expired_node_id:
+            # Continue to the next node if its nearby nodes has been already
+            # computed
+            continue
+
+        # Put nearby nodes to expired nodes
+        node_upstream = node_attribute[upstream_index]
+        node_upstream = set(str_to_list(node_upstream))
+        expired_node_id.union(node_upstream)
+
+        node_downstream = node_attribute[downstream_index]
+        node_downstream = set(str_to_list(node_downstream))
+        expired_node_id.union(node_downstream)
+
+        node_point = node.geometry().asPoint()
+        x = node_point.x()
+        y = node_point.y()
+
+        for i in range(len(feature_indexes)):
+            if node_attribute[feature_indexes[i]] == 1:
+                new_feature = QgsFeature()
+                new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
+                new_feature.setAttributes([new_node_id, x, y, feature_names[i]])
+                output_data_provider.addFeatures([new_feature])
+                new_node_id += 1
+
+    # self intersection
+    for self_intersection in self_intersections:
+        new_feature = QgsFeature()
+        new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
+        x = self_intersection.x()
+        y = self_intersection.y()
+        new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
+        output_data_provider.addFeatures([new_feature])
+        new_node_id += 1
+
+    for segment_center in segment_centers:
+        new_feature = QgsFeature()
+        new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
+        x = segment_center.x()
+        y = segment_center.y()
+        new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
+        output_data_provider.addFeatures([new_feature])
+        new_node_id += 1
+
+    output_layer.commitChanges()
+    return output_layer
+
+

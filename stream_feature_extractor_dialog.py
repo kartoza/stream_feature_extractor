@@ -23,10 +23,15 @@
 from qgis.core import *
 from stream_feature_extractor_dialog_base import Ui_StreamFeatureToolDialogBase
 
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, QVariant
 from PyQt4.QtGui import QMessageBox
 from PyQt4 import QtGui, uic
-from utilities import extract_node
+from utilities import (
+    extract_node,
+    create_nodes_layer,
+    add_associated_nodes,
+    identify_features,
+    add_layer_attribute)
 
 # FORM_CLASS, _ = uic.loadUiType(os.path.join(
 #     os.path.dirname(__file__), 'stream_feature_extractor_dialog_base.ui'))
@@ -51,6 +56,7 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
         # properties
         self.input_layer = None
         self.output_path = None
+        self.load_layer = False
         self.threshold = float(self.leThreshold.text())
 
     def get_vector_line_layers(self):
@@ -93,11 +99,38 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
     def extract(self):
         """The main feature extraction process."""
         nodes = extract_node(self.input_layer)
+        memory_layer = create_nodes_layer(nodes)
+        add_associated_nodes(memory_layer, self.threshold)
+        identify_features(memory_layer)
+
+        QMessageBox.warning(None, 'stream', memory_layer.name())
+
+    def put_in_layer(self, memory_layer):
+        """Put points from memory layer to final layer.
+
+        :param memory_layer: A layer that contains nodes and the identifying
+        results.
+        :type memory_layer: QgsVectorLayer
+
+        :returns: A layer that contains nodes and the types
+        :rtype: QgsVectorLayer
+        """
+        layer = QgsVectorLayer(self.output_path, 'nodes', 'ogr')
+        add_layer_attribute(layer, 'ID', QVariant.Int)
+        add_layer_attribute(layer, 'X', QVariant.LongLong)
+        add_layer_attribute(layer, 'Y', QVariant.LongLong)
+        add_layer_attribute(layer, 'ART', QVariant.String)
+
+        data_provider = memory_layer.dataProvider()
+
+
+
 
     def accept(self):
         """Run the feature extraction"""
         self.get_ingredients()
-        msg = ('%s \n %s \n %s \n %s' % (
-            self.input_layer, self.output_path, self.threshold,
-            self.load_layer))
-        QMessageBox.warning(None, 'stream', msg)
+        self.extract()
+        # msg = ('%s \n %s \n %s \n %s' % (
+        #     self.input_layer, self.output_path, self.threshold,
+        #     self.load_layer))
+        # QMessageBox.warning(None, 'stream', msg)
