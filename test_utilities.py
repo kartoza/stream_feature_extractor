@@ -152,7 +152,6 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
 
     """
     temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
-    print 'temporary file: ', temp_shapefile, title
     return get_shapefile_layer(temp_shapefile, title)
 
 
@@ -567,8 +566,6 @@ class TestUtilities(unittest.TestCase):
         expected_center = QgsPoint(2.5, 0)
         message = 'Expected %s but I got %s' % (expected_center, center)
         self.assertEqual(expected_center, center, message)
-
-        print self.nodes_layer.source()
 
 if __name__ == '__main__':
     unittest.main()
