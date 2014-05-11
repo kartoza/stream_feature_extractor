@@ -572,15 +572,27 @@ class TestUtilities(unittest.TestCase):
         """Test for identify_features."""
         sungai_layer = get_temp_shapefile_layer(
             sungai_di_jawa_shp, 'sungai_di_jawa')
-        output_layer = identify_features(sungai_layer, THRESHOLD)
+        # output_layer = identify_features(sungai_layer, THRESHOLD)
+        #
+        # i = 0
+        # for f in output_layer.getFeatures():
+        #     print f.id(), f.attributes(), f.geometry().asPoint()
+        #     i += 1
+        # message = 'There should be 22 features, but I got %s' % i
+        # self.assertEqual(i, 22, message)
 
-        i = 0
-        for f in output_layer.getFeatures():
-            print f.id(), f.attributes(), f.geometry().asPoint()
-            i += 1
-        message = 'There should be 22 features, but I got %s' % i
-        self.assertEqual(i, 22, message)
+        random_basename = get_random_string()
+        temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
+        output_layer = identify_features(sungai_layer, THRESHOLD, temp_file)
+        print output_layer.source(), 'alalala', temp_file
 
+        error = QgsVectorFileWriter.writeAsVectorFormat(
+            output_layer, temp_file, "CP1250", None, "ESRI Shapefile")
+
+        if error == QgsVectorFileWriter.NoError:
+            print "success!"
+
+        remove_temp_layer(temp_file)
 
 if __name__ == '__main__':
     unittest.main()

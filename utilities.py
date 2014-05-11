@@ -645,6 +645,7 @@ def identify_features(input_layer, threshold, output_path=None):
     :type threshold: float
 
     """
+    print 'alpha'
     nodes = extract_node(input_layer)
     memory_layer = create_nodes_layer(nodes)
     add_associated_nodes(memory_layer, threshold)
@@ -656,6 +657,7 @@ def identify_features(input_layer, threshold, output_path=None):
     identify_pseudo_node(memory_layer)
     identify_watershed(memory_layer)
 
+    print 'beta'
     self_intersections = []
     segment_centers = []
 
@@ -667,26 +669,20 @@ def identify_features(input_layer, threshold, output_path=None):
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
-    if output_path is None:
-        output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
-    else:
-        output_layer = QgsVectorLayer(output_path, 'Nodes', 'ogr')
-
+    # if output_path is None:
+    output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
+    # else:
+        # output_layer = QgsVectorLayer(output_path, 'Nodes', 'ogr')
     # Start edit layer
-    output_layer.startEditing()
     output_data_provider = output_layer.dataProvider()
+    output_layer.startEditing()
     # Add fields
     output_data_provider.addAttributes([
-        QgsField('ID', QVariant.Int),
-        QgsField('X', QVariant.LongLong),
-        QgsField('Y', QVariant.LongLong),
-        QgsField('ART', QVariant.String)
+        QgsField('id', QVariant.Int),
+        QgsField('x', QVariant.String),
+        QgsField('y', QVariant.String),
+        QgsField('art', QVariant.String),
     ])
-
-    ID_index = output_layer.fieldNameIndex('ID')
-    X_index = output_layer.fieldNameIndex('X')
-    Y_index = output_layer.fieldNameIndex('Y')
-    ART_index = output_layer.fieldNameIndex('ART')
 
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
@@ -740,13 +736,14 @@ def identify_features(input_layer, threshold, output_path=None):
         node_point = node.geometry().asPoint()
         x = node_point.x()
         y = node_point.y()
-
         for i in range(len(feature_indexes)):
             if node_attribute[feature_indexes[i]] == 1:
                 new_feature = QgsFeature()
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
-                new_feature.setAttributes([new_node_id, x, y, feature_names[i]])
+                new_feature.setAttributes(
+                    [new_node_id, str(x), str(y), feature_names[i]])
                 output_data_provider.addFeatures([new_feature])
+                output_layer.updateFields()
                 new_node_id += 1
 
     # self intersection
@@ -757,6 +754,7 @@ def identify_features(input_layer, threshold, output_path=None):
         y = self_intersection.y()
         new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
         output_data_provider.addFeatures([new_feature])
+        output_layer.updateFields()
         new_node_id += 1
 
     for segment_center in segment_centers:
@@ -766,6 +764,7 @@ def identify_features(input_layer, threshold, output_path=None):
         y = segment_center.y()
         new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
         output_data_provider.addFeatures([new_feature])
+        output_layer.updateFields()
         new_node_id += 1
 
     output_layer.commitChanges()
