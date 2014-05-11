@@ -192,3 +192,10 @@ pep8:
 	@echo "PEP8 issues"
 	@echo "-----------"
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,resources_rc.py . || true
+
+compile_ui:
+	@echo
+	@echo "-----------------"
+	@echo "Compile ui files."
+	@echo "-----------------"
+	pyuic4 -x stream_feature_extractor_dialog_base.ui -o stream_feature_extractor_dialog_base.py

@@ -58,7 +58,7 @@ class StreamFeatureTool:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = StreamFeatureToolDialog()
+        self.dlg = StreamFeatureToolDialog(self.iface)
 
         # Declare instance attributes
         self.action = None
@@ -90,6 +90,7 @@ class StreamFeatureTool:
         """Run method that performs all the real work"""
         # show the dialog
         self.dlg.show()
+        self.dlg.get_vector_line_layers()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
