@@ -26,6 +26,7 @@ from stream_feature_extractor_dialog_base import Ui_StreamFeatureToolDialogBase
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QMessageBox
 from PyQt4 import QtGui, uic
+from utilities import extract_node
 
 # FORM_CLASS, _ = uic.loadUiType(os.path.join(
 #     os.path.dirname(__file__), 'stream_feature_extractor_dialog_base.ui'))
@@ -45,10 +46,12 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
         # Save reference to the QGIS interface
         self.iface = iface
         self.setupUi(self)
+        self.leThreshold.setText('0.025')
 
         # properties
         self.input_layer = None
-        self.output_layer = None
+        self.output_path = None
+        self.threshold = float(self.leThreshold.text())
 
     def get_vector_line_layers(self):
         """Populate combo box with loaded vector line layer."""
@@ -75,8 +78,26 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
         if file_name != '':
             self.leFeaturesLayer.setText(file_name)
 
-    def accept(self):
-        """Run the feature extraction"""
+    def get_ingredients(self):
+        """Update all properties for extracting nodes."""
+        # Input layer
         input_layer_index = self.cboVectorLineLayer.currentIndex()
         self.input_layer = self.cboVectorLineLayer.itemData(input_layer_index)
-        QMessageBox.warning(None, 'stream', self.input_layer.name())
+        # Output path
+        self.output_path = self.leFeaturesLayer.text()
+        # Threshold
+        self.threshold = float(self.leThreshold.text())
+        # Load to QGIS
+        self.load_layer = self.cbLoadToQGIS.isChecked()
+
+    def extract(self):
+        """The main feature extraction process."""
+        nodes = extract_node(self.input_layer)
+
+    def accept(self):
+        """Run the feature extraction"""
+        self.get_ingredients()
+        msg = ('%s \n %s \n %s \n %s' % (
+            self.input_layer, self.output_path, self.threshold,
+            self.load_layer))
+        QMessageBox.warning(None, 'stream', msg)

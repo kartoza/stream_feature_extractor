@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'stream_feature_extractor_dialog_base.ui'
 #
-# Created: Sat May 10 13:11:40 2014
+# Created: Sun May 11 16:20:10 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_StreamFeatureToolDialogBase(object):
     def setupUi(self, StreamFeatureToolDialogBase):
         StreamFeatureToolDialogBase.setObjectName(_fromUtf8("StreamFeatureToolDialogBase"))
-        StreamFeatureToolDialogBase.resize(462, 143)
+        StreamFeatureToolDialogBase.resize(462, 176)
         self.gridLayout = QtGui.QGridLayout(StreamFeatureToolDialogBase)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.button_box = QtGui.QDialogButtonBox(StreamFeatureToolDialogBase)
@@ -59,7 +59,13 @@ class Ui_StreamFeatureToolDialogBase(object):
         font.setPointSize(11)
         self.cbLoadToQGIS.setFont(font)
         self.cbLoadToQGIS.setObjectName(_fromUtf8("cbLoadToQGIS"))
-        self.gridLayout_2.addWidget(self.cbLoadToQGIS, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbLoadToQGIS, 3, 0, 1, 1)
+        self.lblThreshold = QtGui.QLabel(StreamFeatureToolDialogBase)
+        self.lblThreshold.setObjectName(_fromUtf8("lblThreshold"))
+        self.gridLayout_2.addWidget(self.lblThreshold, 2, 0, 1, 1)
+        self.leThreshold = QtGui.QLineEdit(StreamFeatureToolDialogBase)
+        self.leThreshold.setObjectName(_fromUtf8("leThreshold"))
+        self.gridLayout_2.addWidget(self.leThreshold, 2, 1, 1, 1)
         self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
         self.retranslateUi(StreamFeatureToolDialogBase)
@@ -73,4 +79,15 @@ class Ui_StreamFeatureToolDialogBase(object):
         self.lblVectorLineLayer.setText(QtGui.QApplication.translate("StreamFeatureToolDialogBase", "Vector Line Layer", None, QtGui.QApplication.UnicodeUTF8))
         self.tbFeaturesLayer.setText(QtGui.QApplication.translate("StreamFeatureToolDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.cbLoadToQGIS.setText(QtGui.QApplication.translate("StreamFeatureToolDialogBase", "Load to QGIS", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblThreshold.setText(QtGui.QApplication.translate("StreamFeatureToolDialogBase", "Threshold", None, QtGui.QApplication.UnicodeUTF8))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    StreamFeatureToolDialogBase = QtGui.QDialog()
+    ui = Ui_StreamFeatureToolDialogBase()
+    ui.setupUi(StreamFeatureToolDialogBase)
+    StreamFeatureToolDialogBase.show()
+    sys.exit(app.exec_())
 

@@ -20,7 +20,7 @@ import unittest
 from qgis.core import *
 from PyQt4.QtCore import QVariant
 
-from utitilities import (
+from utilities import (
     list_to_str,
     str_to_list,
     add_layer_attribute,
