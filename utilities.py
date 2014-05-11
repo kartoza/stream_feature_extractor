@@ -107,7 +107,6 @@ def extract_node(layer, line_id_attribute='id'):
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
-
         line_id = feature.attributes()[id_index]
         first_point = points[0]
         last_point = points[-1]
@@ -636,7 +635,7 @@ def identify_watershed(layer):
 
 
 # noinspection PyPep8Naming
-def identify_features(input_layer, threshold):
+def identify_features(input_layer, threshold, output_path=None):
     """Identify almost features in one functions and put it in a layer.
 
     :param input_layer: A vector line layer.
@@ -668,7 +667,10 @@ def identify_features(input_layer, threshold):
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
-    output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
+    if output_path is None:
+        output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
+    else:
+        output_layer = QgsVectorLayer(output_path, 'Nodes', 'ogr')
 
     # Start edit layer
     output_layer.startEditing()

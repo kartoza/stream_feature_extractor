@@ -91,6 +91,8 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
         self.input_layer = self.cboVectorLineLayer.itemData(input_layer_index)
         # Output path
         self.output_path = self.leFeaturesLayer.text()
+        if self.output_path == '':
+            self.output_path = None
         # Threshold
         self.threshold = float(self.leThreshold.text())
         # Load to QGIS
@@ -98,12 +100,13 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
 
     def extract(self):
         """The main feature extraction process."""
-        nodes = extract_node(self.input_layer)
-        memory_layer = create_nodes_layer(nodes)
-        add_associated_nodes(memory_layer, self.threshold)
-        identify_features(memory_layer)
+        output_layer = identify_features(
+            self.input_layer, self.threshold, self.output_path)
 
-        QMessageBox.warning(None, 'stream', memory_layer.name())
+        for f in output_layer.getFeatures():
+            print f.id(), f.attributes(), f.geometry().asPoint()
+
+        QMessageBox.warning(None, 'stream', output_layer.name())
 
     def put_in_layer(self, memory_layer):
         """Put points from memory layer to final layer.
@@ -125,10 +128,11 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
 
 
 
-
+    @pyqtSignature('')  # prevents actions being handled twice
     def accept(self):
         """Run the feature extraction"""
         self.get_ingredients()
+        print self.output_path, self.threshold, self.input_layer.source()
         self.extract()
         # msg = ('%s \n %s \n %s \n %s' % (
         #     self.input_layer, self.output_path, self.threshold,
