@@ -645,7 +645,6 @@ def identify_features(input_layer, threshold, output_path=None):
     :type threshold: float
 
     """
-    print 'alpha'
     nodes = extract_node(input_layer)
     memory_layer = create_nodes_layer(nodes)
     add_associated_nodes(memory_layer, threshold)
@@ -657,7 +656,6 @@ def identify_features(input_layer, threshold, output_path=None):
     identify_pseudo_node(memory_layer)
     identify_watershed(memory_layer)
 
-    print 'beta'
     self_intersections = []
     segment_centers = []
 

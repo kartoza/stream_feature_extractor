@@ -106,6 +106,13 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
         for f in output_layer.getFeatures():
             print f.id(), f.attributes(), f.geometry().asPoint()
 
+        error = QgsVectorFileWriter.writeAsVectorFormat(
+                output_layer, self.output_path,
+                'CP1250', None, 'ESRI Shapefile')
+
+        if error == QgsVectorFileWriter.NoError:
+            print "success!"
+
         QMessageBox.warning(None, 'stream', output_layer.name())
 
     def put_in_layer(self, memory_layer):
