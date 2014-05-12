@@ -85,7 +85,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         layer.commitChanges()
 
 
-def extract_node(layer, line_id_attribute='id'):
+def extract_node(layer):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
     This method will extract node from vector line layer. We only extract the
@@ -94,20 +94,16 @@ def extract_node(layer, line_id_attribute='id'):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
 
-    :param line_id_attribute: The name of attribute that represent line id.
-    :type line_id_attribute: str
-
     :returns: list of tuple. The tuple contains line_id, first_point of the
         line, and last_point of the line.
     :rtype: list
     """
     nodes = []
     lines = layer.getFeatures()
-    id_index = layer.fieldNameIndex(line_id_attribute)
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
-        line_id = feature.attributes()[id_index]
+        line_id = feature.id()
         first_point = points[0]
         last_point = points[-1]
         nodes.append((line_id, first_point, last_point))

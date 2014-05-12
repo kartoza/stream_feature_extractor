@@ -258,21 +258,21 @@ class TestUtilities(unittest.TestCase):
     def test_extract_node(self):
         """Test for extracting nodes."""
         expected_nodes = [
-            (1, QgsPoint(110.23989972376222113, -7.43262727664988976),
+            (5, QgsPoint(110.23989972376222113, -7.43262727664988976),
              QgsPoint(110.25117617289369321, -7.77253167189859795)),
-            (2, QgsPoint(110.24634340898020923, -7.77092075059410181),
+            (4, QgsPoint(110.24634340898020923, -7.77092075059410181),
              QgsPoint(110.47509423421867325, -7.97067499235163623)),
             (3, QgsPoint(110.47670515552316317, -7.96745314974264396),
              QgsPoint(110.52181095204906569, -8.14626541454172681)),
-            (4, QgsPoint(110.46865054900068515, -7.96745314974264396),
+            (2, QgsPoint(110.46865054900068515, -7.96745314974264396),
              QgsPoint(110.69579045293465924, -7.75964430146262796)),
-            (5, QgsPoint(110.73123072163357961, -7.47773307317578428),
+            (0, QgsPoint(110.73123072163357961, -7.47773307317578428),
              QgsPoint(110.69417953163015511, -7.75803338015813182)),
-            (6, QgsPoint(110.69256861032566519, -7.75964430146262796),
+            (1, QgsPoint(110.69256861032566519, -7.75964430146262796),
              QgsPoint(110.97286891730800562, -7.7483678523311541)),
         ]
         layer = self.sungai_layer
-        nodes = extract_node(layer, 'id')
+        nodes = extract_node(layer)
         for node in expected_nodes:
             assert node in nodes, 'Node %s not found,' % str(node)
         assert len(nodes) == len(expected_nodes), (
@@ -281,7 +281,7 @@ class TestUtilities(unittest.TestCase):
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
-        nodes = extract_node(layer, 'id')
+        nodes = extract_node(layer)
         point_layer = create_nodes_layer(nodes)
         assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
         assert point_layer.isValid(), 'Layer is not valid.'
@@ -291,18 +291,18 @@ class TestUtilities(unittest.TestCase):
             'Geometry type should be %s' % QGis.Point)
 
         expected_nodes = [
-            [0, 5, 'upstream'],
-            [1, 5, 'downstream'],
-            [2, 6, 'upstream'],
-            [3, 6, 'downstream'],
-            [4, 4, 'upstream'],
-            [5, 4, 'downstream'],
+            [0, 0, 'upstream'],
+            [1, 0, 'downstream'],
+            [2, 1, 'upstream'],
+            [3, 1, 'downstream'],
+            [4, 2, 'upstream'],
+            [5, 2, 'downstream'],
             [6, 3, 'upstream'],
             [7, 3, 'downstream'],
-            [8, 2, 'upstream'],
-            [9, 2, 'downstream'],
-            [10, 1, 'upstream'],
-            [11, 1, 'downstream']
+            [8, 4, 'upstream'],
+            [9, 4, 'downstream'],
+            [10, 5, 'upstream'],
+            [11, 5, 'downstream']
         ]
 
         real_nodes = point_layer.getFeatures()
