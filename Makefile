@@ -40,6 +40,8 @@ PY_FILES = \
 
 EXTRAS = icon.png metadata.txt
 
+UI_FILES = stream_feature_extractor_dialog_base.ui
+
 COMPILED_RESOURCE_FILES = resources_rc.py
 
 
@@ -59,9 +61,6 @@ compile: $(COMPILED_RESOURCE_FILES)
 
 %_rc.py : %.qrc
 	pyrcc4 -o $*_rc.py  $<
-
-%.qm : %.ts
-	lrelease $<
 
 test: compile transcompile
 	@echo
@@ -86,8 +85,7 @@ deploy: compile doc transcompile
 	# $HOME/$(QGISDIR)/python/plugins
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vf $(COMPILED_UI_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vf $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	cp -vf $(UI_FILES) $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
@@ -167,7 +165,7 @@ clean:
 	@echo "------------------------------------"
 	@echo "Removing uic and rcc generated files"
 	@echo "------------------------------------"
-	rm $(COMPILED_UI_FILES) $(COMPILED_RESOURCE_FILES)
+	rm $(COMPILED_RESOURCE_FILES)
 
 doc:
 	@echo

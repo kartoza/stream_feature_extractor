@@ -67,7 +67,7 @@ class StreamFeatureTool:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
         self.action = QAction(
-            QIcon(":/plugins/streamfeaturetool/icon.svg"),
+            QIcon(":/plugins/StreamFeatureTool/icon.svg"),
             u"Stream Features",
             self.iface.mainWindow())
         # connect the action to the run method
