@@ -5,6 +5,8 @@
    Detailed multi-paragraph description...
 
 """
+from __future__ import division
+from math import sqrt
 from PyQt4.QtCore import QVariant
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
@@ -84,7 +86,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         layer.commitChanges()
 
 
-def extract_nodes(layer, line_id_attribute='id'):
+def extract_nodes(layer):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
     This method will extract node from vector line layer. We only extract the
@@ -106,8 +108,7 @@ def extract_nodes(layer, line_id_attribute='id'):
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
-
-        line_id = feature.attributes()[id_index]
+        line_id = feature.id()
         first_point = points[0]
         last_point = points[-1]
         nodes.append((line_id, first_point, last_point))
@@ -497,25 +498,106 @@ def identify_pseudo_nodes(layer):
     layer.commitChanges()
 
 
-def identify_self_intersections(layer):
-    """Mark nodes from the layer if self intersection is found.
+# noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+def identify_self_intersections(line):
+    """Return all self intersection points of a line.
 
-    :param layer: A vector line layer.
-    :type layer: QGISVectorLayer
+    Adapted from:
+    http://qgis.osgeo.org/api/qgsgeometryvalidator_8cpp_source.html#l00371
+
+    :param line: A line to be identified.
+    :type line: QgsFeature
+
+    :returns: List of QgsPoint that represent the intersection point.
+    :rtype: list
     """
-    raise NotImplementedError
+    def between(a, b, c):
+        """True if c is between a and b."""
+        if a <= b <= c:
+            return True
+        if c <= b <= a:
+            return True
+        return False
+
+    self_intersections = []
+
+    geometry = line.geometry()
+    vertices = geometry.asPolyline()
+    if len(vertices) <= 2:
+        return self_intersections
+
+    for i in range(len(vertices) - 2):
+        v = (vertices[i + 1].x() - vertices[i].x(),
+             vertices[i + 1].y() - vertices[i].y())
+        for j in range(i + 2, len(vertices) - 1):
+            w = (vertices[j + 1].x() - vertices[j].x(),
+                 vertices[j + 1].y() - vertices[j].y())
+            d = v[1] * w[0] - v[0] * w[1]
+            if d == 0:
+                return None
+
+            dx = vertices[j].x() - vertices[i].x()
+            dy = vertices[j].y() - vertices[i].y()
+
+            k = (dy * w[0] - dx * w[1]) / float(d)
+
+            intersection = vertices[i][0] + v[0] * k, vertices[i][1] + v[1] * k
+            if not between(
+                    vertices[i][0], intersection[0], vertices[i + 1][0]):
+                continue
+            if not between(
+                    vertices[i][1], intersection[1], vertices[i + 1][1]):
+                    continue
+            self_intersections.append(
+                QgsPoint(intersection[0], intersection[1]))
+
+    return self_intersections
 
 
-def identify_segment_centers(layer):
-    """Mark nodes from the layer if segment center is found.
+def identify_segment_center(line):
+    """Return a QgsPoint of linear segment center of the line.
 
-    :param layer: A vector line layer.
-    :type layer: QGISVectorLayer
+    :param line: A line to be identified.
+    :type line: QgsFeature
+
+    :returns: A linear segment center
+    :rtype: QgsPoint
     """
-    raise NotImplementedError
+    geometry = line.geometry()
+    vertices = geometry.asPolyline()
+
+    part_length = []
+    for i in range(len(vertices) - 1):
+        length = vertices[i].sqrDist(vertices[i + 1])
+        part_length.append(sqrt(length))
+
+    line_length = sum(part_length)
+    half_length = 0.5 * line_length
+
+    current_length = 0
+    i = 0
+    add_length = 0
+    while current_length <= half_length:
+        add_length = part_length[i]
+        current_length += add_length
+        i += 1
+
+    current_length -= add_length
+    delta_length = half_length - current_length
+    i -= 1
+
+    ratio = float(delta_length) / float(add_length)
+
+    center_x = vertices[i].x()
+    center_x += ratio * (vertices[i + 1].x() - vertices[i].x())
+
+    center_y = vertices[i].y()
+    center_y += ratio * (vertices[i + 1].y() - vertices[i].y())
+
+    return QgsPoint(center_x, center_y)
 
 
-def identify_watersheds(layer):
+def identify_watershed(layer):
     """Mark nodes from the layer if it is a watershed.
 
     A node is identified as a watershed if the number of upstream nodes > 0
@@ -552,6 +634,141 @@ def identify_watersheds(layer):
     layer.commitChanges()
 
 
+# noinspection PyPep8Naming
+def identify_features(input_layer, threshold, output_path=None):
+    """Identify almost features in one functions and put it in a layer.
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QGISVectorLayer
+
+    :param threshold: Distance threshold for node snapping.
+    :type threshold: float
+
+    """
+    nodes = extract_node(input_layer)
+    memory_layer = create_nodes_layer(nodes)
+    add_associated_nodes(memory_layer, threshold)
+
+    identify_wells(memory_layer)
+    identify_sinks(memory_layer)
+    identify_branches(memory_layer)
+    identify_confluences(memory_layer)
+    identify_pseudo_nodes(memory_layer)
+    identify_watersheds(memory_layer)
+
+    self_intersections = []
+    segment_centers = []
+
+    data_provider = input_layer.dataProvider()
+
+    features = data_provider.getFeatures()
+    for feature in features:
+        self_intersections.extend(identify_self_intersection(feature))
+        segment_centers.append(identify_segment_center(feature))
+
+    # create output layer
+    # if output_path is None:
+    output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
+    # else:
+        # output_layer = QgsVectorLayer(output_path, 'Nodes', 'ogr')
+    # Start edit layer
+    output_data_provider = output_layer.dataProvider()
+    output_layer.startEditing()
+    # Add fields
+    output_data_provider.addAttributes([
+        QgsField('id', QVariant.Int),
+        QgsField('x', QVariant.String),
+        QgsField('y', QVariant.String),
+        QgsField('art', QVariant.String),
+    ])
+
+    id_index = memory_layer.fieldNameIndex('id')
+    upstream_index = memory_layer.fieldNameIndex('up_nodes')
+    downstream_index = memory_layer.fieldNameIndex('down_nodes')
+    well_index = memory_layer.fieldNameIndex('well')
+    sink_index = memory_layer.fieldNameIndex('sink')
+    branch_index = memory_layer.fieldNameIndex('branch')
+    confluence_index = memory_layer.fieldNameIndex('pseudo')
+    pseudo_node_index = memory_layer.fieldNameIndex('confluence')
+    watershed_index = memory_layer.fieldNameIndex('watershed')
+
+    feature_indexes = [
+        well_index,
+        sink_index,
+        branch_index,
+        confluence_index,
+        pseudo_node_index,
+        watershed_index]
+
+    feature_names = [
+        'WELL',
+        'SINK',
+        'BRANCH',
+        'CONFLUENCE',
+        'PSEUDO_NODE',
+        'WATERSHED']
+
+    memory_data_provider = memory_layer.dataProvider()
+    nodes = memory_data_provider.getFeatures()
+
+    new_node_id = 1
+    expired_node_id = set()
+    for node in nodes:
+        # get data from memory layers
+        node_attribute = node.attributes()
+        node_id = node_attribute[id_index]
+        if node_id in expired_node_id:
+            # Continue to the next node if its nearby nodes has been already
+            # computed
+            continue
+
+        # Put nearby nodes to expired nodes
+        node_upstream = node_attribute[upstream_index]
+        node_upstream = set(str_to_list(node_upstream))
+        expired_node_id.union(node_upstream)
+
+        node_downstream = node_attribute[downstream_index]
+        node_downstream = set(str_to_list(node_downstream))
+        expired_node_id.union(node_downstream)
+
+        node_point = node.geometry().asPoint()
+        x = node_point.x()
+        y = node_point.y()
+        for i in range(len(feature_indexes)):
+            if node_attribute[feature_indexes[i]] == 1:
+                new_feature = QgsFeature()
+                new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
+                new_feature.setAttributes(
+                    [new_node_id, str(x), str(y), feature_names[i]])
+                output_data_provider.addFeatures([new_feature])
+                output_layer.updateFields()
+                new_node_id += 1
+
+    # self intersection
+    for self_intersection in self_intersections:
+        new_feature = QgsFeature()
+        new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
+        x = self_intersection.x()
+        y = self_intersection.y()
+        new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
+        output_data_provider.addFeatures([new_feature])
+        output_layer.updateFields()
+        new_node_id += 1
+
+    for segment_center in segment_centers:
+        new_feature = QgsFeature()
+        new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
+        x = segment_center.x()
+        y = segment_center.y()
+        new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
+        output_data_provider.addFeatures([new_feature])
+        output_layer.updateFields()
+        new_node_id += 1
+
+    output_layer.commitChanges()
+    return output_layer
+
+
 def is_line_layer(layer):
     """Check if a QGIS layer is vector and its geometries are lines.
 
@@ -566,3 +783,4 @@ def is_line_layer(layer):
             layer.geometryType() == QGis.Line)
     except AttributeError:
         return False
+
