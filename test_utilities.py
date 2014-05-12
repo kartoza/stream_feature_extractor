@@ -17,7 +17,13 @@ import hashlib
 from datetime import datetime
 from shutil import copy2
 import unittest
-from qgis.core import *
+from qgis.core import (
+    QGis,
+    QgsVectorLayer,
+    QgsPoint,
+    QgsVectorFileWriter,
+    QgsGeometry,
+    QgsFeature)
 from PyQt4.QtCore import QVariant
 
 from utilities import (
@@ -35,10 +41,12 @@ from utilities import (
     identify_confluences,
     identify_pseudo_nodes,
     identify_watersheds,
-    identify_self_intersection,
+    identify_self_intersections,
     identify_segment_center,
     identify_features)
-)
+
+from test.utilities import get_qgis_app
+QGIS_APP = get_qgis_app()
 
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
@@ -132,8 +140,6 @@ def get_shapefile_layer(shapefile_path, title):
     :param title: the title of the layer
     :type title: str
 
-    :param temp_dir: temporary directory for saving the temporary shapefile
-    :type temp_dir: str
 
     :returns: A layer
     :rtype: QGISVectorLayer
@@ -166,10 +172,6 @@ class TestUtilities(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # noinspection PyCallByClass,PyTypeChecker
-        QgsApplication.setPrefixPath('/usr', True)
-        # noinspection PyArgumentList
-        QgsApplication.initQgis()
         cls.sungai_layer = get_temp_shapefile_layer(
             sungai_di_jawa_shp, 'sungai_di_jawa')
 
@@ -181,8 +183,6 @@ class TestUtilities(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # noinspection PyArgumentList
-        QgsApplication.exitQgis()
         remove_temp_layer(cls.sungai_layer.source())
         remove_temp_layer(cls.nodes_layer.source())
         remove_temp_layer(cls.prepared_nodes_layer.source())
@@ -250,7 +250,7 @@ class TestUtilities(unittest.TestCase):
         message = 'New attribute has not been added yet.'
         self.assertTrue(id_index > -1, message)
 
-    def check_data_test(self):
+    def test_check_data(self):
         """Test for checking the data test."""
         layer = self.sungai_layer
         assert layer.name() == 'sungai_di_jawa', (
@@ -260,7 +260,7 @@ class TestUtilities(unittest.TestCase):
         assert layer.geometryType() == QGis.Line, (
             'Geometry type should be %s' % QGis.Line)
 
-    def test_extract_node(self):
+    def test_extract_nodes(self):
         """Test for extracting nodes."""
         expected_nodes = [
             (5, QgsPoint(110.23989972376222113, -7.43262727664988976),
@@ -277,7 +277,7 @@ class TestUtilities(unittest.TestCase):
              QgsPoint(110.97286891730800562, -7.7483678523311541)),
         ]
         layer = self.sungai_layer
-        nodes = extract_node(layer)
+        nodes = extract_nodes(line_id_attribute='id', layer=layer)
         for node in expected_nodes:
             assert node in nodes, 'Node %s not found,' % str(node)
         assert len(nodes) == len(expected_nodes), (
@@ -286,7 +286,7 @@ class TestUtilities(unittest.TestCase):
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
-        nodes = extract_node(layer)
+        nodes = extract_nodes(line_id_attribute='id', layer=layer)
         point_layer = create_nodes_layer(nodes)
         assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
         assert point_layer.isValid(), 'Layer is not valid.'
@@ -376,7 +376,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(len(expected_attributes), i, message)
         print nodes_layer.source()
 
-    def test_identify_well(self):
+    def test_identify_wells(self):
         """Test for identify_well method."""
         nodes_layer = self.prepared_nodes_layer
         identify_well(nodes_layer)
@@ -398,7 +398,7 @@ class TestUtilities(unittest.TestCase):
                 self.assertEqual(
                     0, well_value, 'Node %s Should not be a well' % node_id)
 
-    def test_identify_sink(self):
+    def test_identify_sinks(self):
         """Test for identify_sink method."""
         nodes_layer = self.prepared_nodes_layer
         identify_sink(nodes_layer)
@@ -420,10 +420,10 @@ class TestUtilities(unittest.TestCase):
                 self.assertEqual(
                     0, sink_value, 'Node %s Should not be a sink' % node_id)
 
-    def test_identify_branch(self):
+    def test_identify_branches(self):
         """Test for identify_branch method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_branch(nodes_layer)
+        identify_branches(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -442,10 +442,10 @@ class TestUtilities(unittest.TestCase):
                 self.assertEqual(0, branch_value,
                                  'Node %s Should not be a branch' % node_id)
 
-    def test_identify_confluence(self):
+    def test_identify_confluences(self):
         """Test for identify_confluence method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_confluence(nodes_layer)
+        identify_confluences(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -471,7 +471,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_pseudo_node(self):
         """Test for identify_pseudo_node method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_pseudo_node(nodes_layer)
+        identify_pseudo_nodes(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -536,7 +536,7 @@ class TestUtilities(unittest.TestCase):
         ]
 
         for feature in features:
-            intersections = identify_self_intersection(feature)
+            intersections = identify_self_intersections(feature)
             message = 'The number of intersections points should be 3.'
             self.assertEqual(len(intersections), 3, message)
             message = 'There is item not equal in %s and %s.' % (
@@ -588,7 +588,7 @@ class TestUtilities(unittest.TestCase):
 
         random_basename = get_random_string()
         temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
-        output_layer = identify_features(sungai_layer, THRESHOLD, temp_file)
+        output_layer = identify_features(sungai_layer, THRESHOLD)
 
         error = QgsVectorFileWriter.writeAsVectorFormat(
             output_layer, temp_file, "CP1250", None, "ESRI Shapefile")

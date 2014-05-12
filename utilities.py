@@ -86,7 +86,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         layer.commitChanges()
 
 
-def extract_nodes(layer):
+def extract_nodes(line_id_attribute, layer):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
     This method will extract node from vector line layer. We only extract the
@@ -597,7 +597,7 @@ def identify_segment_center(line):
     return QgsPoint(center_x, center_y)
 
 
-def identify_watershed(layer):
+def identify_watersheds(layer):
     """Mark nodes from the layer if it is a watershed.
 
     A node is identified as a watershed if the number of upstream nodes > 0
@@ -635,7 +635,7 @@ def identify_watershed(layer):
 
 
 # noinspection PyPep8Naming
-def identify_features(input_layer, threshold, output_path=None):
+def identify_features(input_layer, threshold):
     """Identify almost features in one functions and put it in a layer.
 
     :param input_layer: A vector line layer.
@@ -644,8 +644,10 @@ def identify_features(input_layer, threshold, output_path=None):
     :param threshold: Distance threshold for node snapping.
     :type threshold: float
 
+    :returns: Map layer (memory layer) containing identified features.
+    :rtype: QgsVectorLayer
     """
-    nodes = extract_node(input_layer)
+    nodes = extract_nodes(line_id_attribute='id', layer=input_layer)
     memory_layer = create_nodes_layer(nodes)
     add_associated_nodes(memory_layer, threshold)
 
@@ -663,7 +665,7 @@ def identify_features(input_layer, threshold, output_path=None):
 
     features = data_provider.getFeatures()
     for feature in features:
-        self_intersections.extend(identify_self_intersection(feature))
+        self_intersections.extend(identify_self_intersections(feature))
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
