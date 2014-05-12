@@ -19,13 +19,18 @@
  *                                                                         *
  ***************************************************************************/
 """
+
+import os.path
+
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
+from qgis.core import QgsMapLayerRegistry
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
 from stream_feature_extractor_dialog import StreamFeatureToolDialog
-import os.path
+from utilities import (
+    is_line_layer, create_nodes_layer, extract_nodes, add_associated_nodes)
 
 
 class StreamFeatureTool:
@@ -61,33 +66,55 @@ class StreamFeatureTool:
         self.dlg = StreamFeatureToolDialog()
 
         # Declare instance attributes
-        self.action = None
+        self.run_action = None
+        self.options_action = None
+        self.active_layer = None
+
+        # For enable/disable the menu option and setting active_layer
+        self.iface.currentLayerChanged.connect(self.layer_changed)
+
+        if self.iface.activeLayer() is not None:
+            self.layer_changed()
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
-        self.action = QAction(
+        self.run_action = QAction(
             QIcon(":/plugins/StreamFeatureTool/icon.svg"),
-            u"Stream Features",
+            u"Extract from current layer",
             self.iface.mainWindow())
         # connect the action to the run method
-        self.action.triggered.connect(self.run)
-
+        self.run_action.triggered.connect(self.run)
         # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(
+        self.iface.addToolBarIcon(self.run_action)
+        self.iface.addPluginToVectorMenu(
             u"&Stream Feature Extractor",
-            self.action)
+            self.run_action)
+
+        # self.options_action = QAction(
+        #     QIcon(":/plugins/StreamFeatureTool/icon.svg"),
+        #     u"Options",
+        #     self.iface.mainWindow())
+        # # connect the action to the run method
+        # self.run_action.triggered.connect(self.show_options)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         self.iface.removePluginMenu(
             u"&Stream Feature Extractor",
-            self.action)
-        self.iface.removeToolBarIcon(self.action)
+            self.run_action)
+        self.iface.removeToolBarIcon(self.run_action)
 
     def run(self):
-        """Run method that performs all the real work"""
+        """Run method that performs all the real work."""
+
+        nodes = extract_nodes(self.iface.activeLayer())
+        layer = create_nodes_layer(nodes)
+        add_associated_nodes(layer, threshold=5)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+    def show_options(self):
+        """Show dialog with plugin options."""
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
@@ -97,3 +124,12 @@ class StreamFeatureTool:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
+
+    def layer_changed(self, layer):
+        """Enable or disable extract features action when active layer changes.
+
+        :param layer: The layer that is now active.
+        :type layer: QgsMapLayer
+        """
+        flag = is_line_layer(layer)
+        self.run_action.setEnabled(flag)

@@ -20,21 +20,21 @@ import unittest
 from qgis.core import *
 from PyQt4.QtCore import QVariant
 
-from utitilities import (
+from utilities import (
     list_to_str,
     str_to_list,
     add_layer_attribute,
-    extract_node,
+    extract_nodes,
     create_nodes_layer,
     get_nearby_nodes,
     add_associated_nodes,
     check_associated_attributes,
-    identify_well,
-    identify_sink,
-    identify_branch,
-    identify_confluence,
-    identify_pseudo_node,
-    identify_watershed
+    identify_wells,
+    identify_sinks,
+    identify_branches,
+    identify_confluences,
+    identify_pseudo_nodes,
+    identify_watersheds
 )
 
 TEMP_DIR = os.path.join(
@@ -251,7 +251,7 @@ class TestUtilities(unittest.TestCase):
              QgsPoint(110.97286891730800562, -7.7483678523311541)),
         ]
         layer = self.sungai_layer
-        nodes = extract_node(layer, 'id')
+        nodes = extract_nodes(layer, 'id')
         for node in expected_nodes:
             assert node in nodes, 'Node %s not found,' % str(node)
         assert len(nodes) == len(expected_nodes), (
@@ -260,7 +260,7 @@ class TestUtilities(unittest.TestCase):
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
-        nodes = extract_node(layer, 'id')
+        nodes = extract_nodes(layer, 'id')
         point_layer = create_nodes_layer(nodes)
         assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
         assert point_layer.isValid(), 'Layer is not valid.'
@@ -351,7 +351,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_well(self):
         """Test for identify_well method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_well(nodes_layer)
+        identify_wells(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -373,7 +373,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_sink(self):
         """Test for identify_sink method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_sink(nodes_layer)
+        identify_sinks(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -395,7 +395,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_branch(self):
         """Test for identify_branch method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_branch(nodes_layer)
+        identify_branches(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -417,7 +417,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_confluence(self):
         """Test for identify_confluence method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_confluence(nodes_layer)
+        identify_confluences(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -443,7 +443,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_pseudo_node(self):
         """Test for identify_pseudo_node method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_pseudo_node(nodes_layer)
+        identify_pseudo_nodes(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -469,7 +469,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_watershed(self):
         """Test for identify_watershed method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_watershed(nodes_layer)
+        identify_watersheds(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')

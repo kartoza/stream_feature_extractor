@@ -84,7 +84,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         layer.commitChanges()
 
 
-def extract_node(layer, line_id_attribute='id'):
+def extract_nodes(layer, line_id_attribute='id'):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
     This method will extract node from vector line layer. We only extract the
@@ -312,7 +312,7 @@ def check_associated_attributes(layer):
         return True
 
 
-def identify_well(layer):
+def identify_wells(layer):
     """Mark nodes from the layer if it is a well.
 
     A node is identified as a well if the number of upstream nodes = 0 and
@@ -349,7 +349,7 @@ def identify_well(layer):
     layer.commitChanges()
 
 
-def identify_sink(layer):
+def identify_sinks(layer):
     """Mark nodes from the layer if it is a sink.
 
     A node is identified as a sink if the number of upstream nodes > 0 and
@@ -386,7 +386,7 @@ def identify_sink(layer):
     layer.commitChanges()
 
 
-def identify_branch(layer):
+def identify_branches(layer):
     """Mark nodes from the layer if it is a branch.
 
     A node is identified as a branch if the number of upstream nodes > 0 and
@@ -422,7 +422,8 @@ def identify_branch(layer):
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
 
-def identify_confluence(layer):
+
+def identify_confluences(layer):
     """Mark nodes from the layer if it is a confluence.
 
     A node is identified as a confluence if the number of upstream nodes > 1
@@ -459,7 +460,7 @@ def identify_confluence(layer):
     layer.commitChanges()
 
 
-def identify_pseudo_node(layer):
+def identify_pseudo_nodes(layer):
     """Mark nodes from the layer if it is a pseudo_node.
 
     A node is identified as a pseudo_node if the number of upstream nodes == 1
@@ -496,7 +497,7 @@ def identify_pseudo_node(layer):
     layer.commitChanges()
 
 
-def identify_self_intersection(layer):
+def identify_self_intersections(layer):
     """Mark nodes from the layer if self intersection is found.
 
     :param layer: A vector line layer.
@@ -505,7 +506,7 @@ def identify_self_intersection(layer):
     raise NotImplementedError
 
 
-def identify_segment_center(layer):
+def identify_segment_centers(layer):
     """Mark nodes from the layer if segment center is found.
 
     :param layer: A vector line layer.
@@ -514,7 +515,7 @@ def identify_segment_center(layer):
     raise NotImplementedError
 
 
-def identify_watershed(layer):
+def identify_watersheds(layer):
     """Mark nodes from the layer if it is a watershed.
 
     A node is identified as a watershed if the number of upstream nodes > 0
@@ -550,3 +551,18 @@ def identify_watershed(layer):
         data_provider.changeAttributeValues({node_fid: attributes})
     layer.commitChanges()
 
+
+def is_line_layer(layer):
+    """Check if a QGIS layer is vector and its geometries are lines.
+
+    :param layer: A vector layer.
+    :type layer: QgsVectorLayer, QgsMapLayer
+
+    :returns: True if the layer contains lines, otherwise False.
+    :rtype: bool
+    """
+    try:
+        return (layer.type() == QgsMapLayer.VectorLayer) and (
+            layer.geometryType() == QGis.Line)
+    except AttributeError:
+        return False
