@@ -36,13 +36,12 @@ PLUGINNAME = StreamFeatureTool
 
 PY_FILES = \
 	stream_feature_extractor.py \
-	stream_feature_extractor_dialog.py \
 	__init__.py \
 	utilities.py
 
 EXTRAS = icon.png metadata.txt
 
-UI_FILES = stream_feature_extractor_dialog_base.ui
+UI_FILES =
 
 COMPILED_RESOURCE_FILES = resources_rc.py
 

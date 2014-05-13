@@ -678,14 +678,14 @@ def identify_features(input_layer, threshold):
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
-    # if output_path is None:
-    output_layer = QgsVectorLayer('Point', 'Nodes', 'memory')
-    # else:
-        # output_layer = QgsVectorLayer(output_path, 'Nodes', 'ogr')
+    authority_id = input_layer.crs().authid()
+    output_layer = QgsVectorLayer(
+        'Point?crs=%i&index=yes' % authority_id, 'Nodes', 'memory')
+
     # Start edit layer
     output_data_provider = output_layer.dataProvider()
     output_layer.startEditing()
-    # Add fields
+    # Add fields (note you could also do this in uri of vector layer ctor TS)
     output_data_provider.addAttributes([
         QgsField('id', QVariant.Int),
         QgsField('x', QVariant.String),
