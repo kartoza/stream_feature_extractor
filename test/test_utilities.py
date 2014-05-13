@@ -26,7 +26,7 @@ from qgis.core import (
     QgsFeature)
 from PyQt4.QtCore import QVariant
 
-from utilities import (
+from utilities_stream import (
     list_to_str,
     str_to_list,
     add_layer_attribute,
@@ -45,14 +45,14 @@ from utilities import (
     identify_segment_center,
     identify_features)
 
-from test.utilities import get_qgis_app
+from test.utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
-DATA_TEST_DIR = 'data_test'
-sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
-nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
+DATA_TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
+JAWA_SHP = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
+NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
 
 THRESHOLD = 0.025
 
@@ -173,12 +173,12 @@ class TestUtilities(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.sungai_layer = get_temp_shapefile_layer(
-            sungai_di_jawa_shp, 'sungai_di_jawa')
+            JAWA_SHP, 'sungai_di_jawa')
 
-        cls.nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        cls.nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
 
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
-            nodes_shp, 'prepared_nodes')
+            NODES_SHP, 'prepared_nodes')
         add_associated_nodes(cls.prepared_nodes_layer, THRESHOLD)
 
     @classmethod
@@ -317,7 +317,7 @@ class TestUtilities(unittest.TestCase):
             self.assertIn(node_attributes, expected_nodes, message)
 
         # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     point_layer, nodes_shp, "CP1250", None, "ESRI Shapefile")
+        #     point_layer, NODES_SHP, "CP1250", None, "ESRI Shapefile")
         #
         # if error == QgsVectorFileWriter.NoError:
         #     print "success!"
@@ -339,7 +339,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_check_associated_attributes(self):
         """Test for check_associated_attributes"""
-        nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
         message = 'Should be False.'
         assert not check_associated_attributes(nodes_layer), message
 
@@ -494,7 +494,7 @@ class TestUtilities(unittest.TestCase):
                     pseudo_node_value,
                     'Node %s Should not be a pseudo_node' % node_id)
 
-    def test_identify_watershed(self):
+    def test_identify_watersheds(self):
         """Test for identify_watershed method."""
         nodes_layer = self.prepared_nodes_layer
         identify_watersheds(nodes_layer)
@@ -521,8 +521,8 @@ class TestUtilities(unittest.TestCase):
                     'Node %s Should not be a watershed' % node_id)
 
     # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-    def test_identify_self_intersection(self):
-        """Test for identify_self_intersection."""
+    def test_identify_self_intersections(self):
+        """Test for identify_self_intersections."""
         line_intersect = os.path.join(DATA_TEST_DIR, 'line_intersect.shp')
         line_intersect = get_temp_shapefile_layer(line_intersect, 'lines')
 
@@ -541,7 +541,7 @@ class TestUtilities(unittest.TestCase):
             self.assertEqual(len(intersections), 3, message)
             message = 'There is item not equal in %s and %s.' % (
                 expected_intersections, intersections)
-            self.assertItemsEqual(
+            self.assertListEqual(
                 intersections, expected_intersections, message)
 
     # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
@@ -576,7 +576,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_features(self):
         """Test for identify_features."""
         sungai_layer = get_temp_shapefile_layer(
-            sungai_di_jawa_shp, 'sungai_di_jawa')
+            JAWA_SHP, 'sungai_di_jawa')
         output_layer = identify_features(sungai_layer, THRESHOLD)
 
         i = 0
