@@ -182,7 +182,7 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc safe . || true
+	@pylint --reports=n --rcfile=pylintrc . || true
 
 
 # Run pep8 style checking
