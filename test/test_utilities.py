@@ -616,7 +616,7 @@ class TestUtilities(unittest.TestCase):
         self.assertTrue(os.path.exists(temp_file), message)
         remove_temp_layer(temp_file)
 
-    def test_identify_features_dgn(self):
+    def Xtest_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
         layer = get_temp_shapefile_layer(
             DGN_SHP, 'dgn_lines')
