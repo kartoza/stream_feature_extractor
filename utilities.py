@@ -18,6 +18,7 @@ from math import sqrt
 from PyQt4.QtCore import QVariant
 
 from qgis.core import (
+    QGis,
     QgsField,
     QgsVectorLayer,
     QgsFeature,
