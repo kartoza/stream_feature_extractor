@@ -20,25 +20,28 @@
  ***************************************************************************/
 """
 
-from qgis.core import *
-from stream_feature_extractor_dialog_base import Ui_StreamFeatureToolDialogBase
+import os
 
 from PyQt4.QtCore import pyqtSignature, QVariant
 from PyQt4.QtGui import QMessageBox
 from PyQt4 import QtGui, uic
+
+from qgis.core import (
+    QGis,
+    QgsVectorFileWriter,
+    QgsVectorLayer,
+    QgsMapLayerRegistry,
+    QgsMapLayer)
+
 from utilities import (
-    extract_node,
-    create_nodes_layer,
-    add_associated_nodes,
     identify_features,
     add_layer_attribute)
 
-# FORM_CLASS, _ = uic.loadUiType(os.path.join(
-#     os.path.dirname(__file__), 'stream_feature_extractor_dialog_base.ui'))
-# FORM_CLASS = Ui_StreamFeatureToolDialogBase
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+     os.path.dirname(__file__), 'stream_feature_extractor_dialog_base.ui'))
 
 
-class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
+class StreamFeatureToolDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, iface, parent=None):
         """Constructor."""
         super(StreamFeatureToolDialog, self).__init__(parent)
@@ -107,8 +110,11 @@ class StreamFeatureToolDialog(QtGui.QDialog, Ui_StreamFeatureToolDialogBase):
             print f.id(), f.attributes(), f.geometry().asPoint()
 
         error = QgsVectorFileWriter.writeAsVectorFormat(
-                output_layer, self.output_path,
-                'CP1250', None, 'ESRI Shapefile')
+                output_layer,
+                self.output_path,
+                'CP1250',
+                None,
+                'ESRI Shapefile')
 
         if error == QgsVectorFileWriter.NoError:
             print "success!"

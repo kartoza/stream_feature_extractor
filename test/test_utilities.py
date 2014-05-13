@@ -51,8 +51,8 @@ QGIS_APP = get_qgis_app()
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
 DATA_TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
-sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
-nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
+JAWA_SHP = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
+NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
 
 THRESHOLD = 0.025
 
@@ -173,12 +173,12 @@ class TestUtilities(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.sungai_layer = get_temp_shapefile_layer(
-            sungai_di_jawa_shp, 'sungai_di_jawa')
+            JAWA_SHP, 'sungai_di_jawa')
 
-        cls.nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        cls.nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
 
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
-            nodes_shp, 'prepared_nodes')
+            NODES_SHP, 'prepared_nodes')
         add_associated_nodes(cls.prepared_nodes_layer, THRESHOLD)
 
     @classmethod
@@ -317,7 +317,7 @@ class TestUtilities(unittest.TestCase):
             self.assertIn(node_attributes, expected_nodes, message)
 
         # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     point_layer, nodes_shp, "CP1250", None, "ESRI Shapefile")
+        #     point_layer, NODES_SHP, "CP1250", None, "ESRI Shapefile")
         #
         # if error == QgsVectorFileWriter.NoError:
         #     print "success!"
@@ -339,7 +339,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_check_associated_attributes(self):
         """Test for check_associated_attributes"""
-        nodes_layer = get_temp_shapefile_layer(nodes_shp, 'nodes')
+        nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
         message = 'Should be False.'
         assert not check_associated_attributes(nodes_layer), message
 
@@ -576,7 +576,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_features(self):
         """Test for identify_features."""
         sungai_layer = get_temp_shapefile_layer(
-            sungai_di_jawa_shp, 'sungai_di_jawa')
+            JAWA_SHP, 'sungai_di_jawa')
         output_layer = identify_features(sungai_layer, THRESHOLD)
 
         i = 0
