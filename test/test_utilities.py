@@ -26,7 +26,7 @@ from qgis.core import (
     QgsFeature)
 from PyQt4.QtCore import QVariant
 
-from utilities import (
+from utilities_stream import (
     list_to_str,
     str_to_list,
     add_layer_attribute,

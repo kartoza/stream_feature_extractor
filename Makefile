@@ -30,7 +30,7 @@ SOURCES = \
 	__init__.py \
 	stream_feature_extractor.py \
 	stream_feature_extractor_dialog.py\
-	utilities.py
+	utilities_stream.py
 
 PLUGINNAME = StreamFeatureTool
 
@@ -38,7 +38,7 @@ PY_FILES = \
 	stream_feature_extractor.py \
 	stream_feature_extractor_dialog.py \
 	__init__.py \
-	utilities.py
+	utilities_stream.py
 
 EXTRAS = icon.png metadata.txt
 

@@ -29,8 +29,8 @@ from qgis.core import QgsMapLayerRegistry
 import resources_rc
 # Import the code for the dialog
 from stream_feature_extractor_dialog import StreamFeatureToolDialog
-from utilities import (
-    is_line_layer, create_nodes_layer, extract_nodes, add_associated_nodes)
+from utilities_stream import (
+    identify_features, is_line_layer)
 
 
 class StreamFeatureTool:
@@ -108,9 +108,8 @@ class StreamFeatureTool:
     def run(self):
         """Run method that performs all the real work."""
 
-        nodes = extract_nodes(self.iface.activeLayer())
-        layer = create_nodes_layer(nodes)
-        add_associated_nodes(layer, threshold=5)
+        threshold = 5
+        layer = identify_features(self.iface.activeLayer(), threshold)
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
     def show_options(self):
