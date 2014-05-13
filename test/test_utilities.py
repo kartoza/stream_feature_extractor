@@ -180,8 +180,10 @@ class TestUtilities(unittest.TestCase):
         cls.dgn_layer = get_temp_shapefile_layer(
             DGN_SHP, 'dgn_test  ')
 
-        cls.jawa_nodes_layer = get_temp_shapefile_layer(JAWA_NODES_SHP, 'nodes')
-        cls.dgn_nodes_layer = get_temp_shapefile_layer(DGN_NODES_SHP, 'nodes')
+        cls.jawa_nodes_layer = get_temp_shapefile_layer(
+            JAWA_NODES_SHP, 'nodes')
+        cls.dgn_nodes_layer = get_temp_shapefile_layer(
+            DGN_NODES_SHP, 'nodes')
 
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
             JAWA_NODES_SHP, 'prepared_nodes')
@@ -630,5 +632,3 @@ class TestUtilities(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-

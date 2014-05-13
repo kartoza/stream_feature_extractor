@@ -794,4 +794,3 @@ def is_line_layer(layer):
             layer.geometryType() == QGis.Line)
     except AttributeError:
         return False
-

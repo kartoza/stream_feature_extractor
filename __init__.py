@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- StreamFeatureTool
+ StreamFeatureExtractor
                                  A QGIS plugin
  A tool to extract features from a stream network.
                              -------------------
@@ -21,7 +21,9 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+
+# noinspection PyPep8Naming
 def classFactory(iface):
-    # load StreamFeatureTool class from file StreamFeatureTool
+    """load StreamFeatureExtractor class from file StreamFeatureExtractor."""
     from stream_feature_extractor import StreamFeatureExtractor
     return StreamFeatureExtractor(iface)

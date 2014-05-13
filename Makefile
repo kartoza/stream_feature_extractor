@@ -1,5 +1,5 @@
 #/***************************************************************************
-# StreamFeatureTool
+# StreamFeatureExtractor
 #
 # A tool to extract features from a stream network.
 #							 -------------------
@@ -32,7 +32,7 @@ SOURCES = \
 	stream_feature_extractor_dialog.py\
 	utilities.py
 
-PLUGINNAME = StreamFeatureTool
+PLUGINNAME = StreamFeatureExtractor
 
 PY_FILES = \
 	stream_feature_extractor.py \
@@ -192,7 +192,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,resources_rc.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude conf.py,pydev,resources_rc.py . || true
 
 compile_ui:
 	@echo
