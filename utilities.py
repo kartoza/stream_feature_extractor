@@ -6,8 +6,6 @@
 
 """
 from __future__ import division
-from math import sqrt
-from PyQt4.QtCore import QVariant
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
@@ -16,8 +14,16 @@ __license__ = "GPL"
 __copyright__ = ''
 
 
-from exceptions import NotImplementedError
-from qgis.core import *
+from math import sqrt
+from PyQt4.QtCore import QVariant
+
+from qgis.core import (
+    QgsField,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsGeometry,
+    QgsPoint,
+    QgsMapLayer)
 
 
 def list_to_str(the_list, sep=','):
