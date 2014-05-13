@@ -16,7 +16,6 @@ __license__ = "GPL"
 __copyright__ = ''
 
 
-from exceptions import NotImplementedError
 from qgis.core import *
 
 
@@ -86,7 +85,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
         layer.commitChanges()
 
 
-def extract_nodes(line_id_attribute, layer):
+def extract_nodes(layer):
     """Return a list of tuple that represent line_id, first_point, last_point.
 
     This method will extract node from vector line layer. We only extract the
@@ -95,16 +94,12 @@ def extract_nodes(line_id_attribute, layer):
     :param layer: A vector line layer.
     :type layer: QGISVectorLayer
 
-    :param line_id_attribute: The name of attribute that represent line id.
-    :type line_id_attribute: str
-
     :returns: list of tuple. The tuple contains line_id, first_point of the
         line, and last_point of the line.
     :rtype: list
     """
     nodes = []
     lines = layer.getFeatures()
-    id_index = layer.fieldNameIndex(line_id_attribute)
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
@@ -647,7 +642,7 @@ def identify_features(input_layer, threshold):
     :returns: Map layer (memory layer) containing identified features.
     :rtype: QgsVectorLayer
     """
-    nodes = extract_nodes(line_id_attribute='id', layer=input_layer)
+    nodes = extract_nodes(layer=input_layer)
     memory_layer = create_nodes_layer(nodes)
     add_associated_nodes(memory_layer, threshold)
 

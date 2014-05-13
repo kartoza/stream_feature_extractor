@@ -27,7 +27,7 @@ from PyQt4.QtCore import pyqtSignature, QVariant
 from PyQt4.QtGui import QMessageBox
 from PyQt4 import QtGui, uic
 from utilities import (
-    extract_node,
+    extract_nodes,
     create_nodes_layer,
     add_associated_nodes,
     identify_features,
