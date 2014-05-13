@@ -108,7 +108,7 @@ class StreamFeatureTool:
     def run(self):
         """Run method that performs all the real work."""
 
-        nodes = extract_nodes(self.iface.activeLayer())
+        nodes = extract_nodes('id', self.iface.activeLayer())
         layer = create_nodes_layer(nodes)
         add_associated_nodes(layer, threshold=5)
         QgsMapLayerRegistry.instance().addMapLayers([layer])

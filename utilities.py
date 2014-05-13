@@ -111,10 +111,12 @@ def extract_nodes(line_id_attribute, layer):
     """
     nodes = []
     lines = layer.getFeatures()
-    id_index = layer.fieldNameIndex(line_id_attribute)
+    #id_index = layer.fieldNameIndex(line_id_attribute)
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
+        if len(points) < 1:
+            continue
         line_id = feature.id()
         first_point = points[0]
         last_point = points[-1]

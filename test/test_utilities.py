@@ -52,7 +52,10 @@ TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
 DATA_TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 JAWA_SHP = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
-NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
+JAWA_NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
+
+DGN_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test.shp')
+DGN_NODES_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test_nodes.shp')
 
 THRESHOLD = 0.025
 
@@ -174,17 +177,22 @@ class TestUtilities(unittest.TestCase):
     def setUpClass(cls):
         cls.sungai_layer = get_temp_shapefile_layer(
             JAWA_SHP, 'sungai_di_jawa')
+        cls.dgn_layer = get_temp_shapefile_layer(
+            DGN_SHP, 'dgn_test  ')
 
-        cls.nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
+        cls.jawa_nodes_layer = get_temp_shapefile_layer(JAWA_NODES_SHP, 'nodes')
+        cls.dgn_nodes_layer = get_temp_shapefile_layer(DGN_NODES_SHP, 'nodes')
 
         cls.prepared_nodes_layer = get_temp_shapefile_layer(
-            NODES_SHP, 'prepared_nodes')
+            JAWA_NODES_SHP, 'prepared_nodes')
         add_associated_nodes(cls.prepared_nodes_layer, THRESHOLD)
 
     @classmethod
     def tearDownClass(cls):
-        remove_temp_layer(cls.sungai_layer.source())
-        remove_temp_layer(cls.nodes_layer.source())
+        remove_temp_layer(cls.jawa_nodes_layer.source())
+        remove_temp_layer(cls.jawa_nodes_layer.source())
+        remove_temp_layer(cls.dgn_nodes_layer.source())
+        remove_temp_layer(cls.dgn_nodes_layer.source())
         remove_temp_layer(cls.prepared_nodes_layer.source())
 
     def test_random_string(self):
@@ -243,7 +251,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_layer_add_attribute(self):
         """test add_layer_attribute."""
-        layer = self.nodes_layer
+        layer = self.jawa_nodes_layer
         attribute_name = 'new_att'
         add_layer_attribute(layer, attribute_name, QVariant.Int)
         id_index = layer.fieldNameIndex(attribute_name)
@@ -283,6 +291,13 @@ class TestUtilities(unittest.TestCase):
         assert len(nodes) == len(expected_nodes), (
             'Number of nodes should be %d' % len(expected_nodes))
 
+    def test_extract_nodes_dgn(self):
+        """Test for extracting nodes using dgn dataset."""
+
+        layer = self.dgn_layer
+        nodes = extract_nodes(line_id_attribute='id', layer=layer)
+        self.assertEqual(len(nodes), 5)
+
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
@@ -317,14 +332,14 @@ class TestUtilities(unittest.TestCase):
             self.assertIn(node_attributes, expected_nodes, message)
 
         # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     point_layer, NODES_SHP, "CP1250", None, "ESRI Shapefile")
+        #     point_layer, JAWA_NODES_SHP, "CP1250", None, "ESRI Shapefile")
         #
         # if error == QgsVectorFileWriter.NoError:
         #     print "success!"
 
     def test_get_nearby_nodes(self):
         """Test for get_nearby_nodes function."""
-        nodes_layer = self.nodes_layer
+        nodes_layer = self.jawa_nodes_layer
         upstream_nodes, downstream_nodes = get_nearby_nodes(
             nodes_layer, 1, THRESHOLD)
         expected_upstream_nodes = [2]
@@ -339,7 +354,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_check_associated_attributes(self):
         """Test for check_associated_attributes"""
-        nodes_layer = get_temp_shapefile_layer(NODES_SHP, 'nodes')
+        nodes_layer = get_temp_shapefile_layer(JAWA_NODES_SHP, 'nodes')
         message = 'Should be False.'
         assert not check_associated_attributes(nodes_layer), message
 
@@ -349,7 +364,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_add_associated_nodes(self):
         """test for add_associated_nodes"""
-        nodes_layer = self.nodes_layer
+        nodes_layer = self.jawa_nodes_layer
         add_associated_nodes(nodes_layer, THRESHOLD)
         features = nodes_layer.getFeatures()
         expected_attributes = [
