@@ -25,12 +25,6 @@ import os
 from PyQt4.QtCore import pyqtSignature, QVariant
 from PyQt4.QtGui import QMessageBox
 from PyQt4 import QtGui, uic
-<<<<<<< HEAD
-from utilities import (
-    extract_nodes,
-    create_nodes_layer,
-    add_associated_nodes,
-=======
 
 from qgis.core import (
     QGis,
@@ -40,7 +34,6 @@ from qgis.core import (
     QgsMapLayer)
 
 from utilities_stream import (
->>>>>>> tim_dev
     identify_features,
     add_layer_attribute)
 
