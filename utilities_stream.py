@@ -676,7 +676,7 @@ def identify_features(input_layer, threshold):
     # create output layer
     authority_id = input_layer.crs().authid()
     output_layer = QgsVectorLayer(
-        'Point?crs=%i&index=yes' % authority_id, 'Nodes', 'memory')
+        'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
 
     # Start edit layer
     output_data_provider = output_layer.dataProvider()
