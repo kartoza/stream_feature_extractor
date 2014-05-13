@@ -33,7 +33,6 @@ from stream_utilities import (
     is_line_layer, create_nodes_layer, extract_nodes, add_associated_nodes)
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
-
 MENU_RUN_LABEL = u'Extract from current layer'
 
 
