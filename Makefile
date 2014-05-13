@@ -45,6 +45,8 @@ UI_FILES =
 
 COMPILED_RESOURCE_FILES = resources_rc.py
 
+# For debug deploys
+PYDEV = pydev
 
 #################################################
 # Normally you would not need to edit below here
@@ -92,6 +94,18 @@ deploy: compile doc transcompile
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
+
+debugdeploy: deploy
+	@echo
+	@echo "------------------------------------------"
+	@echo "Deploying pydev debug libs."
+	@echo "------------------------------------------"
+	# The deploy  target only works on unix like operating system where
+	# the Python plugin directory is located at:
+	# $HOME/$(QGISDIR)/python/plugins
+	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	cp -rvf $(PYDEV) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+
 
 # The dclean target removes compiled python files from plugin directory
 # also deletes any .svn entry

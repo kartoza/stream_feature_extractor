@@ -304,7 +304,7 @@ class TestUtilities(unittest.TestCase):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
         nodes = extract_nodes(layer=layer)
-        point_layer = create_nodes_layer(nodes)
+        point_layer = create_nodes_layer(nodes=nodes)
         assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
         assert point_layer.isValid(), 'Layer is not valid.'
         assert point_layer.featureCount() == 12, (

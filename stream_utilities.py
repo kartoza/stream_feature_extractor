@@ -121,7 +121,7 @@ def extract_nodes(layer):
     return nodes
 
 
-def create_nodes_layer(nodes=None, name=None):
+def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     """Return QgsVectorLayer (point) that contains nodes.
 
     This method also create attribute for the layer as follow:
@@ -129,6 +129,11 @@ def create_nodes_layer(nodes=None, name=None):
     id : the id of the node, generated
     line_id : the id of the line. It should be existed in the nodes
     node_type : upstream (first point) or downstream (last point).
+
+    :param authority_id: Coordinate reference system authid (as represented in
+        QgsCoordinateReferenceSystem.authid() for the nodes layer that will
+        be created. Defaults to 'EPSG:4326'.
+    :type authority_id: str
 
     :param nodes: A list of nodes. Represent as line_id, first_point,
         and last_point in a tuple.
@@ -142,7 +147,10 @@ def create_nodes_layer(nodes=None, name=None):
     """
     if name is None:
         name = 'Nodes'
-    layer = QgsVectorLayer('Point', name, 'memory')
+
+    layer = QgsVectorLayer(
+        'Point?crs=%s&index=yes' % authority_id, name, 'memory')
+
     data_provider = layer.dataProvider()
 
     # Start edit layer
@@ -640,20 +648,21 @@ def identify_watersheds(layer):
 
 
 # noinspection PyPep8Naming
-def identify_features(input_layer, threshold):
+def identify_features(input_layer, threshold=1):
     """Identify almost features in one functions and put it in a layer.
 
     :param input_layer: A vector line layer.
     :type input_layer: QGISVectorLayer
 
-    :param threshold: Distance threshold for node snapping.
+    :param threshold: Distance threshold for node snapping. Defaults to 1.
     :type threshold: float
 
     :returns: Map layer (memory layer) containing identified features.
     :rtype: QgsVectorLayer
     """
+    authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
-    memory_layer = create_nodes_layer(nodes)
+    memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
     add_associated_nodes(memory_layer, threshold)
 
     identify_wells(memory_layer)
@@ -674,7 +683,7 @@ def identify_features(input_layer, threshold):
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
-    authority_id = input_layer.crs().authid()
+
     output_layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
 
