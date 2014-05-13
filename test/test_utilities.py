@@ -26,7 +26,7 @@ from qgis.core import (
     QgsFeature)
 from PyQt4.QtCore import QVariant
 
-from utilities import (
+from utilities_stream import (
     list_to_str,
     str_to_list,
     add_layer_attribute,
@@ -287,7 +287,7 @@ class TestUtilities(unittest.TestCase):
              QgsPoint(110.97286891730800562, -7.7483678523311541)),
         ]
         layer = self.sungai_layer
-        nodes = extract_nodes(line_id_attribute='id', layer=layer)
+        nodes = extract_nodes(layer=layer)
         for node in expected_nodes:
             assert node in nodes, 'Node %s not found,' % str(node)
         assert len(nodes) == len(expected_nodes), (
@@ -297,13 +297,13 @@ class TestUtilities(unittest.TestCase):
         """Test for extracting nodes using dgn dataset."""
 
         layer = self.dgn_layer
-        nodes = extract_nodes(line_id_attribute='id', layer=layer)
-        self.assertEqual(len(nodes), 5)
+        nodes = extract_nodes(layer=layer)
+        self.assertEqual(len(nodes), 4115)
 
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
-        nodes = extract_nodes(line_id_attribute='id', layer=layer)
+        nodes = extract_nodes(layer=layer)
         point_layer = create_nodes_layer(nodes)
         assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
         assert point_layer.isValid(), 'Layer is not valid.'
