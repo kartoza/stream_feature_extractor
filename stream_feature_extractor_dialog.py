@@ -33,7 +33,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapLayer)
 
-from utilities_stream import (
+from stream_utilities import (
     identify_features,
     add_layer_attribute)
 

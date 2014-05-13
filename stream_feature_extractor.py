@@ -29,7 +29,7 @@ from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
-from utilities_stream import (
+from stream_utilities import (
     is_line_layer, create_nodes_layer, extract_nodes, add_associated_nodes)
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
