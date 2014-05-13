@@ -23,5 +23,5 @@
 
 def classFactory(iface):
     # load StreamFeatureTool class from file StreamFeatureTool
-    from stream_feature_extractor import StreamFeatureTool
-    return StreamFeatureTool(iface)
+    from stream_feature_extractor import StreamFeatureExtractor
+    return StreamFeatureExtractor(iface)

@@ -588,8 +588,8 @@ class TestUtilities(unittest.TestCase):
         message = 'Expected %s but I got %s' % (expected_center, center)
         self.assertEqual(expected_center, center, message)
 
-    def test_identify_features(self):
-        """Test for identify_features."""
+    def test_identify_features_jawa(self):
+        """Test for identify_features on the jawa dataset."""
         sungai_layer = get_temp_shapefile_layer(
             JAWA_SHP, 'sungai_di_jawa')
         output_layer = identify_features(sungai_layer, THRESHOLD)
@@ -613,6 +613,20 @@ class TestUtilities(unittest.TestCase):
         message = '%s is not exist' % temp_file
         self.assertTrue(os.path.exists(temp_file), message)
         remove_temp_layer(temp_file)
+
+    def test_identify_features_dgn(self):
+        """Test for identify_features on the dgn test dataset."""
+        layer = get_temp_shapefile_layer(
+            DGN_SHP, 'dgn_lines')
+        output_layer = identify_features(layer, THRESHOLD)
+
+        i = 0
+        for f in output_layer.getFeatures():
+            print f.id(), f.attributes(), f.geometry().asPoint()
+            i += 1
+        message = 'There should be 22 features, but I got %s' % i
+        self.assertEqual(i, 22, message)
+
 
 if __name__ == '__main__':
     unittest.main()
