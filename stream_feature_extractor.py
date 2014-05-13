@@ -241,7 +241,7 @@ class StreamFeatureExtractor:
             threshold=1,
             callback=progress_callback)
 
-        QgsMapLayerRegistry.instance.addLayers([nodes])
+        QgsMapLayerRegistry.instance().addMapLayer(nodes)
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.iface.messageBar().pushMessage(

@@ -628,7 +628,7 @@ class TestUtilities(unittest.TestCase):
             print f.id(), f.attributes(), f.geometry().asPoint()
             i += 1
         message = 'There should be 22 features, but I got %s' % i
-        self.assertEqual(i, 22, message)
+        self.assertEqual(i, 24005, message)
 
 if __name__ == '__main__':
     unittest.main()
