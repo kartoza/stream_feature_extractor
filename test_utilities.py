@@ -379,7 +379,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_wells(self):
         """Test for identify_well method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_well(nodes_layer)
+        identify_wells(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -401,7 +401,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_sinks(self):
         """Test for identify_sink method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_sink(nodes_layer)
+        identify_sinks(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -497,7 +497,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_watershed(self):
         """Test for identify_watershed method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_watershed(nodes_layer)
+        identify_watersheds(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
