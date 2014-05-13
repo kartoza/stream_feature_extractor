@@ -6,8 +6,6 @@
 
 """
 from __future__ import division
-from math import sqrt
-from PyQt4.QtCore import QVariant
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
@@ -16,7 +14,17 @@ __license__ = "GPL"
 __copyright__ = ''
 
 
-from qgis.core import *
+from math import sqrt
+from PyQt4.QtCore import QVariant
+
+from qgis.core import (
+    QGis,
+    QgsField,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsGeometry,
+    QgsPoint,
+    QgsMapLayer)
 
 
 def list_to_str(the_list, sep=','):
@@ -103,6 +111,8 @@ def extract_nodes(layer):
     for feature in lines:
         geom = feature.geometry()
         points = geom.asPolyline()
+        if len(points) < 1:
+            continue
         line_id = feature.id()
         first_point = points[0]
         last_point = points[-1]

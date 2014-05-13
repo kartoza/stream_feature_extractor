@@ -29,11 +29,7 @@ from qgis.core import QgsMapLayerRegistry
 import resources_rc
 # Import the code for the dialog
 from stream_feature_extractor_dialog import StreamFeatureToolDialog
-<<<<<<< HEAD
-from utilities import (
-=======
 from utilities_stream import (
->>>>>>> tim_dev
     identify_features, is_line_layer)
 
 
@@ -112,11 +108,7 @@ class StreamFeatureTool:
     def run(self):
         """Run method that performs all the real work."""
 
-<<<<<<< HEAD
         threshold = 0.025
-=======
-        threshold = 5
->>>>>>> tim_dev
         layer = identify_features(self.iface.activeLayer(), threshold)
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 

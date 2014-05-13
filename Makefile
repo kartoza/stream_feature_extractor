@@ -64,7 +64,9 @@ compile: $(COMPILED_RESOURCE_FILES)
 %_rc.py : %.qrc
 	pyrcc4 -o $*_rc.py  $<
 
-test: compile transcompile
+test: test_code pep8 pylint
+
+test_code: compile transcompile
 	@echo
 	@echo "----------------------"
 	@echo "Regression Test Suite"
