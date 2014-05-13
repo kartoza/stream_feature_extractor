@@ -43,7 +43,8 @@ from stream_utilities import (
     identify_watersheds,
     identify_self_intersections,
     identify_segment_center,
-    identify_features)
+    identify_features,
+    console_progress_callback)
 
 from test.utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
@@ -616,11 +617,11 @@ class TestUtilities(unittest.TestCase):
         self.assertTrue(os.path.exists(temp_file), message)
         remove_temp_layer(temp_file)
 
-    def Xtest_identify_features_dgn(self):
+    def test_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
-        layer = get_temp_shapefile_layer(
-            DGN_SHP, 'dgn_lines')
-        output_layer = identify_features(layer, THRESHOLD)
+        layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
+        output_layer = identify_features(
+            layer, THRESHOLD, callback=console_progress_callback)
 
         i = 0
         for f in output_layer.getFeatures():
@@ -628,7 +629,6 @@ class TestUtilities(unittest.TestCase):
             i += 1
         message = 'There should be 22 features, but I got %s' % i
         self.assertEqual(i, 22, message)
-
 
 if __name__ == '__main__':
     unittest.main()

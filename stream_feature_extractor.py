@@ -223,7 +223,24 @@ class StreamFeatureExtractor:
             message_bar, self.iface.messageBar().INFO)
         self.message_bar = message_bar
 
-        nodes = identify_features(self.iface.activeLayer(), threshold=1)
+        def progress_callback(current, maximum):
+            """GUI based callback implementation for showing progress.
+
+            :param current: Current progress.
+            :type current: int
+
+            :param maximum: Maximum range (point at which task is complete.
+            :type maximum: int
+            """
+            if progress_bar is not None:
+                progress_bar.setMaximum(maximum)
+                progress_bar.setValue(current)
+
+        nodes = identify_features(
+            self.iface.activeLayer(),
+            threshold=1,
+            callback=progress_callback)
+
         QgsMapLayerRegistry.instance.addLayers([nodes])
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
