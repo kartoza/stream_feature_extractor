@@ -45,12 +45,12 @@ from utilities import (
     identify_segment_center,
     identify_features)
 
-from test.utilities import get_qgis_app
+from test.utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')
-DATA_TEST_DIR = 'data_test'
+DATA_TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 sungai_di_jawa_shp = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
 nodes_shp = os.path.join(DATA_TEST_DIR, 'nodes.shp')
 
@@ -379,7 +379,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_wells(self):
         """Test for identify_well method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_well(nodes_layer)
+        identify_wells(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -401,7 +401,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_sinks(self):
         """Test for identify_sink method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_sink(nodes_layer)
+        identify_sinks(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -494,10 +494,10 @@ class TestUtilities(unittest.TestCase):
                     pseudo_node_value,
                     'Node %s Should not be a pseudo_node' % node_id)
 
-    def test_identify_watershed(self):
+    def test_identify_watersheds(self):
         """Test for identify_watershed method."""
         nodes_layer = self.prepared_nodes_layer
-        identify_watershed(nodes_layer)
+        identify_watersheds(nodes_layer)
         features = nodes_layer.getFeatures()
 
         id_index = nodes_layer.fieldNameIndex('id')
@@ -521,8 +521,8 @@ class TestUtilities(unittest.TestCase):
                     'Node %s Should not be a watershed' % node_id)
 
     # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-    def test_identify_self_intersection(self):
-        """Test for identify_self_intersection."""
+    def test_identify_self_intersections(self):
+        """Test for identify_self_intersections."""
         line_intersect = os.path.join(DATA_TEST_DIR, 'line_intersect.shp')
         line_intersect = get_temp_shapefile_layer(line_intersect, 'lines')
 
@@ -541,7 +541,7 @@ class TestUtilities(unittest.TestCase):
             self.assertEqual(len(intersections), 3, message)
             message = 'There is item not equal in %s and %s.' % (
                 expected_intersections, intersections)
-            self.assertItemsEqual(
+            self.assertListEqual(
                 intersections, expected_intersections, message)
 
     # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
