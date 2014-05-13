@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- StreamFeatureTool
+ StreamFeatureExtractor
                                  A QGIS plugin
  A tool to extract features from a stream network.
                               -------------------
@@ -57,7 +57,7 @@ class StreamFeatureExtractor:
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'StreamFeatureTool_{}.qm'.format(locale))
+            'StreamFeatureExtractor_{}.qm'.format(locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -175,7 +175,7 @@ class StreamFeatureExtractor:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         self.menu = u'Vector'
-        icon_path = ':/plugins/StreamFeatureTool/icon.svg'
+        icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
         self.run_action = self.add_action(
             icon_path,
             text=self.tr(u"Extract from current layer",),
@@ -183,12 +183,11 @@ class StreamFeatureExtractor:
             parent=self.iface.mainWindow())
 
         # self.options_action = QAction(
-        #     QIcon(":/plugins/StreamFeatureTool/icon.svg"),
+        #     QIcon(":/plugins/StreamFeatureExtractor/icon.svg"),
         #     u"Options",
         #     self.iface.mainWindow())
         # # connect the action to the run method
         # self.run_action.triggered.connect(self.show_options)
-
 
         if self.iface.activeLayer() is not None:
             self.layer_changed(self.iface.activeLayer())
