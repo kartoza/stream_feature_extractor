@@ -121,7 +121,7 @@ def extract_nodes(layer):
     return nodes
 
 
-def create_nodes_layer(nodes=None, name=None):
+def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     """Return QgsVectorLayer (point) that contains nodes.
 
     This method also create attribute for the layer as follow:
@@ -129,6 +129,11 @@ def create_nodes_layer(nodes=None, name=None):
     id : the id of the node, generated
     line_id : the id of the line. It should be existed in the nodes
     node_type : upstream (first point) or downstream (last point).
+
+    :param authority_id: Coordinate reference system authid (as represented in
+        QgsCoordinateReferenceSystem.authid() for the nodes layer that will
+        be created. Defaults to 'EPSG:4326'.
+    :type authority_id: str
 
     :param nodes: A list of nodes. Represent as line_id, first_point,
         and last_point in a tuple.
@@ -142,7 +147,10 @@ def create_nodes_layer(nodes=None, name=None):
     """
     if name is None:
         name = 'Nodes'
-    layer = QgsVectorLayer('Point', name, 'memory')
+
+    layer = QgsVectorLayer(
+        'Point?crs=%s&index=yes' % authority_id, name, 'memory')
+
     data_provider = layer.dataProvider()
 
     # Start edit layer
@@ -231,7 +239,7 @@ def get_nearby_nodes(layer, node_id, threshold):
     return upstream_nodes, downstream_nodes
 
 
-def add_associated_nodes(layer, threshold):
+def add_associated_nodes(layer, threshold, callback=None):
     """Add node_list and node_count attribute to every node in layer.
 
     node_list is list of node that is near from a node. There are two node
@@ -253,6 +261,11 @@ def add_associated_nodes(layer, threshold):
     :param threshold: Distance threshold.
     :type threshold: float
 
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int) and 'maximum' (int). Defaults to
+        None.
+    :type callback: function
+
     """
     nodes = layer.getFeatures()
     id_index = layer.fieldNameIndex('id')
@@ -273,7 +286,14 @@ def add_associated_nodes(layer, threshold):
 
     layer.startEditing()
 
+    node_count = layer.featureCount()
+    counter = 1
+
     for node in nodes:
+        if callback is not None:
+            if counter % 100 == 0:
+                callback(current=counter, maximum=node_count)
+        counter += 1
         node_fid = int(node.id())
         node_attributes = node.attributes()
         node_id = node_attributes[id_index]
@@ -293,6 +313,10 @@ def add_associated_nodes(layer, threshold):
             down_num_index: downstream_count
         }
         data_provider.changeAttributeValues({node_fid: attributes})
+
+    if callback:
+        callback(current=node_count, maximum=node_count)
+
     layer.commitChanges()
 
 
@@ -640,21 +664,28 @@ def identify_watersheds(layer):
 
 
 # noinspection PyPep8Naming
-def identify_features(input_layer, threshold):
+def identify_features(input_layer, threshold=1, callback=None):
     """Identify almost features in one functions and put it in a layer.
 
     :param input_layer: A vector line layer.
     :type input_layer: QGISVectorLayer
 
-    :param threshold: Distance threshold for node snapping.
+    :param threshold: Distance threshold for node snapping. Defaults to 1.
     :type threshold: float
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int) and 'maximum' (int). Defaults to
+        None.
+    :type callback: function
 
     :returns: Map layer (memory layer) containing identified features.
     :rtype: QgsVectorLayer
+
     """
+    authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
-    memory_layer = create_nodes_layer(nodes)
-    add_associated_nodes(memory_layer, threshold)
+    memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
+    add_associated_nodes(memory_layer, threshold, callback)
 
     identify_wells(memory_layer)
     identify_sinks(memory_layer)
@@ -670,11 +701,12 @@ def identify_features(input_layer, threshold):
 
     features = data_provider.getFeatures()
     for feature in features:
-        self_intersections.extend(identify_self_intersections(feature))
+        feature_self_intersections = identify_self_intersections(feature)
+        self_intersections.extend(feature_self_intersections)
         segment_centers.append(identify_segment_center(feature))
 
     # create output layer
-    authority_id = input_layer.crs().authid()
+
     output_layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
 
@@ -790,3 +822,15 @@ def is_line_layer(layer):
             layer.geometryType() == QGis.Line)
     except AttributeError:
         return False
+
+
+def console_progress_callback(current, maximum):
+    """Simple console based callback implementation for tests.
+
+    :param current: Current progress.
+    :type current: int
+
+    :param maximum: Maximum range (point at which task is complete.
+    :type maximum: int
+    """
+    print 'Task progress: %i of %i' % (current, maximum)

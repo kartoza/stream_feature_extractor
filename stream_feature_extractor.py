@@ -22,6 +22,8 @@
 
 import os.path
 
+#from pydev import pydevd  # pylint: disable=F0401
+
 from PyQt4.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon, QProgressBar, QPushButton
 from qgis.core import QgsMapLayerRegistry
@@ -29,8 +31,7 @@ from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
-from stream_utilities import (
-    is_line_layer, create_nodes_layer, extract_nodes, add_associated_nodes)
+from stream_utilities import is_line_layer, identify_features
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
 MENU_RUN_LABEL = u'Extract from current layer'
@@ -47,6 +48,11 @@ class StreamFeatureExtractor:
             application at run time.
         :type iface: QgsInterface
         """
+        # Enable remote debugging - should normally be commented out.
+        # pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True,
+        #     stderrToServer=True)
+
         # Save reference to the QGIS interface
         self.iface = iface
         # initialize plugin directory
@@ -217,9 +223,25 @@ class StreamFeatureExtractor:
             message_bar, self.iface.messageBar().INFO)
         self.message_bar = message_bar
 
-        nodes = extract_nodes(self.iface.activeLayer())
-        layer = create_nodes_layer(nodes)
-        add_associated_nodes(layer, threshold=5)
+        def progress_callback(current, maximum):
+            """GUI based callback implementation for showing progress.
+
+            :param current: Current progress.
+            :type current: int
+
+            :param maximum: Maximum range (point at which task is complete.
+            :type maximum: int
+            """
+            if progress_bar is not None:
+                progress_bar.setMaximum(maximum)
+                progress_bar.setValue(current)
+
+        nodes = identify_features(
+            self.iface.activeLayer(),
+            threshold=1,
+            callback=progress_callback)
+
+        QgsMapLayerRegistry.instance.addLayers([nodes])
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.iface.messageBar().pushMessage(
