@@ -24,7 +24,9 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsPoint,
-    QgsMapLayer)
+    QgsMapLayer,
+    QgsRectangle,
+    QgsFeatureRequest)
 
 
 def list_to_str(the_list, sep=','):
@@ -191,7 +193,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     return layer
 
 
-def get_nearby_nodes(layer, node_id, threshold):
+def get_nearby_nodes(layer, node, threshold):
     """Return all nodes that has distance less than threshold from node_id.
 
     The list will be divided into two groups, upstream nodes and downstream
@@ -200,8 +202,8 @@ def get_nearby_nodes(layer, node_id, threshold):
     :param layer: A vector point layer.
     :type layer: QGISVectorLayer
 
-    :param node_id: The id of a point/node.
-    :type node_id: int
+    :param node: The point/node.
+    :type node: QgsFeature
 
     :param threshold: Distance threshold.
     :type threshold: float
@@ -209,33 +211,34 @@ def get_nearby_nodes(layer, node_id, threshold):
     :returns: Tuple of list of nodes. (upstream_nodes, downstream_nodes).
     :rtype: tuple
     """
-    # get location of the node_id
-    nodes = layer.getFeatures()
-    center_node = None
+    id_index = layer.fieldNameIndex('id')
+    node_attributes = node.attributes()
+    node_id = node_attributes[id_index]
     id_index = layer.fieldNameIndex('id')
     node_type_index = layer.fieldNameIndex('node_type')
-    for node in nodes:
-        if node.attributes()[id_index] == node_id:
-            center_node = node
-            break
-    if center_node is None:
-        raise Exception('node id is not found')
+    center_node_point = node.geometry().asPoint()
 
-    center_node_point = center_node.geometry().asPoint()
+    rectangle = QgsRectangle(
+        center_node_point.x() - threshold,
+        center_node_point.y() - threshold,
+        center_node_point.x() + threshold,
+        center_node_point.y() + threshold)
+
     # iterate through all nodes
     upstream_nodes = []
     downstream_nodes = []
-    nodes = layer.getFeatures()
-    for node in nodes:
-        node_attributes = node.attributes()
-        if node_attributes[id_index] == node_id:
+    request = QgsFeatureRequest()
+    request.setFilterRect(rectangle)
+    for feature in layer.getFeatures(request):
+        attributes = feature.attributes()
+        if feature[id_index] == node_id:
             continue
-        node_point = node.geometry().asPoint()
-        if center_node_point.sqrDist(node_point) <= threshold:
-            if node_attributes[node_type_index] == 'upstream':
-                upstream_nodes.append(node.attributes()[id_index])
-            if node_attributes[node_type_index] == 'downstream':
-                downstream_nodes.append(node.attributes()[id_index])
+
+        if attributes[node_type_index] == 'upstream':
+            upstream_nodes.append(attributes[id_index])
+        if attributes[node_type_index] == 'downstream':
+            downstream_nodes.append(attributes[id_index])
+
     return upstream_nodes, downstream_nodes
 
 
@@ -299,7 +302,7 @@ def add_associated_nodes(layer, threshold, callback=None):
         node_id = node_attributes[id_index]
         node_type = node_attributes[node_type_index]
         upstream_nodes, downstream_nodes = get_nearby_nodes(
-            layer, node_id, threshold)
+            layer, node, threshold)
         upstream_count = len(upstream_nodes)
         downstream_count = len(downstream_nodes)
         if node_type == 'upstream':
@@ -563,7 +566,8 @@ def identify_self_intersections(line):
                  vertices[j + 1].y() - vertices[j].y())
             d = v[1] * w[0] - v[0] * w[1]
             if d == 0:
-                return None
+                # Continue to the next part of line
+                continue
 
             dx = vertices[j].x() - vertices[i].x()
             dy = vertices[j].y() - vertices[i].y()
@@ -594,20 +598,25 @@ def identify_segment_center(line):
     """
     geometry = line.geometry()
     vertices = geometry.asPolyline()
+    vertex_count = len(vertices)
 
-    part_length = []
-    for i in range(len(vertices) - 1):
+    if vertex_count < 1:
+        return None
+
+    part_lengths = []
+    for i in range(vertex_count - 1):
         length = vertices[i].sqrDist(vertices[i + 1])
-        part_length.append(sqrt(length))
+        part_lengths.append(sqrt(length))
 
-    line_length = sum(part_length)
+    segment_count = len(part_lengths)
+    line_length = sum(part_lengths)
     half_length = 0.5 * line_length
 
     current_length = 0
     i = 0
     add_length = 0
-    while current_length <= half_length:
-        add_length = part_length[i]
+    while current_length <= half_length and i < segment_count:
+        add_length = part_lengths[i]
         current_length += add_length
         i += 1
 
@@ -615,13 +624,20 @@ def identify_segment_center(line):
     delta_length = half_length - current_length
     i -= 1
 
-    ratio = float(delta_length) / float(add_length)
+    if add_length > 0:
+        ratio = float(delta_length) / float(add_length)
 
-    center_x = vertices[i].x()
-    center_x += ratio * (vertices[i + 1].x() - vertices[i].x())
+        center_x = vertices[i].x()
+        center_x += ratio * (vertices[i + 1].x() - vertices[i].x())
 
-    center_y = vertices[i].y()
-    center_y += ratio * (vertices[i + 1].y() - vertices[i].y())
+        center_y = vertices[i].y()
+        center_y += ratio * (vertices[i + 1].y() - vertices[i].y())
+    else:
+        try:
+            center_x = vertices[i].x()
+            center_y = vertices[i].y()
+        except IndexError:
+            pass
 
     return QgsPoint(center_x, center_y)
 
@@ -682,6 +698,7 @@ def identify_features(input_layer, threshold=1, callback=None):
     :rtype: QgsVectorLayer
 
     """
+    from datetime import datetime
     authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
     memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
@@ -702,17 +719,21 @@ def identify_features(input_layer, threshold=1, callback=None):
     features = data_provider.getFeatures()
     for feature in features:
         feature_self_intersections = identify_self_intersections(feature)
-        self_intersections.extend(feature_self_intersections)
-        segment_centers.append(identify_segment_center(feature))
-
+        try:
+            self_intersections.extend(feature_self_intersections)
+        except TypeError:
+            pass
+        center = identify_segment_center(feature)
+        if center is not None:
+            segment_centers.append(center)
     # create output layer
 
     output_layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
-
     # Start edit layer
     output_data_provider = output_layer.dataProvider()
     output_layer.startEditing()
+    new_features = []
     # Add fields (note you could also do this in uri of vector layer ctor TS)
     output_data_provider.addAttributes([
         QgsField('id', QVariant.Int),
@@ -720,7 +741,6 @@ def identify_features(input_layer, threshold=1, callback=None):
         QgsField('y', QVariant.String),
         QgsField('art', QVariant.String),
     ])
-
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
     downstream_index = memory_layer.fieldNameIndex('down_nodes')
@@ -730,7 +750,6 @@ def identify_features(input_layer, threshold=1, callback=None):
     confluence_index = memory_layer.fieldNameIndex('pseudo')
     pseudo_node_index = memory_layer.fieldNameIndex('confluence')
     watershed_index = memory_layer.fieldNameIndex('watershed')
-
     feature_indexes = [
         well_index,
         sink_index,
@@ -746,10 +765,8 @@ def identify_features(input_layer, threshold=1, callback=None):
         'CONFLUENCE',
         'PSEUDO_NODE',
         'WATERSHED']
-
     memory_data_provider = memory_layer.dataProvider()
     nodes = memory_data_provider.getFeatures()
-
     new_node_id = 1
     expired_node_id = set()
     for node in nodes:
@@ -779,10 +796,8 @@ def identify_features(input_layer, threshold=1, callback=None):
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
                 new_feature.setAttributes(
                     [new_node_id, str(x), str(y), feature_names[i]])
-                output_data_provider.addFeatures([new_feature])
-                output_layer.updateFields()
+                new_features.append(new_feature)
                 new_node_id += 1
-
     # self intersection
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
@@ -790,20 +805,18 @@ def identify_features(input_layer, threshold=1, callback=None):
         x = self_intersection.x()
         y = self_intersection.y()
         new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
-        output_data_provider.addFeatures([new_feature])
-        output_layer.updateFields()
+        new_features.append(new_feature)
         new_node_id += 1
-
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
         new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
-        output_data_provider.addFeatures([new_feature])
-        output_layer.updateFields()
+        new_features.append(new_feature)
         new_node_id += 1
-
+    output_data_provider.addFeatures(new_features)
+    output_layer.updateFields()
     output_layer.commitChanges()
     return output_layer
 
