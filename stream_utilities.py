@@ -698,6 +698,7 @@ def identify_features(input_layer, threshold=1, callback=None):
     :rtype: QgsVectorLayer
 
     """
+    from datetime import datetime
     authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
     memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
@@ -725,15 +726,14 @@ def identify_features(input_layer, threshold=1, callback=None):
         center = identify_segment_center(feature)
         if center is not None:
             segment_centers.append(center)
-
     # create output layer
 
     output_layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
-
     # Start edit layer
     output_data_provider = output_layer.dataProvider()
     output_layer.startEditing()
+    new_features = []
     # Add fields (note you could also do this in uri of vector layer ctor TS)
     output_data_provider.addAttributes([
         QgsField('id', QVariant.Int),
@@ -741,7 +741,6 @@ def identify_features(input_layer, threshold=1, callback=None):
         QgsField('y', QVariant.String),
         QgsField('art', QVariant.String),
     ])
-
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
     downstream_index = memory_layer.fieldNameIndex('down_nodes')
@@ -751,7 +750,6 @@ def identify_features(input_layer, threshold=1, callback=None):
     confluence_index = memory_layer.fieldNameIndex('pseudo')
     pseudo_node_index = memory_layer.fieldNameIndex('confluence')
     watershed_index = memory_layer.fieldNameIndex('watershed')
-
     feature_indexes = [
         well_index,
         sink_index,
@@ -767,10 +765,8 @@ def identify_features(input_layer, threshold=1, callback=None):
         'CONFLUENCE',
         'PSEUDO_NODE',
         'WATERSHED']
-
     memory_data_provider = memory_layer.dataProvider()
     nodes = memory_data_provider.getFeatures()
-
     new_node_id = 1
     expired_node_id = set()
     for node in nodes:
@@ -800,10 +796,8 @@ def identify_features(input_layer, threshold=1, callback=None):
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
                 new_feature.setAttributes(
                     [new_node_id, str(x), str(y), feature_names[i]])
-                output_data_provider.addFeatures([new_feature])
-                output_layer.updateFields()
+                new_features.append(new_feature)
                 new_node_id += 1
-
     # self intersection
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
@@ -811,20 +805,18 @@ def identify_features(input_layer, threshold=1, callback=None):
         x = self_intersection.x()
         y = self_intersection.y()
         new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
-        output_data_provider.addFeatures([new_feature])
-        output_layer.updateFields()
+        new_features.append(new_feature)
         new_node_id += 1
-
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
         new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
-        output_data_provider.addFeatures([new_feature])
-        output_layer.updateFields()
+        new_features.append(new_feature)
         new_node_id += 1
-
+    output_data_provider.addFeatures(new_features)
+    output_layer.updateFields()
     output_layer.commitChanges()
     return output_layer
 
