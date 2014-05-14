@@ -554,8 +554,18 @@ def between(a, b, c):
         return True
     return False
 
+def point_in_line(point, line):
+    """True if a point is in a line that has only two vertices."""
+    x_point = point[0]
+    y_point = point[1]
+    x1_line = line[0][0]
+    y1_line = line[0][1]
+    x2_line = line[1][0]
+    y2_line = line[1][1]
+    return (between(x1_line, x_point, x2_line)
+            and between(y1_line, y_point, y2_line))
 
-def identify_intersections(layer, layer2):
+def identify_intersections(layer):
     """Return all self intersection points of a line.
 
     :param layer: A vector line to be identified.
@@ -564,32 +574,18 @@ def identify_intersections(layer, layer2):
     :returns: List of QgsPoint that represent the intersection point.
     :rtype: list
     """
-    lines1 = layer.getFeatures()
-    print layer.featureCount()
-    lines2 = layer2.getFeatures()
+    dictionary_vertices = {}
+    for line in layer.getFeatures():
+        geometry = line.geometry()
+        dictionary_vertices[line.id()] = geometry.asPolyline()
 
     intersections = []
 
-    expired_couples = set()
-    for i in range(layer.featureCount()):
-        line1 = layer.getFeatures(QgsFeatureRequest().setFilterFid(i))
-        line1_id = line1.id()
-        geometry1 = line1.geometry()
-        vertices1 = geometry1.asPolyline()
-        for j in range(layer.featureCount()):
-            line2 = layer.getFeatures(QgsFeatureRequest().setFilterFid(j))
-            line2_id = line2.id()
-            print line1_id, line2_id
-            if line1_id == line2_id:
+    for key1, vertices1 in dictionary_vertices.iteritems():
+        for key2, vertices2 in dictionary_vertices.iteritems():
+            # only check half of them
+            if key1 >= key2:
                 continue
-            if (line1_id, line2_id) in expired_couples:
-                continue
-            if (line2_id, line1_id) in expired_couples:
-                continue
-
-            geometry2 = line2.geometry()
-            vertices2 = geometry2.asPolyline()
-
             for i in range(len(vertices1) - 1):
                 v = (vertices1[i + 1].x() - vertices1[i].x(),
                      vertices1[i + 1].y() - vertices1[i].y())
@@ -607,20 +603,12 @@ def identify_intersections(layer, layer2):
 
                     intersection = (vertices1[i][0] + v[0] * k,
                                     vertices1[i][1] + v[1] * k)
-                    if not between(
-                            vertices1[i][0],
-                            intersection[0],
-                            vertices1[i + 1][0]):
+                    if not point_in_line(intersection, vertices1[i:i+2]):
                         continue
-                    if not between(
-                            vertices1[i][1],
-                            intersection[1],
-                            vertices1[i + 1][1]):
+                    if not point_in_line(intersection, vertices2[j:j+2]):
                         continue
-
                     intersections.append(
                         QgsPoint(intersection[0], intersection[1]))
-                    expired_couples.add((line1_id, line2_id))
 
     return intersections
 
@@ -662,12 +650,10 @@ def identify_self_intersections(line):
             k = (dy * w[0] - dx * w[1]) / float(d)
 
             intersection = vertices[i][0] + v[0] * k, vertices[i][1] + v[1] * k
-            if not between(
-                    vertices[i][0], intersection[0], vertices[i + 1][0]):
+            if not point_in_line(intersection, vertices[i:i+2]):
                 continue
-            if not between(
-                    vertices[i][1], intersection[1], vertices[i + 1][1]):
-                    continue
+            if not point_in_line(intersection, vertices[j:j+2]):
+                continue
             self_intersections.append(
                 QgsPoint(intersection[0], intersection[1]))
 
@@ -789,9 +775,13 @@ def identify_features(input_layer, threshold=1, callback=None):
     """
     from datetime import datetime
     authority_id = input_layer.crs().authid()
+    a = datetime.now()
     nodes = extract_nodes(layer=input_layer)
+    b = datetime.now()
     memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
+    c = datetime.now()
     add_associated_nodes(memory_layer, threshold, callback)
+    d = datetime.now()
 
     identify_wells(memory_layer)
     identify_sinks(memory_layer)
@@ -799,7 +789,11 @@ def identify_features(input_layer, threshold=1, callback=None):
     identify_confluences(memory_layer)
     identify_pseudo_nodes(memory_layer)
     identify_watersheds(memory_layer)
-
+    e = datetime.now()
+    print b - a
+    print c - b
+    print d - c
+    print e - d
     self_intersections = []
     segment_centers = []
 
@@ -904,9 +898,13 @@ def identify_features(input_layer, threshold=1, callback=None):
         new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
         new_features.append(new_feature)
         new_node_id += 1
+    f = datetime.now()
+    print f - e
     output_data_provider.addFeatures(new_features)
     output_layer.updateFields()
     output_layer.commitChanges()
+    g = datetime.now()
+    print g - f
     return output_layer
 
 

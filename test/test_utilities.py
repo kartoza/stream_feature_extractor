@@ -704,14 +704,12 @@ class TestUtilities(unittest.TestCase):
     def test_intersections(self):
         """Test identify_intersections."""
         line_intersect = os.path.join(DATA_TEST_DIR, 'lines.shp')
-        print line_intersect
         line_layer = get_temp_shapefile_layer(line_intersect, 'lines')
-        line_layer2 = get_temp_shapefile_layer(line_intersect, 'lines')
 
-        intersections = identify_intersections(line_layer, line_layer2)
-        for a in intersections:
-            print a
-        print len(intersections)
+        intersections = identify_intersections(line_layer)
+        self.assertEqual(len(intersections), 22, '%s' % len(intersections))
+
+        remove_temp_layer(line_layer.source())
 
 if __name__ == '__main__':
     unittest.main()
