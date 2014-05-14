@@ -166,7 +166,6 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
 
     """
     temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
-    print 'temporary file: ', temp_shapefile, title
     return get_shapefile_layer(temp_shapefile, title)
 
 
@@ -343,8 +342,18 @@ class TestUtilities(unittest.TestCase):
     def test_get_nearby_nodes(self):
         """Test for get_nearby_nodes function."""
         nodes_layer = self.jawa_nodes_layer
+        nodes = nodes_layer.getFeatures()
+        node = None
+        # finding node with id == 1
+        for i in nodes:
+            print i.attributes()
+            if i['id'] == 1:
+                node = i
+                break
+        message = 'Node with id == 1 not found.'
+        self.assertIsNotNone(node, message)
         upstream_nodes, downstream_nodes = get_nearby_nodes(
-            nodes_layer, 1, THRESHOLD)
+            nodes_layer, node, THRESHOLD)
         expected_upstream_nodes = [2]
         expected_downstream_nodes = [5]
         message = ('Expect upstream nearby nodes %s but got %s' % (
@@ -392,7 +401,6 @@ class TestUtilities(unittest.TestCase):
         message = ('There should be %s features but I got %s.' % (
             len(expected_attributes), i))
         self.assertEqual(len(expected_attributes), i, message)
-        print nodes_layer.source()
 
     def test_identify_wells(self):
         """Test for identify_well method."""
@@ -619,16 +627,55 @@ class TestUtilities(unittest.TestCase):
 
     def test_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
+        full_start = datetime.now()
         layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
+        start = datetime.now()
         output_layer = identify_features(
             layer, THRESHOLD, callback=console_progress_callback)
-
+        end = datetime.now()
+        delta = end - start
         i = 0
+        num_wells = 0
+        num_sinks = 0
+        num_branches = 0
+        num_confluences = 0
+        num_pseudo_nodes = 0
+        num_watersheds = 0
+        num_self_intersections = 0
+        num_segment_center = 0
         for f in output_layer.getFeatures():
-            print f.id(), f.attributes(), f.geometry().asPoint()
+            # print f.id(), f.attributes(), f.geometry().asPoint()
+            node_type = f.attributes()[3]
+            if node_type == 'WELL':
+                num_wells += 1
+            if node_type == 'SINK':
+                num_sinks += 1
+            if node_type == 'BRANCH':
+                num_branches += 1
+            if node_type == 'CONFLUENCE':
+                num_confluences += 1
+            if node_type == 'PSEUDO_NODE':
+                num_pseudo_nodes += 1
+            if node_type == 'WATERSHED':
+                num_watersheds += 1
+            if node_type == 'SELF INTERSECTION':
+                num_self_intersections += 1
+            if node_type == 'SEGMENT CENTER':
+                num_segment_center += 1
             i += 1
-        message = 'There should be 22 features, but I got %s' % i
-        self.assertEqual(i, 22, message)
+        print 'wells', num_wells
+        print 'sinks', num_sinks
+        print 'branches', num_branches
+        print 'confluences', num_confluences
+        print 'pseudo nodes', num_pseudo_nodes
+        print 'watersheds', num_watersheds
+        print 'self intersections', num_self_intersections
+        print 'segment center', num_segment_center
+        full_end = datetime.now()
+        print 'identify_features duration', delta
+        print 'full duration', full_end - full_start
+        message = 'There should be 24005 features, but I got %s' % i
+        self.assertEqual(i, 24005, message)
 
 if __name__ == '__main__':
     unittest.main()
