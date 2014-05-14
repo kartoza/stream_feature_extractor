@@ -166,7 +166,6 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
 
     """
     temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
-    print 'temporary file: ', temp_shapefile, title
     return get_shapefile_layer(temp_shapefile, title)
 
 
@@ -343,8 +342,18 @@ class TestUtilities(unittest.TestCase):
     def test_get_nearby_nodes(self):
         """Test for get_nearby_nodes function."""
         nodes_layer = self.jawa_nodes_layer
+        nodes = nodes_layer.getFeatures()
+        node = None
+        # finding node with id == 1
+        for i in nodes:
+            print i.attributes()
+            if i['id'] == 1:
+                node = i
+                break
+        message = 'Node with id == 1 not found.'
+        self.assertIsNotNone(node, message)
         upstream_nodes, downstream_nodes = get_nearby_nodes(
-            nodes_layer, 1, THRESHOLD)
+            nodes_layer, node, THRESHOLD)
         expected_upstream_nodes = [2]
         expected_downstream_nodes = [5]
         message = ('Expect upstream nearby nodes %s but got %s' % (
@@ -392,7 +401,6 @@ class TestUtilities(unittest.TestCase):
         message = ('There should be %s features but I got %s.' % (
             len(expected_attributes), i))
         self.assertEqual(len(expected_attributes), i, message)
-        print nodes_layer.source()
 
     def test_identify_wells(self):
         """Test for identify_well method."""
@@ -627,7 +635,7 @@ class TestUtilities(unittest.TestCase):
         for f in output_layer.getFeatures():
             print f.id(), f.attributes(), f.geometry().asPoint()
             i += 1
-        message = 'There should be 22 features, but I got %s' % i
+        message = 'There should be 24005 features, but I got %s' % i
         self.assertEqual(i, 24005, message)
 
 if __name__ == '__main__':

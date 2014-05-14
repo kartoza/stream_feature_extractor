@@ -203,7 +203,7 @@ def get_nearby_nodes(layer, node, threshold):
     :type layer: QGISVectorLayer
 
     :param node: The point/node.
-    :type node: int
+    :type node: QgsFeature
 
     :param threshold: Distance threshold.
     :type threshold: float
@@ -566,8 +566,8 @@ def identify_self_intersections(line):
                  vertices[j + 1].y() - vertices[j].y())
             d = v[1] * w[0] - v[0] * w[1]
             if d == 0:
-                # TODO: Ismail do we really want to return None here?
-                return None
+                # Continue to the next part of line
+                continue
 
             dx = vertices[j].x() - vertices[i].x()
             dy = vertices[j].y() - vertices[i].y()
