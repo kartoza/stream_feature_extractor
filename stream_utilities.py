@@ -168,6 +168,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     # For creating node_id
     node_id = 0
     # Add features
+    features = []
     for node in nodes:
         line_id = node[0]
         first_point = node[1]
@@ -178,7 +179,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
         # noinspection PyArgumentList
         feature.setGeometry(QgsGeometry.fromPoint(first_point))
         feature.setAttributes([node_id, line_id, 'upstream'])
-        data_provider.addFeatures([feature])
+        features.append(feature)
         node_id += 1
 
         # Add upstream node
@@ -186,8 +187,10 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
         # noinspection PyArgumentList
         feature.setGeometry(QgsGeometry.fromPoint(last_point))
         feature.setAttributes([node_id, line_id, 'downstream'])
-        data_provider.addFeatures([feature])
+        features.append(feature)
         node_id += 1
+
+    data_provider.addFeatures(features)
     # Commit changes
     layer.commitChanges()
     return layer
@@ -292,6 +295,7 @@ def add_associated_nodes(layer, threshold, callback=None):
     node_count = layer.featureCount()
     counter = 1
 
+    dictionary_changes = {}
     for node in nodes:
         if callback is not None:
             if counter % 100 == 0:
@@ -315,7 +319,9 @@ def add_associated_nodes(layer, threshold, callback=None):
             up_num_index: upstream_count,
             down_num_index: downstream_count
         }
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_changes[node_fid] = attributes
+
+    data_provider.changeAttributeValues(dictionary_changes)
 
     if callback:
         callback(current=node_count, maximum=node_count)
@@ -358,9 +364,6 @@ def identify_wells(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'well', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -368,6 +371,7 @@ def identify_wells(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     well_index = layer.fieldNameIndex('well')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -378,7 +382,11 @@ def identify_wells(layer):
         else:
             well_value = 0
         attributes = {well_index: well_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
 
 
@@ -395,9 +403,6 @@ def identify_sinks(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'sink', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -405,6 +410,7 @@ def identify_sinks(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     sink_index = layer.fieldNameIndex('sink')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -415,7 +421,11 @@ def identify_sinks(layer):
         else:
             sink_value = 0
         attributes = {sink_index: sink_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
 
 
@@ -432,9 +442,6 @@ def identify_branches(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'branch', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -442,6 +449,7 @@ def identify_branches(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     branch_index = layer.fieldNameIndex('branch')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -452,7 +460,11 @@ def identify_branches(layer):
         else:
             branch_value = 0
         attributes = {branch_index: branch_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
 
 
@@ -469,9 +481,6 @@ def identify_confluences(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'confluence', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -479,6 +488,7 @@ def identify_confluences(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     confluence_index = layer.fieldNameIndex('confluence')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -489,7 +499,11 @@ def identify_confluences(layer):
         else:
             confluence_value = 0
         attributes = {confluence_index: confluence_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
 
 
@@ -506,9 +520,6 @@ def identify_pseudo_nodes(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'pseudo', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -516,6 +527,7 @@ def identify_pseudo_nodes(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     pseudo_node_index = layer.fieldNameIndex('pseudo')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -526,8 +538,91 @@ def identify_pseudo_nodes(layer):
         else:
             pseudo_node_value = 0
         attributes = {pseudo_node_index: pseudo_node_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
+
+
+def between(a, b, c):
+    """True if c is between a and b."""
+    if a <= b <= c:
+        return True
+    if c <= b <= a:
+        return True
+    return False
+
+
+def identify_intersections(layer, layer2):
+    """Return all self intersection points of a line.
+
+    :param layer: A vector line to be identified.
+    :type layer: QgsVectorLayer
+
+    :returns: List of QgsPoint that represent the intersection point.
+    :rtype: list
+    """
+    lines1 = layer.getFeatures()
+    print layer.featureCount()
+    lines2 = layer2.getFeatures()
+
+    intersections = []
+
+    expired_couples = set()
+    for i in range(layer.featureCount()):
+        line1 = layer.getFeatures(QgsFeatureRequest().setFilterFid(i))
+        line1_id = line1.id()
+        geometry1 = line1.geometry()
+        vertices1 = geometry1.asPolyline()
+        for j in range(layer.featureCount()):
+            line2 = layer.getFeatures(QgsFeatureRequest().setFilterFid(j))
+            line2_id = line2.id()
+            print line1_id, line2_id
+            if line1_id == line2_id:
+                continue
+            if (line1_id, line2_id) in expired_couples:
+                continue
+            if (line2_id, line1_id) in expired_couples:
+                continue
+
+            geometry2 = line2.geometry()
+            vertices2 = geometry2.asPolyline()
+
+            for i in range(len(vertices1) - 1):
+                v = (vertices1[i + 1].x() - vertices1[i].x(),
+                     vertices1[i + 1].y() - vertices1[i].y())
+                for j in range(len(vertices2) - 1):
+                    w = (vertices2[j + 1].x() - vertices2[j].x(),
+                         vertices2[j + 1].y() - vertices2[j].y())
+                    d = v[1] * w[0] - v[0] * w[1]
+                    if d == 0:
+                        # Continue to the next part of line
+                        continue
+                    dx = vertices2[j].x() - vertices1[i].x()
+                    dy = vertices2[j].y() - vertices1[i].y()
+
+                    k = (dy * w[0] - dx * w[1]) / float(d)
+
+                    intersection = (vertices1[i][0] + v[0] * k,
+                                    vertices1[i][1] + v[1] * k)
+                    if not between(
+                            vertices1[i][0],
+                            intersection[0],
+                            vertices1[i + 1][0]):
+                        continue
+                    if not between(
+                            vertices1[i][1],
+                            intersection[1],
+                            vertices1[i + 1][1]):
+                        continue
+
+                    intersections.append(
+                        QgsPoint(intersection[0], intersection[1]))
+                    expired_couples.add((line1_id, line2_id))
+
+    return intersections
 
 
 # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
@@ -543,14 +638,6 @@ def identify_self_intersections(line):
     :returns: List of QgsPoint that represent the intersection point.
     :rtype: list
     """
-    def between(a, b, c):
-        """True if c is between a and b."""
-        if a <= b <= c:
-            return True
-        if c <= b <= a:
-            return True
-        return False
-
     self_intersections = []
 
     geometry = line.geometry()
@@ -655,9 +742,6 @@ def identify_watersheds(layer):
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
 
-    data_provider = layer.dataProvider()
-    layer.startEditing()
-
     add_layer_attribute(layer, 'watershed', QVariant.Int)
     nodes = layer.getFeatures()
 
@@ -665,6 +749,7 @@ def identify_watersheds(layer):
     down_num_index = layer.fieldNameIndex('down_num')
     watershed_index = layer.fieldNameIndex('watershed')
 
+    dictionary_attributes = {}
     for node in nodes:
         node_fid = node.id()
         node_attributes = node.attributes()
@@ -675,7 +760,11 @@ def identify_watersheds(layer):
         else:
             watershed_value = 0
         attributes = {watershed_index: watershed_value}
-        data_provider.changeAttributeValues({node_fid: attributes})
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
     layer.commitChanges()
 
 

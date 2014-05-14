@@ -44,7 +44,8 @@ from stream_utilities import (
     identify_self_intersections,
     identify_segment_center,
     identify_features,
-    console_progress_callback)
+    console_progress_callback,
+    identify_intersections)
 
 from test.utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
@@ -671,11 +672,46 @@ class TestUtilities(unittest.TestCase):
         print 'watersheds', num_watersheds
         print 'self intersections', num_self_intersections
         print 'segment center', num_segment_center
+
         full_end = datetime.now()
         print 'identify_features duration', delta
         print 'full duration', full_end - full_start
+
         message = 'There should be 24005 features, but I got %s' % i
         self.assertEqual(i, 24005, message)
+
+        message = ('There should be 12 self intersections / kreuzung, '
+                   'but I got %s' % i)
+        self.assertEqual(num_self_intersections, 12, message)
+
+        message = 'There should be 1893 pseudo node, but I got %s' % i
+        self.assertEqual(num_pseudo_nodes, 1893, message)
+
+        message = 'There should be 847 wells / quelle, but I got %s' % i
+        self.assertEqual(num_wells, 847, message)
+
+        message = 'There should be 125 sinks / senke, but I got %s' % i
+        self.assertEqual(num_sinks, 125, message)
+
+        message = ('There should be 186 branches / verzweigung, but I got %s'
+                   % i)
+        self.assertEqual(num_branches, 186, message)
+
+        message = ('There should be 867 confluences / Zusammenfluss, '
+                   'but I got %s' % i)
+        self.assertEqual(num_confluences, 867, message)
+
+    def test_intersections(self):
+        """Test identify_intersections."""
+        line_intersect = os.path.join(DATA_TEST_DIR, 'lines.shp')
+        print line_intersect
+        line_layer = get_temp_shapefile_layer(line_intersect, 'lines')
+        line_layer2 = get_temp_shapefile_layer(line_intersect, 'lines')
+
+        intersections = identify_intersections(line_layer, line_layer2)
+        for a in intersections:
+            print a
+        print len(intersections)
 
 if __name__ == '__main__':
     unittest.main()
