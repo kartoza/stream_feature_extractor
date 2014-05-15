@@ -644,6 +644,7 @@ class TestUtilities(unittest.TestCase):
         num_watersheds = 0
         num_self_intersections = 0
         num_segment_center = 0
+        num_intersections = 0
         for f in output_layer.getFeatures():
             # print f.id(), f.attributes(), f.geometry().asPoint()
             node_type = f.attributes()[3]
@@ -663,6 +664,8 @@ class TestUtilities(unittest.TestCase):
                 num_self_intersections += 1
             if node_type == 'SEGMENT CENTER':
                 num_segment_center += 1
+            if node_type == 'INTERSECTION':
+                num_intersections += 1
             i += 1
         print 'wells', num_wells
         print 'sinks', num_sinks
@@ -680,9 +683,9 @@ class TestUtilities(unittest.TestCase):
         message = 'There should be 24005 features, but I got %s' % i
         self.assertEqual(i, 24005, message)
 
-        message = ('There should be 12 self intersections / kreuzung, '
+        message = ('There should be 12 intersections / kreuzung, '
                    'but I got %s' % i)
-        self.assertEqual(num_self_intersections, 12, message)
+        self.assertEqual(num_intersections, 12, message)
 
         message = 'There should be 1893 pseudo node, but I got %s' % i
         self.assertEqual(num_pseudo_nodes, 1893, message)
