@@ -412,7 +412,7 @@ class TestUtilities(unittest.TestCase):
         id_index = nodes_layer.fieldNameIndex('id')
         well_index = nodes_layer.fieldNameIndex('well')
 
-        expected_well = [3, 7]
+        expected_well = [0, 10]
 
         for feature in features:
             node_attributes = feature.attributes()
@@ -434,7 +434,7 @@ class TestUtilities(unittest.TestCase):
         id_index = nodes_layer.fieldNameIndex('id')
         sink_index = nodes_layer.fieldNameIndex('sink')
 
-        expected_sink = [0, 10]
+        expected_sink = [3, 7]
 
         for feature in features:
             node_attributes = feature.attributes()
@@ -610,8 +610,8 @@ class TestUtilities(unittest.TestCase):
         for f in output_layer.getFeatures():
             print f.id(), f.attributes(), f.geometry().asPoint()
             i += 1
-        message = 'There should be 22 features, but I got %s' % i
-        self.assertEqual(i, 22, message)
+        message = 'There should be 23 features, but I got %s' % i
+        self.assertEqual(i, 23, message)
 
         random_basename = get_random_string()
         temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')

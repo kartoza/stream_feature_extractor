@@ -355,8 +355,8 @@ def check_associated_attributes(layer):
 def identify_wells(layer):
     """Mark nodes from the layer if it is a well.
 
-    A node is identified as a well if the number of upstream nodes = 0 and
-    the number downstream node > 0.
+    A node is identified as a well if the number of upstream nodes == 1 and
+    the number downstream node 0.
     And add attribute `well` for marking.
 
     :param layer: A vector point layer.
@@ -378,7 +378,7 @@ def identify_wells(layer):
         node_attributes = node.attributes()
         up_num = node_attributes[up_num_index]
         down_num = node_attributes[down_num_index]
-        if up_num == 0 and down_num > 0:
+        if up_num == 1 and down_num == 0:
             well_value = 1
         else:
             well_value = 0
@@ -394,8 +394,8 @@ def identify_wells(layer):
 def identify_sinks(layer):
     """Mark nodes from the layer if it is a sink.
 
-    A node is identified as a sink if the number of upstream nodes > 0 and
-    the number downstream node = 0.
+    A node is identified as a sink if the number of upstream nodes == 0 and
+    the number downstream node = 1.
     And add attribute `sink` for marking.
 
     :param layer: A vector point layer.
@@ -417,7 +417,7 @@ def identify_sinks(layer):
         node_attributes = node.attributes()
         up_num = node_attributes[up_num_index]
         down_num = node_attributes[down_num_index]
-        if up_num > 0 and down_num == 0:
+        if up_num == 0 and down_num == 1:
             sink_value = 1
         else:
             sink_value = 0
@@ -430,11 +430,88 @@ def identify_sinks(layer):
     layer.commitChanges()
 
 
+def identify_tops(layer):
+    """Mark nodes from the layer if it is a top.
+
+    A node is identified as a top if the number of upstream nodes > 1 and
+    the number downstream node = 0.
+    And add attribute `top` for marking.
+
+    :param layer: A vector point layer.
+    :type layer: QGISVectorLayer
+    """
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    add_layer_attribute(layer, 'top', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    top_index = layer.fieldNameIndex('top')
+
+    dictionary_attributes = {}
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num > 1 and down_num == 0:
+            top_value = 1
+        else:
+            top_value = 0
+        attributes = {top_index: top_value}
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
+    layer.commitChanges()
+
+def identify_unclear_bifurcations(layer):
+    """Mark nodes from the layer if it is a unclear bifurcations.
+
+    A node is identified as a top if the number of upstream nodes > 1 and
+    the number downstream node > 1 and both of them must have the sam number.
+    And add attribute `unclear_bi` for marking.
+
+    :param layer: A vector point layer.
+    :type layer: QGISVectorLayer
+    """
+    if not check_associated_attributes(layer):
+        raise Exception('You should add associated node first')
+
+    add_layer_attribute(layer, 'unclear_bi', QVariant.Int)
+    nodes = layer.getFeatures()
+
+    up_num_index = layer.fieldNameIndex('up_num')
+    down_num_index = layer.fieldNameIndex('down_num')
+    unclear_bifurcation_index = layer.fieldNameIndex('unclear_bi')
+
+    dictionary_attributes = {}
+    for node in nodes:
+        node_fid = node.id()
+        node_attributes = node.attributes()
+        up_num = node_attributes[up_num_index]
+        down_num = node_attributes[down_num_index]
+        if up_num == down_num > 1:
+            unclear_bifurcation_value = 1
+        else:
+            unclear_bifurcation_value = 0
+        attributes = {unclear_bifurcation_index: unclear_bifurcation_value}
+        dictionary_attributes[node_fid] = attributes
+
+    data_provider = layer.dataProvider()
+    layer.startEditing()
+    data_provider.changeAttributeValues(dictionary_attributes)
+    layer.commitChanges()
+
+
 def identify_branches(layer):
     """Mark nodes from the layer if it is a branch.
 
-    A node is identified as a branch if the number of upstream nodes > 0 and
-    the number downstream node > 1.
+    A node is identified as a branch if 1 <= the number of upstream nodes <
+    the number of downstream nodes.
     And add attribute `branch` for marking.
 
     :param layer: A vector point layer.
@@ -456,7 +533,7 @@ def identify_branches(layer):
         node_attributes = node.attributes()
         up_num = node_attributes[up_num_index]
         down_num = node_attributes[down_num_index]
-        if up_num > 0 and down_num > 1:
+        if 1 <= up_num < down_num:
             branch_value = 1
         else:
             branch_value = 0
@@ -472,8 +549,8 @@ def identify_branches(layer):
 def identify_confluences(layer):
     """Mark nodes from the layer if it is a confluence.
 
-    A node is identified as a confluence if the number of upstream nodes > 1
-    and the number downstream node > 0.
+    A node is identified as a confluence if 1 <= the number of downstream
+    nodes < the number of upstream nodes.
     And add attribute `confluence` for marking.
 
     :param layer: A vector point layer.
@@ -495,7 +572,7 @@ def identify_confluences(layer):
         node_attributes = node.attributes()
         up_num = node_attributes[up_num_index]
         down_num = node_attributes[down_num_index]
-        if up_num > 1 and down_num > 0:
+        if 1 <= down_num < up_num:
             confluence_value = 1
         else:
             confluence_value = 0
@@ -801,6 +878,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     identify_confluences(memory_layer)
     identify_pseudo_nodes(memory_layer)
     identify_watersheds(memory_layer)
+    identify_tops(memory_layer)
     e = datetime.now()
     print b - a
     print c - b
@@ -846,13 +924,17 @@ def identify_features(input_layer, threshold=0, callback=None):
     confluence_index = memory_layer.fieldNameIndex('pseudo')
     pseudo_node_index = memory_layer.fieldNameIndex('confluence')
     watershed_index = memory_layer.fieldNameIndex('watershed')
+    top_index = memory_layer.fieldNameIndex('top')
+    unclear_bifurcation_index = memory_layer.fieldNameIndex('unclear_bi')
     feature_indexes = [
         well_index,
         sink_index,
         branch_index,
         confluence_index,
         pseudo_node_index,
-        watershed_index]
+        watershed_index,
+        top_index,
+        unclear_bifurcation_index]
 
     feature_names = [
         'WELL',
@@ -860,7 +942,9 @@ def identify_features(input_layer, threshold=0, callback=None):
         'BRANCH',
         'CONFLUENCE',
         'PSEUDO_NODE',
-        'WATERSHED']
+        'WATERSHED',
+        'TOP',
+        'UNCLEAR BIFURCATION']
     memory_data_provider = memory_layer.dataProvider()
     nodes = memory_data_provider.getFeatures()
     new_node_id = 1
@@ -914,7 +998,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     x = datetime.now()
     intersections = identify_intersections(input_layer, callback)
     y = datetime.now()
-    print y - x, 'alalalala'
+    print y - x, 'intersection and segment center.'
     for intersection in intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
