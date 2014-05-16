@@ -20,6 +20,9 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+# Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 
 # noinspection PyPep8Naming

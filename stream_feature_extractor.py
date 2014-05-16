@@ -22,6 +22,11 @@
 
 import os.path
 
+# Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+# do it before Qt imports
+import qgis  # pylint: disable=W0611
+
 #from pydev import pydevd  # pylint: disable=F0401
 
 from PyQt4.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication
@@ -239,9 +244,12 @@ class StreamFeatureExtractor:
                 progress_bar.setMaximum(maximum)
                 progress_bar.setValue(current)
 
+        settings = QSettings()
+        distance = settings.value(
+            'stream-feature-extractor/search-distance', 0, type=float)
         nodes = identify_features(
             self.iface.activeLayer(),
-            threshold=1,
+            threshold=distance,
             callback=progress_callback)
 
         QgsMapLayerRegistry.instance().addMapLayer(nodes)

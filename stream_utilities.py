@@ -15,6 +15,7 @@ __copyright__ = ''
 
 
 from math import sqrt
+
 from PyQt4.QtCore import QVariant
 
 from qgis.core import (
@@ -303,7 +304,7 @@ def add_associated_nodes(layer, threshold, callback=None):
         counter += 1
         node_fid = int(node.id())
         node_attributes = node.attributes()
-        node_id = node_attributes[id_index]
+        #node_id = node_attributes[id_index]
         node_type = node_attributes[node_type_index]
         upstream_nodes, downstream_nodes = get_nearby_nodes(
             layer, node, threshold)
@@ -766,7 +767,7 @@ def identify_watersheds(layer):
 
 
 # noinspection PyPep8Naming
-def identify_features(input_layer, threshold=1, callback=None):
+def identify_features(input_layer, threshold=0, callback=None):
     """Identify almost features in one functions and put it in a layer.
 
     :param input_layer: A vector line layer.
