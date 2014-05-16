@@ -20,7 +20,8 @@
  ***************************************************************************/
 """
 
-import os.path
+import os
+import logging
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
@@ -52,6 +53,7 @@ from stream_help_dialog import HelpDialog
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
 MENU_RUN_LABEL = u'Extract from current layer'
+LOGGER = logging.getLogger('QGIS')
 
 
 class StreamFeatureExtractor:
@@ -104,6 +106,7 @@ class StreamFeatureExtractor:
 
         # To enable/disable the run menu option
         self.iface.currentLayerChanged.connect(self.layer_changed)
+        LOGGER.debug('Stream feature extractor initialised')
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -266,11 +269,22 @@ class StreamFeatureExtractor:
         settings = QSettings()
         distance = settings.value(
             'stream-feature-extractor/search-distance', 0, type=float)
-        nodes = identify_features(
-            self.iface.activeLayer(),
-            threshold=distance,
-            callback=progress_callback)
+        # noinspection PyBroadException
+        try:
+            nodes = identify_features(
+                self.iface.activeLayer(),
+                threshold=distance,
+                callback=progress_callback)
+        except Exception:
+            LOGGER.exception('A terrible failure occurred.')
+            self.iface.messageBar().pushMessage(
+                self.tr('Extraction error.'),
+                self.tr('Please check logs for details.'),
+                level=QgsMessageBar.CRITICAL,
+                duration=5)
+            return
 
+        message_bar.hide()
         QgsMapLayerRegistry.instance().addMapLayer(nodes)
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
@@ -285,7 +299,9 @@ class StreamFeatureExtractor:
         """Display application help to the user."""
         help_file = 'file:///%s/help/index.html' % os.path.dirname(__file__)
         results_dialog = HelpDialog()
-        #results_dialog.web_view.setHtml(results_popped)
+        # noinspection PyTypeChecker
+        url = QUrl.fromLocalFile(help_file)
+        results_dialog.web_view.load(url)
         #results_dialog.show()
         results_dialog.exec_()
 

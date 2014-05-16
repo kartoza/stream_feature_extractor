@@ -25,22 +25,15 @@
 #Add iso code for any locales you want to support here (space separated)
 LOCALES = af
 
-# translation
-SOURCES = \
-	__init__.py \
-	stream_feature_extractor.py\
-	stream_options_dialog.py\
-	stream_help_dialog.py\
-	stream_utilities.py
-
 PLUGINNAME = StreamFeatureExtractor
 
 PY_FILES = \
+	__init__.py \
 	stream_feature_extractor.py\
 	stream_options_dialog.py \
 	stream_help_dialog.py\
-	__init__.py \
-	stream_utilities.py
+	stream_utilities.py\
+	custom_logging.py
 
 EXTRAS = icon.png metadata.txt
 
@@ -58,6 +51,8 @@ PYDEV = pydev
 #################################################
 
 HELP = help/build/html
+
+THIRD_PARTY = third_party
 
 PLUGIN_UPLOAD = $(c)/plugin_upload.py
 
@@ -99,6 +94,7 @@ deploy: compile doc transcompile
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
+	cp -vfr $(THIRD_PARTY) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/
 
 debugdeploy: deploy
 	@echo
@@ -110,18 +106,15 @@ debugdeploy: deploy
 	# $HOME/$(QGISDIR)/python/plugins
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -rvf $(PYDEV) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-
+	cp -vfr $(THIRD_PARTY) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/third_party
 
 # The dclean target removes compiled python files from plugin directory
-# also deletes any .svn entry
 dclean:
 	@echo
 	@echo "-----------------------------------"
 	@echo "Removing any compiled python files."
 	@echo "-----------------------------------"
 	find $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME) -iname "*.pyc" -delete
-	find $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME) -iname ".svn" -prune -exec rm -Rf {} \;
-
 
 derase:
 	@echo
