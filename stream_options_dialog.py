@@ -22,7 +22,13 @@
 
 import os
 
+# Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+# do it before Qt imports
+import qgis  # pylint: disable=W0611
+
 from PyQt4 import QtGui, uic
+from PyQt4.QtCore import QSettings
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'stream_options_dialog_base.ui'))
@@ -37,4 +43,19 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # self.<objectname>, and you can use autoconnect slots - see
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
+        QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+        settings = QSettings()
+        self.distance.setValue(
+            settings.value(
+                'stream-feature-extractor/search-distance', 0, type=float)
+        )
+
+    def accept(self):
+        """Event handler for when ok is pressed."""
+        settings = QSettings()
+        settings.setValue(
+            'stream-feature-extractor/search-distance',
+            self.distance.value()
+        )
+        self.close()
