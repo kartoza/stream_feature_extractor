@@ -42,6 +42,7 @@ class SafeTranslationsTest(unittest.TestCase):
             dir_path, 'i18n', 'af.qm')
         translator = QTranslator()
         translator.load(file_path)
+        # noinspection PyCallByClass
         QCoreApplication.installTranslator(translator)
 
         expected_message = 'Goeie more'

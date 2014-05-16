@@ -20,7 +20,8 @@
  ***************************************************************************/
 """
 
-import os.path
+import os
+import logging
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
@@ -29,8 +30,18 @@ import qgis  # pylint: disable=W0611
 
 #from pydev import pydevd  # pylint: disable=F0401
 
-from PyQt4.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon, QProgressBar, QPushButton
+from PyQt4.QtCore import (
+    Qt,
+    QSettings,
+    QTranslator,
+    qVersion,
+    QCoreApplication,
+    QUrl)
+from PyQt4.QtGui import (
+    QAction,
+    QIcon,
+    QProgressBar,
+    QPushButton)
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
@@ -38,9 +49,11 @@ import resources_rc
 # Import the code for the dialog
 from stream_utilities import is_line_layer, identify_features
 from stream_options_dialog import OptionsDialog
+from stream_help_dialog import HelpDialog
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
 MENU_RUN_LABEL = u'Extract from current layer'
+LOGGER = logging.getLogger('QGIS')
 
 
 class StreamFeatureExtractor:
@@ -80,7 +93,7 @@ class StreamFeatureExtractor:
         # Declare instance attributes
         self.run_action = None
         self.options_action = None
-        self.active_layer = None
+        self.help_action = None
         self.message_bar = None
 
         # Declare instance attributes
@@ -91,8 +104,9 @@ class StreamFeatureExtractor:
         self.toolbar = self.iface.addToolBar(MENU_GROUP_LABEL)
         self.toolbar.setObjectName(u'StreamFeatureExtractor')
 
-        # To enable/disable the menu option and setting active_layer
+        # To enable/disable the run menu option
         self.iface.currentLayerChanged.connect(self.layer_changed)
+        LOGGER.debug('Stream feature extractor initialised')
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -202,6 +216,14 @@ class StreamFeatureExtractor:
             add_to_menu=True,
             add_to_toolbar=False)
 
+        self.help_action = self.add_action(
+            icon_path,
+            text=self.tr(u"Help ...", ),
+            callback=self.show_help,
+            parent=self.iface.mainWindow(),
+            add_to_menu=True,
+            add_to_toolbar=False)
+
         if self.iface.activeLayer() is not None:
             self.layer_changed(self.iface.activeLayer())
 
@@ -247,11 +269,22 @@ class StreamFeatureExtractor:
         settings = QSettings()
         distance = settings.value(
             'stream-feature-extractor/search-distance', 0, type=float)
-        nodes = identify_features(
-            self.iface.activeLayer(),
-            threshold=distance,
-            callback=progress_callback)
+        # noinspection PyBroadException
+        try:
+            nodes = identify_features(
+                self.iface.activeLayer(),
+                threshold=distance,
+                callback=progress_callback)
+        except Exception:
+            LOGGER.exception('A terrible failure occurred.')
+            self.iface.messageBar().pushMessage(
+                self.tr('Extraction error.'),
+                self.tr('Please check logs for details.'),
+                level=QgsMessageBar.CRITICAL,
+                duration=5)
+            return
 
+        message_bar.hide()
         QgsMapLayerRegistry.instance().addMapLayer(nodes)
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
@@ -260,6 +293,17 @@ class StreamFeatureExtractor:
             self.tr('Use "Layer->Save as" to save the results permanently.'),
             level=QgsMessageBar.INFO,
             duration=3)
+
+    @staticmethod
+    def show_help():
+        """Display application help to the user."""
+        help_file = 'file:///%s/help/index.html' % os.path.dirname(__file__)
+        results_dialog = HelpDialog()
+        # noinspection PyTypeChecker
+        url = QUrl.fromLocalFile(help_file)
+        results_dialog.web_view.load(url)
+        #results_dialog.show()
+        results_dialog.exec_()
 
     @staticmethod
     def show_options():
