@@ -802,9 +802,10 @@ def identify_segment_center(line):
         try:
             center_x = vertices[i].x()
             center_y = vertices[i].y()
-            return QgsPoint(center_x, center_y)
         except IndexError:
-            pass
+            return None
+
+    return QgsPoint(center_x, center_y)
 
 
 # noinspection PyPep8Naming

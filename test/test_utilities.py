@@ -56,6 +56,9 @@ DATA_TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 JAWA_SHP = os.path.join(DATA_TEST_DIR, 'sungai_di_jawa.shp')
 JAWA_NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
 
+SUNGAI_BARU_SHP = os.path.join(
+    DATA_TEST_DIR, 'small_test', 'sungai_baru.shp')
+
 DGN_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test.shp')
 DGN_NODES_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test_nodes.shp')
 
@@ -456,7 +459,7 @@ class TestUtilities(unittest.TestCase):
         id_index = nodes_layer.fieldNameIndex('id')
         branch_index = nodes_layer.fieldNameIndex('branch')
 
-        expected_branch = [1, 2, 5]
+        expected_branch = [4, 6, 9]
 
         for feature in features:
             node_attributes = feature.attributes()
@@ -478,7 +481,7 @@ class TestUtilities(unittest.TestCase):
         id_index = nodes_layer.fieldNameIndex('id')
         confluence_index = nodes_layer.fieldNameIndex('confluence')
 
-        expected_confluence = [4, 6, 9]
+        expected_confluence = [1, 2, 5]
 
         for feature in features:
             node_attributes = feature.attributes()
@@ -530,7 +533,7 @@ class TestUtilities(unittest.TestCase):
         id_index = nodes_layer.fieldNameIndex('id')
         watershed_index = nodes_layer.fieldNameIndex('watershed')
 
-        expected_watershed = [1, 2, 5]
+        expected_watershed = []
 
         for feature in features:
             node_attributes = feature.attributes()
@@ -600,33 +603,84 @@ class TestUtilities(unittest.TestCase):
         message = 'Expected %s but I got %s' % (expected_center, center)
         self.assertEqual(expected_center, center, message)
 
-    def test_identify_features_jawa(self):
-        """Test for identify_features on the jawa dataset."""
+    def test_identify_features_sungai_baru(self):
+        """Test for identify_features on the sungai baru dataset."""
         sungai_layer = get_temp_shapefile_layer(
-            JAWA_SHP, 'sungai_di_jawa')
-        output_layer = identify_features(sungai_layer, THRESHOLD)
+            SUNGAI_BARU_SHP, 'sungai_baru')
+        output_layer = identify_features(sungai_layer, 1)
 
         i = 0
         for f in output_layer.getFeatures():
             print f.id(), f.attributes(), f.geometry().asPoint()
             i += 1
-        message = 'There should be 23 features, but I got %s' % i
-        self.assertEqual(i, 23, message)
 
-        random_basename = get_random_string()
-        temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
-        output_layer = identify_features(sungai_layer, THRESHOLD)
+        expected_result = [
+            [QgsPoint(4505079.78066084068268538, 5820617.32926965225487947),
+             'WATERSHED'],
+            [QgsPoint(4505796.54819717071950436, 5819595.02509501948952675),
+             'SINK'],
+            [QgsPoint(4505201.38892469275742769, 5818932.09107278566807508),
+             'UNCLEAR BIFURCATION'],
+            [QgsPoint(4505994.16670085769146681, 5818944.59937320277094841),
+             'CONFLUENCE'],
+            [QgsPoint(4505423.69021992385387421, 5819349.8841874785721302),
+             'PSEUDO_NODE'],
+            [QgsPoint(4504424.25703522842377424, 5819771.00726572517305613),
+             'BRANCH'],
+            [QgsPoint(4504424.25681891199201345, 5821004.36726346984505653),
+             'WELL'],
+            [QgsPoint(4506321.54563129413872957, 5820690.89381018560379744),
+             'SINK'],
+            [QgsPoint(4505706.96817480307072401, 5820597.46010562963783741),
+             'SELF INTERSECTION'],
+            [QgsPoint(4504954.79498676210641861, 5819664.31516459211707115),
+             'INTERSECTION'],
+            [QgsPoint(4504516.27684732060879469, 5820388.85559526737779379),
+             'SEGMENT CENTER'],
+            [QgsPoint(4505597.77781277894973755, 5818938.34522299282252789),
+             'SEGMENT CENTER'],
+            [QgsPoint(4505874.24493211694061756, 5818746.94614691846072674),
+             'SEGMENT CENTER'],
+            [QgsPoint(4505905.3135033342987299, 5820416.27267749048769474),
+             'SEGMENT CENTER'],
+            [QgsPoint(4505459.78595067281275988, 5820124.87922604847699404),
+             'SEGMENT CENTER'],
+            [QgsPoint(4505298.45680753327906132, 5818640.22502889111638069),
+             'SEGMENT CENTER'],
+            [QgsPoint(4504960.94927519094198942, 5819710.47232702653855085),
+             'SEGMENT CENTER'],
+            [QgsPoint(4506065.1831744248047471, 5819712.94692023564130068),
+             'SEGMENT CENTER'],
+            [QgsPoint(4504974.16828893031924963, 5819660.41915996465831995),
+             'SEGMENT CENTER'],
+            [QgsPoint(4504515.96725786849856377, 5819123.59523478243499994),
+             'SEGMENT CENTER']
+        ]
 
-        error = QgsVectorFileWriter.writeAsVectorFormat(
-            output_layer, temp_file, "CP1250", None, "ESRI Shapefile")
+        message = ('There should be %s features, but I got %s' %
+                   (len(expected_result), i))
+        self.assertEqual(i, len(expected_result), message)
 
-        if error == QgsVectorFileWriter.NoError:
-            print "success!"
-        message = '%s is not exist' % temp_file
-        self.assertTrue(os.path.exists(temp_file), message)
-        remove_temp_layer(temp_file)
+        for feature in output_layer.getFeatures():
+            result = [feature.geometry().asPoint(), feature.attributes()[3]]
+            message = '%s is not found %s' % (result, feature.id())
+            self.assertIn(result, expected_result, message)
 
-    def test_identify_features_dgn(self):
+        remove_temp_layer(sungai_layer.source())
+        # random_basename = get_random_string()
+        # temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
+        # output_layer = identify_features(sungai_layer, THRESHOLD)
+        #
+        # error = QgsVectorFileWriter.writeAsVectorFormat(
+        #     output_layer, temp_file, "CP1250", None, "ESRI Shapefile")
+        #
+        # if error == QgsVectorFileWriter.NoError:
+        #     print "success!"
+        # message = '%s is not exist' % temp_file
+        # self.assertTrue(os.path.exists(temp_file), message)
+        # remove_temp_layer(temp_file)
+
+    def Xtest_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
         full_start = datetime.now()
         layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
