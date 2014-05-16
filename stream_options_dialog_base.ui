@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OptionsDialogBase</class>
- <widget class="QDialog" name="OptionsDialogBase">
+ <class>StreamOptionsDialogBase</class>
+ <widget class="QDialog" name="StreamOptionsDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,7 +45,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>OptionsDialogBase</receiver>
+   <receiver>StreamOptionsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -61,7 +61,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>OptionsDialogBase</receiver>
+   <receiver>StreamOptionsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
