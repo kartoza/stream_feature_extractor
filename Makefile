@@ -29,19 +29,20 @@ LOCALES = af
 SOURCES = \
 	__init__.py \
 	stream_feature_extractor.py \
-	stream_feature_extractor_dialog.py\
+	stream_options_dialog.py\
 	stream_utilities.py
 
 PLUGINNAME = StreamFeatureExtractor
 
 PY_FILES = \
 	stream_feature_extractor.py \
+	stream_options_dialog.py \
 	__init__.py \
 	stream_utilities.py
 
 EXTRAS = icon.png metadata.txt
 
-UI_FILES =
+UI_FILES = stream_options_dialog_base.ui
 
 COMPILED_RESOURCE_FILES = resources_rc.py
 
