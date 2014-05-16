@@ -32,6 +32,7 @@ from qgis.gui import QgsMessageBar
 import resources_rc
 # Import the code for the dialog
 from stream_utilities import is_line_layer, identify_features
+from stream_options_dialog import OptionsDialog
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
 MENU_RUN_LABEL = u'Extract from current layer'
@@ -121,7 +122,7 @@ class StreamFeatureExtractor:
         :type icon_path: str
 
         :param text: Text that should be shown in menu items for this action.
-        :type text: str
+        :type text: str, QString
 
         :param callback: Function to be called when the action is triggered.
         :type callback: function
@@ -168,7 +169,7 @@ class StreamFeatureExtractor:
             self.toolbar.addAction(action)
 
         if add_to_menu:
-            self.iface.addPluginToMenu(
+            self.iface.addPluginToVectorMenu(
                 self.menu,
                 action)
 
@@ -179,20 +180,22 @@ class StreamFeatureExtractor:
     # noinspection PyPep8Naming
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        self.menu = u'Vector'
+        self.menu = u'Stream feature extractor'
         icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
         self.run_action = self.add_action(
             icon_path,
             text=self.tr(u"Extract from current layer",),
             callback=self.run,
-            parent=self.iface.mainWindow())
+            parent=self.iface.mainWindow(),
+            add_to_menu=True)
 
-        # self.options_action = QAction(
-        #     QIcon(":/plugins/StreamFeatureExtractor/icon.svg"),
-        #     u"Options",
-        #     self.iface.mainWindow())
-        # # connect the action to the run method
-        # self.run_action.triggered.connect(self.show_options)
+        self.options_action = self.add_action(
+            icon_path,
+            text=self.tr(u"Options ...", ),
+            callback=self.show_options,
+            parent=self.iface.mainWindow(),
+            add_to_menu=True,
+            add_to_toolbar=False)
 
         if self.iface.activeLayer() is not None:
             self.layer_changed(self.iface.activeLayer())
@@ -250,17 +253,16 @@ class StreamFeatureExtractor:
             level=QgsMessageBar.INFO,
             duration=3)
 
-    def show_options(self):
+    @staticmethod
+    def show_options():
         """Show dialog with plugin options."""
         # show the dialog
-        self.dlg.show()
-        self.dlg.get_vector_line_layers()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
+        dialog = OptionsDialog()
+        result = dialog.exec_()
         # See if OK was pressed
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
+            pass
+        else:
             pass
 
     def layer_changed(self, layer):
