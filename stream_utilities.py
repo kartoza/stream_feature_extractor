@@ -664,11 +664,11 @@ def identify_intersections(layer, callback=None):
 
     """
     def get_index(data_provider):
-        feature = QgsFeature()
+        qgs_feature = QgsFeature()
         index = QgsSpatialIndex()
-        features = data_provider.getFeatures()
-        while features.nextFeature(feature):
-            index.insertFeature(feature)
+        qgs_features = data_provider.getFeatures()
+        while qgs_features.nextFeature(qgs_feature):
+            index.insertFeature(qgs_feature)
         return index
 
     intersections = []
@@ -680,14 +680,16 @@ def identify_intersections(layer, callback=None):
     for feature in features:
         geometry = feature.geometry()
         vertices = geometry.asPolyline()
+        if len(vertices) > 1:
+            start_end_vertices = [vertices[0], vertices[-1]]
+        else:
+            start_end_vertices = []
         intersect_lines = spatial_index.intersects(geometry.boundingBox())
         for intersect_line in intersect_lines:
             line_id = int(intersect_line)
-            if line_id == feature.id():
-                continue
             data_provider.getFeatures(
                 QgsFeatureRequest().setFilterFid(line_id)).nextFeature(
-                feature_2)
+                    feature_2)
             geometry_2 = feature_2.geometry()
             if geometry.intersects(geometry_2):
                 temp_geom = geometry.intersection(geometry_2)
@@ -697,12 +699,13 @@ def identify_intersections(layer, callback=None):
                         temp_list = temp_geom.asMultiPoint()
                     else:
                         temp_list.append(temp_geom.asPoint())
-                    if len(vertices) > 1:
-                        if vertices[0] in temp_list:
-                            temp_list.remove(vertices[0])
-                        if vertices[-1] in temp_list:
-                            temp_list.remove(vertices[-1])
-                        print temp_list, vertices[0], vertices[-1]
+                    # if len(vertices) > 1:
+                    #     if vertices[0] in temp_list:
+                    #         temp_list.remove(vertices[0])
+                    #     if vertices[-1] in temp_list:
+                        #         temp_list.remove(vertices[-1])
+                    if len(temp_list) > 0:
+                        print temp_list, vertices
                     intersections.extend(temp_list)
     return set(intersections)
 
@@ -972,7 +975,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     x = datetime.now()
     intersections = identify_intersections(input_layer, callback)
     y = datetime.now()
-    print y - x, 'intersection and segment center.'
+    print y - x, 'self intersection and segment center.'
     for intersection in intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
