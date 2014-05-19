@@ -27,7 +27,8 @@ from qgis.core import (
     QgsPoint,
     QgsMapLayer,
     QgsRectangle,
-    QgsFeatureRequest)
+    QgsFeatureRequest,
+    QgsSpatialIndex)
 
 
 def list_to_str(the_list, sep=','):
@@ -662,48 +663,48 @@ def identify_intersections(layer, callback=None):
     :type callback: function
 
     """
-    dictionary_vertices = {}
-    for line in layer.getFeatures():
-        geometry = line.geometry()
-        dictionary_vertices[line.id()] = geometry.asPolyline()
+    def get_index(data_provider):
+        feature = QgsFeature()
+        index = QgsSpatialIndex()
+        features = data_provider.getFeatures()
+        while features.nextFeature(feature):
+            index.insertFeature(feature)
+        return index
 
     intersections = []
-    counter = 1
-    node_count = len(dictionary_vertices) * len(dictionary_vertices)
-    for key1, vertices1 in dictionary_vertices.iteritems():
-        for key2, vertices2 in dictionary_vertices.iteritems():
-            if callback is not None:
-                if counter % 1000 == 0:
-                    callback(current=counter, maximum=node_count)
-            counter += 1
-            # only check half of them
-            if key1 >= key2:
+    data_provider = layer.dataProvider()
+    spatial_index = get_index(data_provider)
+
+    feature_2 = QgsFeature()
+    features = layer.getFeatures()
+    for feature in features:
+        geometry = feature.geometry()
+        vertices = geometry.asPolyline()
+        intersect_lines = spatial_index.intersects(geometry.boundingBox())
+        for intersect_line in intersect_lines:
+            line_id = int(intersect_line)
+            if line_id == feature.id():
                 continue
-            for i in range(len(vertices1) - 1):
-                v = (vertices1[i + 1].x() - vertices1[i].x(),
-                     vertices1[i + 1].y() - vertices1[i].y())
-                for j in range(len(vertices2) - 1):
-                    w = (vertices2[j + 1].x() - vertices2[j].x(),
-                         vertices2[j + 1].y() - vertices2[j].y())
-                    d = v[1] * w[0] - v[0] * w[1]
-                    if d == 0:
-                        # Continue to the next part of line
-                        continue
-                    dx = vertices2[j].x() - vertices1[i].x()
-                    dy = vertices2[j].y() - vertices1[i].y()
-
-                    k = (dy * w[0] - dx * w[1]) / float(d)
-
-                    intersection = (vertices1[i][0] + v[0] * k,
-                                    vertices1[i][1] + v[1] * k)
-                    if not point_in_line(intersection, vertices1[i:i + 2]):
-                        continue
-                    if not point_in_line(intersection, vertices2[j:j + 2]):
-                        continue
-                    intersections.append(
-                        QgsPoint(intersection[0], intersection[1]))
-
-    return intersections
+            data_provider.getFeatures(
+                QgsFeatureRequest().setFilterFid(line_id)).nextFeature(
+                feature_2)
+            geometry_2 = feature_2.geometry()
+            if geometry.intersects(geometry_2):
+                temp_geom = geometry.intersection(geometry_2)
+                if temp_geom.type() == QGis.Point:
+                    temp_list = []
+                    if temp_geom.isMultipart():
+                        temp_list = temp_geom.asMultiPoint()
+                    else:
+                        temp_list.append(temp_geom.asPoint())
+                    if len(vertices) > 1:
+                        if vertices[0] in temp_list:
+                            temp_list.remove(vertices[0])
+                        if vertices[-1] in temp_list:
+                            temp_list.remove(vertices[-1])
+                        print temp_list, vertices[0], vertices[-1]
+                    intersections.extend(temp_list)
+    return set(intersections)
 
 
 # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
@@ -878,6 +879,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         QgsField('id', QVariant.Int),
         QgsField('x', QVariant.Double),
         QgsField('y', QVariant.Double),
+        QgsField('eng_art', QVariant.String),
         QgsField('art', QVariant.String),
     ])
     id_index = memory_layer.fieldNameIndex('id')
@@ -907,6 +909,14 @@ def identify_features(input_layer, threshold=0, callback=None):
         'PSEUDO_NODE',
         'WATERSHED',
         'UNCLEAR BIFURCATION']
+    germany_names = [
+        'Quelle',
+        'Senke',
+        'Verzweigung',
+        'Zusammenfluss',
+        'Pseudonode',
+        'Top',
+        'Unklare Bifurkation']
     memory_data_provider = memory_layer.dataProvider()
     nodes = memory_data_provider.getFeatures()
     new_node_id = 1
@@ -937,7 +947,7 @@ def identify_features(input_layer, threshold=0, callback=None):
                 new_feature = QgsFeature()
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
                 new_feature.setAttributes(
-                    [new_node_id, x, y, feature_names[i]])
+                    [new_node_id, x, y, feature_names[i], germany_names[i]])
                 new_features.append(new_feature)
                 new_node_id += 1
     # self intersection
@@ -946,7 +956,8 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
         x = self_intersection.x()
         y = self_intersection.y()
-        new_feature.setAttributes([new_node_id, x, y, 'SELF INTERSECTION'])
+        new_feature.setAttributes(
+            [new_node_id, x, y, 'SELF INTERSECTION', 'Self Intersection'])
         new_features.append(new_feature)
         new_node_id += 1
     for segment_center in segment_centers:
@@ -954,7 +965,8 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
-        new_feature.setAttributes([new_node_id, x, y, 'SEGMENT CENTER'])
+        new_feature.setAttributes(
+            [new_node_id, x, y, 'SEGMENT CENTER', 'Segment Center'])
         new_features.append(new_feature)
         new_node_id += 1
     x = datetime.now()
@@ -966,7 +978,8 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
         x = intersection.x()
         y = intersection.y()
-        new_feature.setAttributes([new_node_id, x, y, 'INTERSECTION'])
+        new_feature.setAttributes(
+            [new_node_id, x, y, 'INTERSECTION', 'Kreuzung'])
         new_features.append(new_feature)
         new_node_id += 1
 
