@@ -350,7 +350,6 @@ class TestUtilities(unittest.TestCase):
         node = None
         # finding node with id == 1
         for i in nodes:
-            print i.attributes()
             if i['id'] == 1:
                 node = i
                 break
@@ -701,27 +700,29 @@ class TestUtilities(unittest.TestCase):
         num_self_intersections = 0
         num_segment_center = 0
         num_intersections = 0
+        num_unseparated = 0
         for f in output_layer.getFeatures():
-            # print f.id(), f.attributes(), f.geometry().asPoint()
             node_type = f.attributes()[3]
-            if node_type == 'WELL':
+            if node_type == 'Well':
                 num_wells += 1
-            if node_type == 'SINK':
+            if node_type == 'Sink':
                 num_sinks += 1
-            if node_type == 'BRANCH':
+            if node_type == 'Branch':
                 num_branches += 1
-            if node_type == 'CONFLUENCE':
+            if node_type == 'Confluence':
                 num_confluences += 1
-            if node_type == 'PSEUDO_NODE':
+            if node_type == 'Pseudo node':
                 num_pseudo_nodes += 1
-            if node_type == 'WATERSHED':
+            if node_type == 'Watershed':
                 num_watersheds += 1
-            if node_type == 'SELF INTERSECTION':
+            if node_type == 'Self Intersection':
                 num_self_intersections += 1
-            if node_type == 'SEGMENT CENTER':
+            if node_type == 'Segment Center':
                 num_segment_center += 1
-            if node_type == 'INTERSECTION':
+            if node_type == 'Intersection':
                 num_intersections += 1
+            if node_type == 'Unseparated':
+                num_unseparated += 1
             i += 1
         print 'wells', num_wells
         print 'sinks', num_sinks
@@ -731,6 +732,7 @@ class TestUtilities(unittest.TestCase):
         print 'watersheds', num_watersheds
         print 'self intersections', num_self_intersections
         print 'segment center', num_segment_center
+        print 'unseparated', num_unseparated
 
         full_end = datetime.now()
         print 'identify_features duration', delta

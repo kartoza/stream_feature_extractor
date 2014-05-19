@@ -648,6 +648,16 @@ def point_in_line(point, line):
             and between(y1_line, y_point, y2_line))
 
 
+def get_spatial_index(data_provider):
+    """Create spatial index from a data provider."""
+    qgs_feature = QgsFeature()
+    index = QgsSpatialIndex()
+    qgs_features = data_provider.getFeatures()
+    while qgs_features.nextFeature(qgs_feature):
+        index.insertFeature(qgs_feature)
+    return index
+
+
 def identify_intersections(layer, callback=None):
     """Return all self intersection points of a line.
 
@@ -663,27 +673,15 @@ def identify_intersections(layer, callback=None):
     :type callback: function
 
     """
-    def get_index(data_provider):
-        qgs_feature = QgsFeature()
-        index = QgsSpatialIndex()
-        qgs_features = data_provider.getFeatures()
-        while qgs_features.nextFeature(qgs_feature):
-            index.insertFeature(qgs_feature)
-        return index
-
     intersections = []
     data_provider = layer.dataProvider()
-    spatial_index = get_index(data_provider)
+    spatial_index = get_spatial_index(data_provider)
 
     feature_2 = QgsFeature()
     features = layer.getFeatures()
     for feature in features:
         geometry = feature.geometry()
         vertices = geometry.asPolyline()
-        if len(vertices) > 1:
-            start_end_vertices = [vertices[0], vertices[-1]]
-        else:
-            start_end_vertices = []
         intersect_lines = spatial_index.intersects(geometry.boundingBox())
         for intersect_line in intersect_lines:
             line_id = int(intersect_line)
@@ -699,13 +697,11 @@ def identify_intersections(layer, callback=None):
                         temp_list = temp_geom.asMultiPoint()
                     else:
                         temp_list.append(temp_geom.asPoint())
-                    # if len(vertices) > 1:
-                    #     if vertices[0] in temp_list:
-                    #         temp_list.remove(vertices[0])
-                    #     if vertices[-1] in temp_list:
-                        #         temp_list.remove(vertices[-1])
-                    if len(temp_list) > 0:
-                        print temp_list, vertices
+                    if len(vertices) > 1:
+                        if vertices[0] in temp_list:
+                            temp_list.remove(vertices[0])
+                        if vertices[-1] in temp_list:
+                                temp_list.remove(vertices[-1])
                     intersections.extend(temp_list)
     return set(intersections)
 
@@ -885,6 +881,12 @@ def identify_features(input_layer, threshold=0, callback=None):
         QgsField('eng_art', QVariant.String),
         QgsField('art', QVariant.String),
     ])
+
+    output_layer.commitChanges()
+
+    eng_art_index = output_layer.fieldNameIndex('eng_art')
+    art_index = output_layer.fieldNameIndex('art')
+
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
     downstream_index = memory_layer.fieldNameIndex('down_nodes')
@@ -905,13 +907,13 @@ def identify_features(input_layer, threshold=0, callback=None):
         unclear_bifurcation_index]
 
     feature_names = [
-        'WELL',
-        'SINK',
-        'BRANCH',
-        'CONFLUENCE',
-        'PSEUDO_NODE',
-        'WATERSHED',
-        'UNCLEAR BIFURCATION']
+        'Well',
+        'Sink',
+        'Branch',
+        'Confluence',
+        'Pseudo node',
+        'Watershed',
+        'Unclear Bifurcation']
     germany_names = [
         'Quelle',
         'Senke',
@@ -952,7 +954,7 @@ def identify_features(input_layer, threshold=0, callback=None):
                 new_feature.setAttributes(
                     [new_node_id, x, y, feature_names[i], germany_names[i]])
                 new_features.append(new_feature)
-                new_node_id += 1
+                # new_node_id += 1
     # self intersection
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
@@ -960,39 +962,71 @@ def identify_features(input_layer, threshold=0, callback=None):
         x = self_intersection.x()
         y = self_intersection.y()
         new_feature.setAttributes(
-            [new_node_id, x, y, 'SELF INTERSECTION', 'Self Intersection'])
+            [new_node_id, x, y, 'Self Intersection', 'Self Intersection'])
         new_features.append(new_feature)
-        new_node_id += 1
+        # new_node_id += 1
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
         new_feature.setAttributes(
-            [new_node_id, x, y, 'SEGMENT CENTER', 'Segment Center'])
+            [new_node_id, x, y, 'Segment Center', 'Segment Center'])
         new_features.append(new_feature)
-        new_node_id += 1
+        # new_node_id += 1
     x = datetime.now()
     intersections = identify_intersections(input_layer, callback)
     y = datetime.now()
     print y - x, 'self intersection and segment center.'
+    intersection_points = []
     for intersection in intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
         x = intersection.x()
         y = intersection.y()
         new_feature.setAttributes(
-            [new_node_id, x, y, 'INTERSECTION', 'Kreuzung'])
-        new_features.append(new_feature)
-        new_node_id += 1
+            [new_node_id, x, y, 'Intersection', 'Kreuzung'])
+        intersection_points.append(new_feature)
+    new_features.extend(intersection_points)
 
     f = datetime.now()
     print f - e
     output_data_provider.addFeatures(new_features)
     output_layer.updateFields()
+
     output_layer.commitChanges()
+
     g = datetime.now()
     print g - f
+
+    output_spatial_index = get_spatial_index(output_data_provider)
+
+    duplicate_features = list()
+    true_features = []
+    fake_features = []
+    for feature in output_layer.getFeatures():
+        geometry = feature.geometry()
+        duplicate_feature = output_spatial_index.intersects(
+            geometry.boundingBox())
+        if len(duplicate_feature) > 1:
+            duplicate_feature.sort()
+            if duplicate_feature not in duplicate_features:
+                duplicate_features.append(duplicate_feature)
+                true_features.append(int(duplicate_feature[0]))
+                fake_features.append(int(duplicate_feature[1]))
+
+    output_data_provider.deleteFeatures(fake_features)
+    dictionary_attributes = {}
+    attributes = {
+        eng_art_index: 'Unseparated',
+        art_index: 'Ungetrennter'
+    }
+    for true_feature in true_features:
+        dictionary_attributes[true_feature] = attributes
+    output_data_provider.changeAttributeValues(dictionary_attributes)
+
+    output_layer.updateFields()
+    output_layer.commitChanges()
     return output_layer
 
 
