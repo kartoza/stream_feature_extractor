@@ -203,14 +203,14 @@ class StreamFeatureExtractor:
         icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
         self.run_action = self.add_action(
             icon_path,
-            text=self.tr(u"Extract from current layer",),
+            text=self.tr(u'Extract stream features from current layer',),
             callback=self.run,
             parent=self.iface.mainWindow(),
             add_to_menu=True)
 
         self.options_action = self.add_action(
             icon_path,
-            text=self.tr(u"Options ...", ),
+            text=self.tr(u'Options ...', ),
             callback=self.show_options,
             parent=self.iface.mainWindow(),
             add_to_menu=True,
@@ -218,7 +218,7 @@ class StreamFeatureExtractor:
 
         self.help_action = self.add_action(
             icon_path,
-            text=self.tr(u"Help ...", ),
+            text=self.tr(u'Help ...', ),
             callback=self.show_help,
             parent=self.iface.mainWindow(),
             add_to_menu=True,
@@ -244,16 +244,17 @@ class StreamFeatureExtractor:
 
         progress_bar = QProgressBar()
         progress_bar.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        cancel_button = QPushButton()
-        cancel_button.setText(self.tr('Cancel'))
+        # Need to implement a separate worker thread if we want cancel
+        #cancel_button = QPushButton()
+        #cancel_button.setText(self.tr('Cancel'))
         #cancel_button.clicked.connect(worker.kill)
         message_bar.layout().addWidget(progress_bar)
-        message_bar.layout().addWidget(cancel_button)
+        #message_bar.layout().addWidget(cancel_button)
         self.iface.messageBar().pushWidget(
             message_bar, self.iface.messageBar().INFO)
         self.message_bar = message_bar
 
-        def progress_callback(current, maximum):
+        def progress_callback(current, maximum, message=None):
             """GUI based callback implementation for showing progress.
 
             :param current: Current progress.
@@ -261,7 +262,12 @@ class StreamFeatureExtractor:
 
             :param maximum: Maximum range (point at which task is complete.
             :type maximum: int
+
+            :param message: Optional message to display in the progress bar
+            :type message: str, QString
             """
+            if message is not None:
+                message_bar.setText(message)
             if progress_bar is not None:
                 progress_bar.setMaximum(maximum)
                 progress_bar.setValue(current)

@@ -851,13 +851,26 @@ def identify_features(input_layer, threshold=0, callback=None):
         authority_id=authority_id, nodes=nodes, name=nodes_layer_name)
     add_associated_nodes(memory_layer, threshold, callback)
 
-    identify_wells(memory_layer)
-    identify_sinks(memory_layer)
-    identify_branches(memory_layer)
-    identify_confluences(memory_layer)
-    identify_pseudo_nodes(memory_layer)
-    identify_watersheds(memory_layer)
-    identify_unclear_bifurcations(memory_layer)
+    # Create a collection of function references that we will call in turn
+    # Note the actually run order is non deterministic so each function
+    # should be independent.
+    rules = {
+        tr('Finding wells...'): identify_wells,
+        tr('Finding sinks...'): identify_sinks,
+        tr('Finding branches...'): identify_branches,
+        tr('Finding confluences...'): identify_confluences,
+        tr('Finding pseudo nodes...'): identify_pseudo_nodes,
+        tr('Finding watersheds...'): identify_watersheds,
+        tr('Finding unclear bifurcations...'): identify_unclear_bifurcations}
+    rule_count = len(rules)
+    index = 1
+
+    for message, rule in rules.iteritems():
+        rule(memory_layer)
+        callback(current=index, maximum=rule_count)
+        index += 1
+
+    # Build a list of self intersections and segment centers
     self_intersections = []
     segment_centers = []
 
@@ -873,6 +886,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         center = identify_segment_center(feature)
         if center is not None:
             segment_centers.append(center)
+
     # create output layer
     layer_name = tr('Stream Features')
     output_layer = QgsVectorLayer(
@@ -891,7 +905,6 @@ def identify_features(input_layer, threshold=0, callback=None):
     output_layer.commitChanges()
 
     type_index = output_layer.fieldNameIndex('type')
-
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
     downstream_index = memory_layer.fieldNameIndex('down_nodes')
@@ -952,6 +965,7 @@ def identify_features(input_layer, threshold=0, callback=None):
                 new_feature.setAttributes(
                     [new_node_id, x, y, feature_names[i]])
                 new_features.append(new_feature)
+
     # self intersection
     self_intersection_name = tr('Self Intersection')
     segment_center_name = tr('Segment Center')
