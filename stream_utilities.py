@@ -949,20 +949,25 @@ def identify_features(input_layer, threshold=0, callback=None):
                     [new_node_id, x, y, feature_names[i]])
                 new_features.append(new_feature)
     # self intersection
+    self_intersection_name = tr('Self Intersection')
+    segment_center_name = tr('Segment Center')
+    intersection_name = tr('Intersection')
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
         x = self_intersection.x()
         y = self_intersection.y()
-        new_feature.setAttributes([new_node_id, x, y, 'Self Intersection'])
+        new_feature.setAttributes(
+            [new_node_id, x, y, tr(self_intersection_name)])
         new_features.append(new_feature)
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
-        new_feature.setAttributes([new_node_id, x, y, 'Segment Center'])
+        new_feature.setAttributes([new_node_id, x, y, segment_center_name])
         new_features.append(new_feature)
+    
     intersections = identify_intersections(input_layer)
     intersection_points = []
     for intersection in intersections:
@@ -970,7 +975,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
         x = intersection.x()
         y = intersection.y()
-        new_feature.setAttributes([new_node_id, x, y, 'Intersection'])
+        new_feature.setAttributes([new_node_id, x, y, intersection_name])
         intersection_points.append(new_feature)
     new_features.extend(intersection_points)
 
