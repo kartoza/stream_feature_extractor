@@ -281,13 +281,16 @@ class StreamFeatureExtractor:
                 callback=progress_callback)
         except Exception:
             LOGGER.exception('A terrible failure occurred.')
+            self.iface.messageBar().popWidget(message_bar)
             self.iface.messageBar().pushMessage(
                 self.tr('Extraction error.'),
                 self.tr('Please check logs for details.'),
                 level=QgsMessageBar.CRITICAL,
                 duration=5)
             return
-        message_bar.hide()
+
+        # Get rid of the message bar again.
+        self.iface.messageBar().popWidget(message_bar)
         QgsMapLayerRegistry.instance().addMapLayer(nodes)
         if load_intermediate_layer:
             QgsMapLayerRegistry.instance().addMapLayer(intermediate_layer)

@@ -165,7 +165,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     :rtype: QgsVectorLayer
     """
     if name is None:
-        name = tr('Nodes')
+        name = tr('Stream features')
 
     layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, name, 'memory')
