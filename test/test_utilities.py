@@ -21,7 +21,6 @@ from qgis.core import (
     QGis,
     QgsVectorLayer,
     QgsPoint,
-    QgsVectorFileWriter,
     QgsGeometry,
     QgsFeature)
 from PyQt4.QtCore import QVariant
@@ -600,10 +599,7 @@ class TestUtilities(unittest.TestCase):
             SUNGAI_BARU_SHP, 'sungai_baru')
         output_layer = identify_features(sungai_layer, 1)
 
-        i = 0
-        for f in output_layer.getFeatures():
-            # print f.id(), f.attributes(), f.geometry().asPoint()
-            i += 1
+        features_count = output_layer.featureCount()
         expected_result = [
             [QgsPoint(4505079.78066084068268538, 5820617.32926965225487947),
              'Watershed'],
@@ -626,58 +622,42 @@ class TestUtilities(unittest.TestCase):
             [QgsPoint(4504954.79498676210641861, 5819664.31516459211707115),
              'Intersection'],
             [QgsPoint(4504516.27684732060879469, 5820388.85559526737779379),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4505459.87090463936328888, 5820124.74861902091652155),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4505597.77781277894973755, 5818938.34522299282252789),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4505298.45680753327906132, 5818640.22502889111638069),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4505874.24493211694061756, 5818746.94614691846072674),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4505905.3135033342987299, 5820416.27267749048769474),
-            'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4504960.94927519094198942, 5819710.47232702653855085),
              'Segment Center'],
             [QgsPoint(4506065.1831744248047471, 5819712.94692023564130068),
-             'Segment Center'],
+              'Segment Center'],
             [QgsPoint(4504974.16828893031924963, 5819660.41915996465831995),
              'Segment Center'],
             [QgsPoint(4504515.96725786849856377, 5819123.59523478243499994),
              'Segment Center']
         ]
         message = ('There should be %s features, but I got %s' %
-                   (len(expected_result), i))
-        self.assertEqual(i, len(expected_result), message)
+                   (len(expected_result), features_count))
+        self.assertEqual(features_count, len(expected_result), message)
 
         for feature in output_layer.getFeatures():
             result = [feature.geometry().asPoint(), feature.attributes()[3]]
             message = '%s is not found %s' % (result, feature.id())
             self.assertIn(result, expected_result, message)
         remove_temp_layer(sungai_layer.source())
-        # random_basename = get_random_string()
-        # temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
-        # output_layer = identify_features(sungai_layer, THRESHOLD)
-        #
-        # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     output_layer, temp_file, "CP1250", None, "ESRI Shapefile")
-        #
-        # if error == QgsVectorFileWriter.NoError:
-        #     print "success!"
-        # message = '%s is not exist' % temp_file
-        # self.assertTrue(os.path.exists(temp_file), message)
-        # remove_temp_layer(temp_file)
 
     def test_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
-        full_start = datetime.now()
         layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
         start = datetime.now()
         output_layer = identify_features(
             layer, THRESHOLD, callback=console_progress_callback)
-        end = datetime.now()
-        delta = end - start
-        i = 0
         num_wells = 0
         num_sinks = 0
         num_branches = 0
@@ -710,7 +690,7 @@ class TestUtilities(unittest.TestCase):
                 num_intersections += 1
             if node_type == 'Unseparated':
                 num_unseparated += 1
-            i += 1
+
         print 'wells', num_wells
         print 'sinks', num_sinks
         print 'branches', num_branches
@@ -721,15 +701,13 @@ class TestUtilities(unittest.TestCase):
         print 'segment center', num_segment_center
         print 'unseparated', num_unseparated
 
-        full_end = datetime.now()
-        print 'identify_features duration', delta
-        print 'full duration', full_end - full_start
+        feature_count = output_layer.featureCount()
+        message = (
+            'There should be 24005 features, but I got %s' % feature_count)
+        self.assertEqual(feature_count, 24005, message)
 
-        message = 'There should be 24005 features, but I got %s' % i
-        self.assertEqual(i, 24005, message)
-
-        message = ('There should be 12 intersections / kreuzung, '
-                   'but I got %s' % i)
+        message = (
+            'There should be 12 intersections / kreuzung, but I got %s' % i)
         self.assertEqual(num_intersections, 12, message)
 
         message = 'There should be 1893 pseudo node, but I got %s' % i
@@ -741,13 +719,16 @@ class TestUtilities(unittest.TestCase):
         message = 'There should be 125 sinks / senke, but I got %s' % i
         self.assertEqual(num_sinks, 125, message)
 
-        message = ('There should be 186 branches / verzweigung, but I got %s'
-                   % i)
+        message = (
+            'There should be 186 branches / verzweigung, but I got %s' % i)
         self.assertEqual(num_branches, 186, message)
 
-        message = ('There should be 867 confluences / Zusammenfluss, '
-                   'but I got %s' % i)
+        message = (
+            'There should be 867 confluences / Zusammenfluss, but I '
+            'got %s' % i)
         self.assertEqual(num_confluences, 867, message)
+
+        remove_temp_layer(layer.source())
 
     def test_intersections(self):
         """Test identify_intersections."""

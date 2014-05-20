@@ -16,7 +16,7 @@ __copyright__ = ''
 
 from math import sqrt
 
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QCoreApplication
 
 from qgis.core import (
     QGis,
@@ -29,6 +29,21 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsSpatialIndex)
+
+
+def tr(message):
+    """Get the translation for a string using Qt translation API.
+
+    We implement this ourselves since we do not inherit QObject.
+
+    :param message: String for translation.
+    :type message: str, QString
+
+    :returns: Translated version of message.
+    :rtype: QString
+    """
+    # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
+    return QCoreApplication.translate('StreamFeatureExtractor', message)
 
 
 def list_to_str(the_list, sep=','):
@@ -150,7 +165,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
     :rtype: QgsVectorLayer
     """
     if name is None:
-        name = 'Nodes'
+        name = tr('Nodes')
 
     layer = QgsVectorLayer(
         'Point?crs=%s&index=yes' % authority_id, name, 'memory')
@@ -278,7 +293,6 @@ def add_associated_nodes(layer, threshold, callback=None):
 
     """
     nodes = layer.getFeatures()
-    id_index = layer.fieldNameIndex('id')
     node_type_index = layer.fieldNameIndex('node_type')
 
     # add attributes
@@ -660,7 +674,7 @@ def get_spatial_index(data_provider):
     return index
 
 
-def identify_intersections(layer, callback=None):
+def identify_intersections(layer):
     """Return all self intersection points of a line.
 
     :param layer: A vector line to be identified.
@@ -668,11 +682,6 @@ def identify_intersections(layer, callback=None):
 
     :returns: List of QgsPoint that represent the intersection point.
     :rtype: list
-
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int) and 'maximum' (int). Defaults to
-        None.
-    :type callback: function
 
     """
     intersections = []
@@ -810,7 +819,7 @@ def identify_segment_center(line):
     return QgsPoint(center_x, center_y)
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyArgumentList,PyArgumentList
 def identify_features(input_layer, threshold=0, callback=None):
     """Identify all features in one functions and put it in a layer.
 
@@ -833,15 +842,10 @@ def identify_features(input_layer, threshold=0, callback=None):
     :rtype: QgsVectorLayer
 
     """
-    from datetime import datetime
     authority_id = input_layer.crs().authid()
-    a = datetime.now()
     nodes = extract_nodes(layer=input_layer)
-    b = datetime.now()
     memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
-    c = datetime.now()
     add_associated_nodes(memory_layer, threshold, callback)
-    d = datetime.now()
 
     identify_wells(memory_layer)
     identify_sinks(memory_layer)
@@ -850,11 +854,6 @@ def identify_features(input_layer, threshold=0, callback=None):
     identify_pseudo_nodes(memory_layer)
     identify_watersheds(memory_layer)
     identify_unclear_bifurcations(memory_layer)
-    e = datetime.now()
-    print b - a
-    print c - b
-    print d - c
-    print e - d
     self_intersections = []
     segment_centers = []
 
@@ -870,11 +869,10 @@ def identify_features(input_layer, threshold=0, callback=None):
         center = identify_segment_center(feature)
         if center is not None:
             segment_centers.append(center)
-    e1 = datetime.now()
-    print 'e1', e1 - e
     # create output layer
+    layer_name = tr('Stream Features')
     output_layer = QgsVectorLayer(
-        'Point?crs=%s&index=yes' % authority_id, 'Nodes', 'memory')
+        'Point?crs=%s&index=yes' % authority_id, layer_name, 'memory')
     # Start edit layer
     output_data_provider = output_layer.dataProvider()
     output_layer.startEditing()
@@ -884,14 +882,11 @@ def identify_features(input_layer, threshold=0, callback=None):
         QgsField('id', QVariant.Int),
         QgsField('x', QVariant.Double),
         QgsField('y', QVariant.Double),
-        QgsField('english_art', QVariant.String),
-        QgsField('art', QVariant.String),
-    ])
+        QgsField('type', QVariant.String)])
 
     output_layer.commitChanges()
 
-    english_art_index = output_layer.fieldNameIndex('english_art')
-    art_index = output_layer.fieldNameIndex('art')
+    type_index = output_layer.fieldNameIndex('type')
 
     id_index = memory_layer.fieldNameIndex('id')
     upstream_index = memory_layer.fieldNameIndex('up_nodes')
@@ -913,21 +908,14 @@ def identify_features(input_layer, threshold=0, callback=None):
         unclear_bifurcation_index]
 
     feature_names = [
-        'Well',
-        'Sink',
-        'Branch',
-        'Confluence',
-        'Pseudo node',
-        'Watershed',
-        'Unclear Bifurcation']
-    german_names = [
-        'Quelle',
-        'Senke',
-        'Verzweigung',
-        'Zusammenfluss',
-        'Pseudonode',
-        'Top',
-        'Unklare Bifurkation']
+        tr('Well'),
+        tr('Sink'),
+        tr('Branch'),
+        tr('Confluence'),
+        tr('Pseudo node'),
+        tr('Watershed'),
+        tr('Unclear Bifurcation')]
+
     memory_data_provider = memory_layer.dataProvider()
     nodes = memory_data_provider.getFeatures()
     new_node_id = 1
@@ -958,7 +946,7 @@ def identify_features(input_layer, threshold=0, callback=None):
                 new_feature = QgsFeature()
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
                 new_feature.setAttributes(
-                    [new_node_id, x, y, feature_names[i], german_names[i]])
+                    [new_node_id, x, y, feature_names[i]])
                 new_features.append(new_feature)
     # self intersection
     for self_intersection in self_intersections:
@@ -966,41 +954,30 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
         x = self_intersection.x()
         y = self_intersection.y()
-        new_feature.setAttributes(
-            [new_node_id, x, y, 'Self Intersection', 'Self Intersection'])
+        new_feature.setAttributes([new_node_id, x, y, 'Self Intersection'])
         new_features.append(new_feature)
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
         x = segment_center.x()
         y = segment_center.y()
-        new_feature.setAttributes(
-            [new_node_id, x, y, 'Segment Center', 'Segment Center'])
+        new_feature.setAttributes([new_node_id, x, y, 'Segment Center'])
         new_features.append(new_feature)
-    x = datetime.now()
-    intersections = identify_intersections(input_layer, callback)
-    y = datetime.now()
-    print y - x, 'self intersection and segment center.'
+    intersections = identify_intersections(input_layer)
     intersection_points = []
     for intersection in intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
         x = intersection.x()
         y = intersection.y()
-        new_feature.setAttributes(
-            [new_node_id, x, y, 'Intersection', 'Kreuzung'])
+        new_feature.setAttributes([new_node_id, x, y, 'Intersection'])
         intersection_points.append(new_feature)
     new_features.extend(intersection_points)
 
-    f = datetime.now()
-    print f - e
     output_data_provider.addFeatures(new_features)
     output_layer.updateFields()
 
     output_layer.commitChanges()
-
-    g = datetime.now()
-    print g - f
 
     output_spatial_index = get_spatial_index(output_data_provider)
 
@@ -1025,13 +1002,23 @@ def identify_features(input_layer, threshold=0, callback=None):
 
     fake_features = [int(x) for x in fake_features]
     output_data_provider.deleteFeatures(fake_features)
+
     dictionary_attributes = {}
-    attributes = {
-        english_art_index: 'Unseparated',
-        art_index: 'Ungetrennter'
-    }
+    attributes = {type_index: 'Unseparated'}
+
     for true_feature in true_features:
         dictionary_attributes[true_feature] = attributes
+    output_data_provider.changeAttributeValues(dictionary_attributes)
+    output_layer.updateFields()
+
+    # Re write the id
+    features = output_layer.getFeatures()
+    dictionary_attributes = {}
+    i = 1
+    for feature in features:
+        attributes = {0: i}
+        dictionary_attributes[feature.id()] = attributes
+        i += 1
     output_data_provider.changeAttributeValues(dictionary_attributes)
 
     output_layer.updateFields()
