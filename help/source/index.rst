@@ -4,12 +4,14 @@
    contain the root `toctree` directive.
 
 Welcome to StreamFeatureExtractor's documentation!
-============================================
+==================================================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   nodes
 
 Indices and tables
 ==================

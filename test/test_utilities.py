@@ -21,7 +21,6 @@ from qgis.core import (
     QGis,
     QgsVectorLayer,
     QgsPoint,
-    QgsVectorFileWriter,
     QgsGeometry,
     QgsFeature)
 from PyQt4.QtCore import QVariant
@@ -196,8 +195,6 @@ class TestUtilities(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         remove_temp_layer(cls.jawa_nodes_layer.source())
-        remove_temp_layer(cls.jawa_nodes_layer.source())
-        remove_temp_layer(cls.dgn_nodes_layer.source())
         remove_temp_layer(cls.dgn_nodes_layer.source())
         remove_temp_layer(cls.prepared_nodes_layer.source())
 
@@ -308,11 +305,16 @@ class TestUtilities(unittest.TestCase):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
         nodes = extract_nodes(layer=layer)
-        point_layer = create_nodes_layer(nodes=nodes)
-        assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
-        assert point_layer.isValid(), 'Layer is not valid.'
-        assert point_layer.featureCount() == 12, (
-            'Feature count is not equal to 12')
+        point_layer = create_nodes_layer(nodes=nodes, name='Node layer')
+
+        message = 'Layer names should be Node layer'
+        self.assertEqual(point_layer.name(), 'Node layer', message)
+
+        self.assertTrue(point_layer.isValid(), 'Layer is not valid.')
+
+        message = 'Feature count is not equal to 12'
+        self.assertEqual(point_layer.featureCount(), 12, message)
+
         assert point_layer.geometryType() == QGis.Point, (
             'Geometry type should be %s' % QGis.Point)
 
@@ -336,12 +338,6 @@ class TestUtilities(unittest.TestCase):
             node_attributes = node.attributes()
             message = 'Node %s should not be found.' % node_attributes
             self.assertIn(node_attributes, expected_nodes, message)
-
-        # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     point_layer, JAWA_NODES_SHP, "CP1250", None, "ESRI Shapefile")
-        #
-        # if error == QgsVectorFileWriter.NoError:
-        #     print "success!"
 
     def test_get_nearby_nodes(self):
         """Test for get_nearby_nodes function."""
@@ -606,91 +602,66 @@ class TestUtilities(unittest.TestCase):
         """Test for identify_features on the sungai baru dataset."""
         sungai_layer = get_temp_shapefile_layer(
             SUNGAI_BARU_SHP, 'sungai_baru')
-        output_layer = identify_features(sungai_layer, 1)
+        _, output_layer = identify_features(sungai_layer, 1)
 
-        i = 0
-        for f in output_layer.getFeatures():
-            print f.id(), f.attributes(), f.geometry().asPoint()
-            i += 1
-
+        features_count = output_layer.featureCount()
         expected_result = [
             [QgsPoint(4505079.78066084068268538, 5820617.32926965225487947),
-             'WATERSHED'],
-            [QgsPoint(4505796.71873049065470695, 5819594.76427847798913717),
-             'SINK'],
+             'Watershed'],
+            [QgsPoint(4505796.71872960310429335, 5819594.76427788194268942),
+             'Unseparated'],
             [QgsPoint(4505201.38892469275742769, 5818932.09107278566807508),
-             'UNCLEAR BIFURCATION'],
+             'Unclear Bifurcation'],
             [QgsPoint(4505994.16670085769146681, 5818944.59937320277094841),
-             'CONFLUENCE'],
+             'Confluence'],
             [QgsPoint(4505423.69021992385387421, 5819349.8841874785721302),
-             'PSEUDO_NODE'],
+             'Pseudo node'],
             [QgsPoint(4504424.25703522842377424, 5819771.00726572517305613),
-             'BRANCH'],
+             'Branch'],
             [QgsPoint(4504424.25681891199201345, 5821004.36726346984505653),
-             'WELL'],
+             'Well'],
             [QgsPoint(4506321.54563129413872957, 5820690.89381018560379744),
-             'SINK'],
+             'Sink'],
             [QgsPoint(4505706.96817480307072401, 5820597.46010562963783741),
-             'SELF INTERSECTION'],
+             'Self Intersection'],
             [QgsPoint(4504954.79498676210641861, 5819664.31516459211707115),
-             'INTERSECTION'],
+             'Intersection'],
             [QgsPoint(4504516.27684732060879469, 5820388.85559526737779379),
-             'SEGMENT CENTER'],
+             'Segment Center'],
+            [QgsPoint(4505459.87090463936328888, 5820124.74861902091652155),
+             'Segment Center'],
             [QgsPoint(4505597.77781277894973755, 5818938.34522299282252789),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4505298.45680753327906132, 5818640.22502889111638069),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4505874.24493211694061756, 5818746.94614691846072674),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4505905.3135033342987299, 5820416.27267749048769474),
-             'SEGMENT CENTER'],
-            # [QgsPoint(4505459.78595067281275988, 5820124.87922604847699404),
-            #  'SEGMENT CENTER'],
-            [QgsPoint(4505459.87090499978512526, 5820124.74861926585435867),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4504960.94927519094198942, 5819710.47232702653855085),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4506065.1831744248047471, 5819712.94692023564130068),
-             'SEGMENT CENTER'],
+              'Segment Center'],
             [QgsPoint(4504974.16828893031924963, 5819660.41915996465831995),
-             'SEGMENT CENTER'],
+             'Segment Center'],
             [QgsPoint(4504515.96725786849856377, 5819123.59523478243499994),
-             'SEGMENT CENTER']
+             'Segment Center']
         ]
-
         message = ('There should be %s features, but I got %s' %
-                   (len(expected_result), i))
-        self.assertEqual(i, len(expected_result), message)
+                   (len(expected_result), features_count))
+        self.assertEqual(features_count, len(expected_result), message)
 
         for feature in output_layer.getFeatures():
             result = [feature.geometry().asPoint(), feature.attributes()[3]]
             message = '%s is not found %s' % (result, feature.id())
             self.assertIn(result, expected_result, message)
-
         remove_temp_layer(sungai_layer.source())
-        # random_basename = get_random_string()
-        # temp_file = os.path.join(TEMP_DIR, random_basename + '.shp')
-        # output_layer = identify_features(sungai_layer, THRESHOLD)
-        #
-        # error = QgsVectorFileWriter.writeAsVectorFormat(
-        #     output_layer, temp_file, "CP1250", None, "ESRI Shapefile")
-        #
-        # if error == QgsVectorFileWriter.NoError:
-        #     print "success!"
-        # message = '%s is not exist' % temp_file
-        # self.assertTrue(os.path.exists(temp_file), message)
-        # remove_temp_layer(temp_file)
 
     def test_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
-        full_start = datetime.now()
         layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
-        start = datetime.now()
-        output_layer = identify_features(
+        _, output_layer = identify_features(
             layer, THRESHOLD, callback=console_progress_callback)
-        end = datetime.now()
-        delta = end - start
-        i = 0
         num_wells = 0
         num_sinks = 0
         num_branches = 0
@@ -723,7 +694,7 @@ class TestUtilities(unittest.TestCase):
                 num_intersections += 1
             if node_type == 'Unseparated':
                 num_unseparated += 1
-            i += 1
+
         print 'wells', num_wells
         print 'sinks', num_sinks
         print 'branches', num_branches
@@ -734,15 +705,13 @@ class TestUtilities(unittest.TestCase):
         print 'segment center', num_segment_center
         print 'unseparated', num_unseparated
 
-        full_end = datetime.now()
-        print 'identify_features duration', delta
-        print 'full duration', full_end - full_start
+        feature_count = output_layer.featureCount()
+        message = (
+            'There should be 24005 features, but I got %s' % feature_count)
+        self.assertEqual(feature_count, 24005, message)
 
-        message = 'There should be 24005 features, but I got %s' % i
-        self.assertEqual(i, 24005, message)
-
-        message = ('There should be 12 intersections / kreuzung, '
-                   'but I got %s' % i)
+        message = (
+            'There should be 12 intersections / kreuzung, but I got %s' % i)
         self.assertEqual(num_intersections, 12, message)
 
         message = 'There should be 1893 pseudo node, but I got %s' % i
@@ -754,13 +723,16 @@ class TestUtilities(unittest.TestCase):
         message = 'There should be 125 sinks / senke, but I got %s' % i
         self.assertEqual(num_sinks, 125, message)
 
-        message = ('There should be 186 branches / verzweigung, but I got %s'
-                   % i)
+        message = (
+            'There should be 186 branches / verzweigung, but I got %s' % i)
         self.assertEqual(num_branches, 186, message)
 
-        message = ('There should be 867 confluences / Zusammenfluss, '
-                   'but I got %s' % i)
+        message = (
+            'There should be 867 confluences / Zusammenfluss, but I '
+            'got %s' % i)
         self.assertEqual(num_confluences, 867, message)
+
+        remove_temp_layer(layer.source())
 
     def test_intersections(self):
         """Test identify_intersections."""

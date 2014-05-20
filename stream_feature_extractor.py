@@ -269,9 +269,13 @@ class StreamFeatureExtractor:
         settings = QSettings()
         distance = settings.value(
             'stream-feature-extractor/search-distance', 0, type=float)
+        load_intermediate_layer = settings.value(
+            'stream-feature-extractor/load-intermediate-layer',
+            False,
+            type=bool)
         # noinspection PyBroadException
         try:
-            nodes = identify_features(
+            intermediate_layer, nodes = identify_features(
                 self.iface.activeLayer(),
                 threshold=distance,
                 callback=progress_callback)
@@ -283,9 +287,10 @@ class StreamFeatureExtractor:
                 level=QgsMessageBar.CRITICAL,
                 duration=5)
             return
-
         message_bar.hide()
         QgsMapLayerRegistry.instance().addMapLayer(nodes)
+        if load_intermediate_layer:
+            QgsMapLayerRegistry.instance().addMapLayer(intermediate_layer)
 
         #QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.iface.messageBar().pushMessage(
