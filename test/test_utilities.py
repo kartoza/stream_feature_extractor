@@ -87,13 +87,13 @@ def remove_temp_layer(shapefile_path):
     :param shapefile_path: path to shapefile
     :type shapefile_path: str
     """
-    exts = ['cpg', 'dbf', 'prj', 'qpj', 'shp', 'shx']
-    filename = os.path.basename(shapefile_path)
+    extensions = ['cpg', 'dbf', 'prj', 'qpj', 'shp', 'shx']
+    filename = os.path.basename(str(shapefile_path))
     basename, _ = os.path.splitext(filename)
 
-    for ext in exts:
-        if os.path.exists(shapefile_path[:3] + ext):
-            os.remove(shapefile_path[:3] + ext)
+    for extension in extensions:
+        if os.path.exists(shapefile_path[:3] + extension):
+            os.remove(shapefile_path[:3] + extension)
 
 
 def copy_temp_layer(shapefile_path, temp_dir=TEMP_DIR):
@@ -304,7 +304,7 @@ class TestUtilities(unittest.TestCase):
 
         layer = self.dgn_layer
         nodes = extract_nodes(layer=layer)
-        self.assertEqual(len(nodes), 4115)
+        self.assertEqual(len(nodes), 4114)
 
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
