@@ -79,16 +79,10 @@ feature each node represents.
 10. Segment Center
 
    Segment center is the linear center of a line. The tool finds the point
-   in the line that has distance half of the lenght of the line.
+   in the line that has distance half of the length of the line.
 
    .. image:: /_static/segment_center.png
       :align: center
-
-   For further detailed illustration of linear center:
-
-   .. image:: /_static/segment_center_explained.png
-      :align: center
-      :scale: 50 %
 
 11. Self Intersection
 
