@@ -50,6 +50,12 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             settings.value(
                 'stream-feature-extractor/search-distance', 0, type=float)
         )
+        self.cbShowIntermediateLayer.setChecked(
+            settings.value(
+                'stream-feature-extractor/load-intermediate-layer',
+                False,
+                type=bool)
+        )
 
     def accept(self):
         """Event handler for when ok is pressed."""
@@ -57,5 +63,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'stream-feature-extractor/search-distance',
             self.distance.value()
+        )
+        settings.setValue(
+            'stream-feature-extractor/load-intermediate-layer',
+            self.cbShowIntermediateLayer.isChecked()
         )
         self.close()

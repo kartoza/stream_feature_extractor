@@ -305,11 +305,16 @@ class TestUtilities(unittest.TestCase):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
         nodes = extract_nodes(layer=layer)
-        point_layer = create_nodes_layer(nodes=nodes)
-        assert point_layer.name() == 'Nodes', 'Layer names should be Nodes'
-        assert point_layer.isValid(), 'Layer is not valid.'
-        assert point_layer.featureCount() == 12, (
-            'Feature count is not equal to 12')
+        point_layer = create_nodes_layer(nodes=nodes, name='Node layer')
+
+        message = 'Layer names should be Node layer'
+        self.assertEqual(point_layer.name(), 'Node layer', message)
+
+        self.assertTrue(point_layer.isValid(), 'Layer is not valid.')
+
+        message = 'Feature count is not equal to 12'
+        self.assertEqual(point_layer.featureCount(), 12, message)
+
         assert point_layer.geometryType() == QGis.Point, (
             'Geometry type should be %s' % QGis.Point)
 
@@ -597,7 +602,7 @@ class TestUtilities(unittest.TestCase):
         """Test for identify_features on the sungai baru dataset."""
         sungai_layer = get_temp_shapefile_layer(
             SUNGAI_BARU_SHP, 'sungai_baru')
-        output_layer = identify_features(sungai_layer, 1)
+        _, output_layer = identify_features(sungai_layer, 1)
 
         features_count = output_layer.featureCount()
         expected_result = [
@@ -655,8 +660,7 @@ class TestUtilities(unittest.TestCase):
     def test_identify_features_dgn(self):
         """Test for identify_features on the dgn test dataset."""
         layer = get_temp_shapefile_layer(DGN_SHP, 'dgn_lines')
-        start = datetime.now()
-        output_layer = identify_features(
+        _, output_layer = identify_features(
             layer, THRESHOLD, callback=console_progress_callback)
         num_wells = 0
         num_sinks = 0

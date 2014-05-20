@@ -838,13 +838,17 @@ def identify_features(input_layer, threshold=0, callback=None):
         None.
     :type callback: function
 
-    :returns: Map layer (memory layer) containing identified features.
-    :rtype: QgsVectorLayer
+    :returns: A tuple of an intermediate layer that contains nodes and Map
+    layer (memory layer) containing identified features.
+    :rtype: tuple
 
     """
     authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
-    memory_layer = create_nodes_layer(authority_id=authority_id, nodes=nodes)
+    nodes_layer_name = tr('Intermediate layer')
+    # noinspection PyTypeChecker
+    memory_layer = create_nodes_layer(
+        authority_id=authority_id, nodes=nodes, name=nodes_layer_name)
     add_associated_nodes(memory_layer, threshold, callback)
 
     identify_wells(memory_layer)
@@ -967,7 +971,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         y = segment_center.y()
         new_feature.setAttributes([new_node_id, x, y, segment_center_name])
         new_features.append(new_feature)
-    
+
     intersections = identify_intersections(input_layer)
     intersection_points = []
     for intersection in intersections:
@@ -1028,7 +1032,8 @@ def identify_features(input_layer, threshold=0, callback=None):
 
     output_layer.updateFields()
     output_layer.commitChanges()
-    return output_layer
+
+    return memory_layer, output_layer
 
 
 def is_line_layer(layer):
