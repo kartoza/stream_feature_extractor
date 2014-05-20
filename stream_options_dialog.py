@@ -50,7 +50,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             settings.value(
                 'stream-feature-extractor/search-distance', 0, type=float)
         )
-        self.cbShowIntermediateLayer.setChecked(
+        self.show_intermediate_layer.setChecked(
             settings.value(
                 'stream-feature-extractor/load-intermediate-layer',
                 False,
@@ -66,6 +66,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         )
         settings.setValue(
             'stream-feature-extractor/load-intermediate-layer',
-            self.cbShowIntermediateLayer.isChecked()
+            self.show_intermediate_layer.isChecked()
         )
         self.close()

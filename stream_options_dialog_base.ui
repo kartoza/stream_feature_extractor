@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <widget class="QCheckBox" name="cbShowIntermediateLayer">
+    <widget class="QCheckBox" name="show_intermediate_layer">
      <property name="text">
       <string>Show intermediate node count layer</string>
      </property>
@@ -46,7 +46,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QCheckBox" name="cbSentryLogging">
+    <widget class="QCheckBox" name="sentry_logging">
      <property name="text">
       <string>Help to improve Stream Feature Extractor by submitting errors to a remote server</string>
      </property>

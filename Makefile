@@ -187,7 +187,7 @@ doc:
 	@echo "------------------------------------"
 	@echo "Building documentation using sphinx."
 	@echo "------------------------------------"
-	cd help; make html
+	cd help; make clean; make html
 
 pylint:
 	@echo

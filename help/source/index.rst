@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    nodes
+   intermediate_layer
 
 Indices and tables
 ==================

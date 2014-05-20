@@ -75,3 +75,24 @@ Node Definitions
 
    .. image:: /_static/confluence.png
       :align: center
+
+10. Segment Center
+
+   Segment center is the linear center of a line. The tool finds the point
+   in the line that has distance half of the lenght of the line.
+
+   .. image:: /_static/segment_center.png
+      :align: center
+
+   For further detailed illustration of linear center:
+
+   .. image:: /_static/segment_center_explained.png
+      :align: center
+      :scale: 50 %
+
+11. Self Intersection
+
+    Same with intersection, but this time the line intersects with itself.
+
+    .. image:: /_static/self_intersection.png
+       :align: center
