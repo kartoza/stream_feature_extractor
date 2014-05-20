@@ -1,6 +1,6 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis version="2.3.0-Master" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="3" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-  <renderer-v2 attr="art" symbollevels="0" type="categorizedSymbol">
+  <renderer-v2 attr="type" symbollevels="0" type="categorizedSymbol">
     <categories>
       <category symbol="0" value="Kreuzung" label="Kreuzung"/>
       <category symbol="1" value="Pseudonode" label="Pseudonode"/>

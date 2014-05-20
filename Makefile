@@ -35,7 +35,9 @@ PY_FILES = \
 	stream_utilities.py\
 	custom_logging.py
 
-EXTRAS = icon.png metadata.txt
+EXTRAS = icon.png metadata.txt LICENSE README.md
+
+STYLES = styles
 
 UI_FILES = \
 	stream_options_dialog_base.ui\
@@ -94,6 +96,7 @@ deploy: compile doc transcompile
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
+	cp -vfr $(STYLES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/styles
 	cp -vfr $(THIRD_PARTY) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/
 
 debugdeploy: deploy

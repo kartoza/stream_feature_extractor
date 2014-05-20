@@ -77,11 +77,11 @@ class StreamFeatureExtractor:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value("locale/userLocale")[0:2]
+        self.locale = QSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'StreamFeatureExtractor_{}.qm'.format(locale))
+            'StreamFeatureExtractor_{}.qm'.format(self.locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -235,6 +235,24 @@ class StreamFeatureExtractor:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def _load_nodes_with_style(self, nodes):
+        """Set the style for the layer (must be before addMapLayer call).
+
+        Try to get one for the current locale, and fall back to default
+        if none available. To add new locales. clone styles/nodes.qml and
+        rename it nodes-<locale>.qml.
+
+        :param nodes: An extracted nodes layer.
+        :type nodes: QgsVectorLayer, QgsMapLayer
+        """
+        style_path = os.path.join(
+            os.path.dirname(__file__), 'styles/nodes-%s.qml' % self.locale)
+        if not os.path.exists(style_path):
+            style_path = os.path.join(
+                os.path.dirname(__file__), 'styles/nodes.qml')
+        nodes.loadNamedStyle(style_path)
+        QgsMapLayerRegistry.instance().addMapLayer(nodes)
+
     def run(self):
         """Run method that performs all the real work."""
         message_bar = self.iface.messageBar().createMessage(
@@ -286,10 +304,10 @@ class StreamFeatureExtractor:
                 threshold=distance,
                 callback=progress_callback)
         except Exception:
-            LOGGER.exception('A terrible failure occurred.')
+            LOGGER.exception('A failure occurred calling identify_features.')
             self.iface.messageBar().popWidget(message_bar)
             self.iface.messageBar().pushMessage(
-                self.tr('Extraction error.'),
+                self.tr('Feature extraction error.'),
                 self.tr('Please check logs for details.'),
                 level=QgsMessageBar.CRITICAL,
                 duration=5)
@@ -297,7 +315,9 @@ class StreamFeatureExtractor:
 
         # Get rid of the message bar again.
         self.iface.messageBar().popWidget(message_bar)
-        QgsMapLayerRegistry.instance().addMapLayer(nodes)
+
+        self._load_nodes_with_style(nodes)
+
         if load_intermediate_layer:
             QgsMapLayerRegistry.instance().addMapLayer(intermediate_layer)
 
@@ -306,7 +326,7 @@ class StreamFeatureExtractor:
             self.tr('Extraction completed.'),
             self.tr('Use "Layer->Save as" to save the results permanently.'),
             level=QgsMessageBar.INFO,
-            duration=3)
+            duration=10)
 
     @staticmethod
     def show_help():
