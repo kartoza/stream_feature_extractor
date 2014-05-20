@@ -167,6 +167,8 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
         QgsField('node_type', QVariant.String)
     ])
 
+    layer.commitChanges()
+
     # For creating node_id
     node_id = 0
     # Add features
@@ -810,7 +812,11 @@ def identify_segment_center(line):
 
 # noinspection PyPep8Naming
 def identify_features(input_layer, threshold=0, callback=None):
-    """Identify almost features in one functions and put it in a layer.
+    """Identify all features in one functions and put it in a layer.
+
+    This function will find node that is an unseparated or ungetrennter (
+    germany). The definition of this type is a node that located in a line (
+    not in the start or end of a line).
 
     :param input_layer: A vector line layer.
     :type input_layer: QGISVectorLayer
@@ -878,13 +884,13 @@ def identify_features(input_layer, threshold=0, callback=None):
         QgsField('id', QVariant.Int),
         QgsField('x', QVariant.Double),
         QgsField('y', QVariant.Double),
-        QgsField('eng_art', QVariant.String),
+        QgsField('english_art', QVariant.String),
         QgsField('art', QVariant.String),
     ])
 
     output_layer.commitChanges()
 
-    eng_art_index = output_layer.fieldNameIndex('eng_art')
+    english_art_index = output_layer.fieldNameIndex('english_art')
     art_index = output_layer.fieldNameIndex('art')
 
     id_index = memory_layer.fieldNameIndex('id')
@@ -914,7 +920,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         'Pseudo node',
         'Watershed',
         'Unclear Bifurcation']
-    germany_names = [
+    german_names = [
         'Quelle',
         'Senke',
         'Verzweigung',
@@ -952,9 +958,8 @@ def identify_features(input_layer, threshold=0, callback=None):
                 new_feature = QgsFeature()
                 new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
                 new_feature.setAttributes(
-                    [new_node_id, x, y, feature_names[i], germany_names[i]])
+                    [new_node_id, x, y, feature_names[i], german_names[i]])
                 new_features.append(new_feature)
-                # new_node_id += 1
     # self intersection
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
@@ -964,7 +969,6 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setAttributes(
             [new_node_id, x, y, 'Self Intersection', 'Self Intersection'])
         new_features.append(new_feature)
-        # new_node_id += 1
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
@@ -973,7 +977,6 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setAttributes(
             [new_node_id, x, y, 'Segment Center', 'Segment Center'])
         new_features.append(new_feature)
-        # new_node_id += 1
     x = datetime.now()
     intersections = identify_intersections(input_layer, callback)
     y = datetime.now()
@@ -1006,19 +1009,25 @@ def identify_features(input_layer, threshold=0, callback=None):
     fake_features = []
     for feature in output_layer.getFeatures():
         geometry = feature.geometry()
-        duplicate_feature = output_spatial_index.intersects(
-            geometry.boundingBox())
+        rectangle = QgsRectangle(
+            geometry.asPoint().x() - threshold,
+            geometry.asPoint().y() - threshold,
+            geometry.asPoint().x() + threshold,
+            geometry.asPoint().y() + threshold
+        )
+        duplicate_feature = output_spatial_index.intersects(rectangle)
         if len(duplicate_feature) > 1:
             duplicate_feature.sort()
             if duplicate_feature not in duplicate_features:
                 duplicate_features.append(duplicate_feature)
                 true_features.append(int(duplicate_feature[0]))
-                fake_features.append(int(duplicate_feature[1]))
+                fake_features.extend(duplicate_feature[1:])
 
+    fake_features = [int(x) for x in fake_features]
     output_data_provider.deleteFeatures(fake_features)
     dictionary_attributes = {}
     attributes = {
-        eng_art_index: 'Unseparated',
+        english_art_index: 'Unseparated',
         art_index: 'Ungetrennter'
     }
     for true_feature in true_features:
