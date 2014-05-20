@@ -135,10 +135,6 @@ def setup_logger(sentry_url, log_file=None):
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     # create syslog handler which logs even debug messages
-    # (ariel): Make this log to /var/log/safe.log instead of
-    #               /var/log/syslog
-    # (Tim) Ole and I discussed this - we prefer to log into the
-    # user's temporary working directory.
     log_temp_dir = temp_dir('logs')
     path = os.path.join(log_temp_dir, 'qgis.log')
     if log_file is None:
@@ -160,7 +156,7 @@ def setup_logger(sentry_url, log_file=None):
     #  * Enable the 'plugins/use_sentry' QSettings option
     # before this will be enabled.
     settings = QtCore.QSettings()
-    flag = settings.value('plugins/use_sentry', False)
+    flag = settings.value('stream-feature-extractor/sentry-logging', False)
     if 'SENTRY' in os.environ or flag:
         client = Client(sentry_url)
         sentry_handler = SentryHandler(client)

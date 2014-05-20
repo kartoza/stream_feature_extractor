@@ -47,7 +47,12 @@ from stream_utilities import (
     identify_intersections)
 
 from test.utilities_for_testing import get_qgis_app
+
 QGIS_APP = get_qgis_app()
+
+# For tests only to ensure sentry logging is on
+# Normaly this is configured via QSettings
+os.environ['SENTRY'] = '1'
 
 TEMP_DIR = os.path.join(
     os.path.expanduser('~'), 'temp', 'stream-feature-extractor')

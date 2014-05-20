@@ -24,10 +24,9 @@
 # this import required to enable PyQt API v2
 import qgis  # pylint: disable=W0611
 
-import os
 import custom_logging
 
-os.environ['SENTRY'] = '1'
+
 sentry_url = (
     'http://b257c02328384628a50de20d257cf06e:'
     'ab515d8c88b746d484351321b0111b44@sentry.linfiniti.com/10')

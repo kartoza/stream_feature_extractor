@@ -40,8 +40,7 @@ from PyQt4.QtCore import (
 from PyQt4.QtGui import (
     QAction,
     QIcon,
-    QProgressBar,
-    QPushButton)
+    QProgressBar)
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
@@ -332,11 +331,9 @@ class StreamFeatureExtractor:
     def show_help():
         """Display application help to the user."""
         help_file = 'file:///%s/help/index.html' % os.path.dirname(__file__)
+        LOGGER.debug('Opening this help file:\n%s' % help_file)
         results_dialog = HelpDialog()
-        # noinspection PyTypeChecker
-        url = QUrl.fromLocalFile(help_file)
-        results_dialog.web_view.load(url)
-        #results_dialog.show()
+        results_dialog.web_view.load(QUrl(help_file))
         results_dialog.exec_()
 
     @staticmethod

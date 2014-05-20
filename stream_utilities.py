@@ -867,7 +867,7 @@ def identify_features(input_layer, threshold=0, callback=None):
 
     for message, rule in rules.iteritems():
         rule(memory_layer)
-        callback(current=index, maximum=rule_count)
+        callback(current=index, maximum=rule_count, message=message)
         index += 1
 
     # Build a list of self intersections and segment centers
@@ -1066,7 +1066,7 @@ def is_line_layer(layer):
         return False
 
 
-def console_progress_callback(current, maximum):
+def console_progress_callback(current, maximum, message=None):
     """Simple console based callback implementation for tests.
 
     :param current: Current progress.
@@ -1074,5 +1074,13 @@ def console_progress_callback(current, maximum):
 
     :param maximum: Maximum range (point at which task is complete.
     :type maximum: int
+
+    :param message: Optional message to display in the progress bar
+    :type message: str, QString
     """
+    # noinspection PyChainedComparisons
+    if maximum > 1000 and current % 1000 != 0 and current != maximum:
+        return
+    if message is not None:
+        print message
     print 'Task progress: %i of %i' % (current, maximum)

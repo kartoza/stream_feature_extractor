@@ -56,6 +56,12 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 False,
                 type=bool)
         )
+        self.sentry_logging.setChecked(
+            settings.value(
+                'stream-feature-extractor/sentry-logging',
+                False,
+                type=bool)
+        )
 
     def accept(self):
         """Event handler for when ok is pressed."""
@@ -67,5 +73,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'stream-feature-extractor/load-intermediate-layer',
             self.show_intermediate_layer.isChecked()
+        )
+        settings.setValue(
+            'stream-feature-extractor/sentry-logging',
+            self.sentry_logging.isChecked()
         )
         self.close()

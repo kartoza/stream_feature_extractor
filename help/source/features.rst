@@ -1,10 +1,10 @@
-.. _node_documentations:
+.. _node_documentation:
 
-Node Documentations
+Feature Definitions
 ===================
 
-Node Definitions
-----------------
+This document describes the logic used for determining what type (if any) of
+feature each node represents.
 
 1. Crossing / *Kreuzung*
 
@@ -44,7 +44,7 @@ Node Definitions
 
 6. Unseparated / *Ungetrennter*
 
-   It's only 1 upstream node or only 1 downstream node and intersects with
+   Only 1 upstream node or only 1 downstream node and intersects with
    one or more other lines. Note that in the lines below, there is only one
    node under the star, the other line has no node at the position of the
    star.
