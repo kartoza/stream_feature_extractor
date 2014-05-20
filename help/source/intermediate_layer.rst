@@ -12,6 +12,7 @@ you will find something like this:
 
    .. image:: /_static/intermediate_layer.png
       :align: center
+      :scale: 70 %
 
 How to obtain this intermediate layer:
 
