@@ -43,7 +43,7 @@ def tr(message):
     :rtype: QString
     """
     # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-    return QCoreApplication.translate('StreamFeatureExtractor', message)
+    return QCoreApplication.translate('@default', message)
 
 
 def list_to_str(the_list, sep=','):
