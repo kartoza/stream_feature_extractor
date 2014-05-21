@@ -23,7 +23,7 @@
 
 
 #Add iso code for any locales you want to support here (space separated)
-LOCALES = af de
+LOCALES = en af de id
 
 PLUGINNAME = StreamFeatureExtractor
 

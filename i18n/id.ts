@@ -1,67 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="de" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0">
 <context>
     <name>@default</name>
-    <message>
-        <location filename="stream_utilities.py" line="893"/>
-        <source>Stream Features</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="930"/>
-        <source>Well</source>
-        <translation>Quelle</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="931"/>
-        <source>Sink</source>
-        <translation>Senke</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="932"/>
-        <source>Branch</source>
-        <translation>Verzweigung</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="933"/>
-        <source>Confluence</source>
-        <translation>Zusammenfluss</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="934"/>
-        <source>Pseudo node</source>
-        <translation>Pseudonode</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="935"/>
-        <source>Watershed</source>
-        <translation>Top</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="936"/>
-        <source>Unclear Bifurcation</source>
-        <translation>Unklare Bifurkation</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="972"/>
-        <source>Self Intersection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="973"/>
-        <source>Segment Center</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="974"/>
-        <source>Intersection</source>
-        <translation>Kreuzung</translation>
-    </message>
-    <message>
-        <location filename="test_translations.py" line="49"/>
-        <source>Good morning</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="stream_utilities.py" line="170"/>
         <source>Stream features</source>
@@ -107,23 +47,88 @@
         <source>Finding unclear bifurcations...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="stream_utilities.py" line="893"/>
+        <source>Stream Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="930"/>
+        <source>Well</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="931"/>
+        <source>Sink</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="932"/>
+        <source>Branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="933"/>
+        <source>Confluence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="934"/>
+        <source>Pseudo node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="935"/>
+        <source>Watershed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="936"/>
+        <source>Unclear Bifurcation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="972"/>
+        <source>Self Intersection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="973"/>
+        <source>Segment Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="974"/>
+        <source>Intersection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="test_translations.py" line="49"/>
+        <source>Good morning</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StreamFeatureExtractor</name>
     <message>
+        <location filename="stream_feature_extractor.py" line="203"/>
+        <source>Extract stream features from current layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="stream_feature_extractor.py" line="210"/>
         <source>Options ...</source>
-        <translation>Optionen ...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="218"/>
         <source>Help ...</source>
-        <translation>Hilfe ...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="257"/>
         <source>Extracting stream features</source>
-        <translation>Extrahieren strom features</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="257"/>
@@ -138,16 +143,11 @@
     <message>
         <location filename="stream_feature_extractor.py" line="324"/>
         <source>Extraction completed.</source>
-        <translation>Extahiren komplett.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="324"/>
         <source>Use &quot;Layer-&gt;Save as&quot; to save the results permanently.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="stream_feature_extractor.py" line="203"/>
-        <source>Extract stream features from current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -161,12 +161,12 @@
     <message>
         <location filename="stream_help_dialog_base.ui" line="14"/>
         <source>Stream Feature Extractor - Documentation</source>
-        <translation>Strom Feature Extractor - Dokumentation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_help_dialog_base.ui" line="26"/>
         <source>about:blank</source>
-        <translation>über:leer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     <message>
         <location filename="stream_options_dialog_base.ui" line="14"/>
         <source>Options</source>
-        <translation>Optionen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="20"/>
