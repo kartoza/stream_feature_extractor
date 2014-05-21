@@ -214,4 +214,4 @@ compile_qml_styles:
 	@echo "-----------------------------------------"
 	@echo "Compile qml styles for supported locales."
 	@echo "-----------------------------------------"
-	@PYTHONPATH=. python scripts/translate_style.py
+	@PYTHONPATH=. python scripts/translate_style.py $(LOCALES)
