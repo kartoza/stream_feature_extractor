@@ -2,15 +2,15 @@
 <qgis version="2.2.0-Valmiera" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="3" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
   <renderer-v2 attr="type" symbollevels="0" type="categorizedSymbol">
     <categories>
-      <category symbol="0" value="Perpotongan" label="Perpotongan"/>
+      <category symbol="0" value="Intersection" label="Intersection"/>
       <category symbol="1" value="Pseudo node" label="Pseudo node"/>
-      <category symbol="2" value="Sumur" label="Sumur"/>
-      <category symbol="3" value="Tengah-tengah segmen" label="Tengah-tengah segmen"/>
+      <category symbol="2" value="Well" label="Well"/>
+      <category symbol="3" value="Segment Center" label="Segment Center"/>
       <category symbol="4" value="Sink" label="Sink"/>
       <category symbol="5" value="Watershed" label="Watershed"/>
       <category symbol="6" value="Unseparated" label="Unseparated"/>
       <category symbol="7" value="Unclear Bifurcation" label="Unclear Bifurcation"/>
-      <category symbol="8" value="Percabangan" label="Percabangan"/>
+      <category symbol="8" value="Branch" label="Branch"/>
       <category symbol="9" value="Confluence" label="Confluence"/>
       <category symbol="10" value="Self Intersection" label="Self Intersection"/>
     </categories>

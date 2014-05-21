@@ -94,7 +94,8 @@ deploy: compile doc transcompile compile_qml_styles
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(UI_FILES) $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/i18n
+	cp -vfr i18n/*.qm $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/i18n/
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
 	cp -vfr $(STYLES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/styles
 	cp -vfr $(THIRD_PARTY) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/
