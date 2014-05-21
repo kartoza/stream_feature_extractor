@@ -1,9 +1,18 @@
-__author__ = 'ismailsunni'
-__project_name = 'stream-feature-extractor'
-__filename = 'translate_style.py'
-__date__ = '5/21/14'
-__copyright__ = 'imajimatika@gmail.com'
-__doc__ = ''
+# -*- coding: utf-8 -*-
+"""**Script for translating qml style file.**
+
+.. tip::
+   Detailed multi-paragraph description...
+
+"""
+from __future__ import division
+
+__author__ = 'Ismail Sunni <ismail@linfiniti.com>'
+__revision__ = '$Format:%H$'
+__date__ = '21/05/2014'
+__license__ = "GPL"
+__copyright__ = ''
+
 
 import sys
 import os
@@ -16,7 +25,7 @@ from test.utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 PAR_DIR = os.path.dirname(__file__)
-STYLES_DIR = os.path.join(PAR_DIR, '..','styles')
+STYLES_DIR = os.path.join(PAR_DIR, '..', 'styles')
 STYLES_DIR = os.path.abspath(STYLES_DIR)
 EN_STYLE_NAME = 'nodes'
 
