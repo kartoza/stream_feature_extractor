@@ -29,4 +29,4 @@ How to obtain this intermediate layer:
    respectively. We will add 1 to *up_num* if the node is upstream_node,
    this applies for *down_num*.
 
-4. The tool will populate each node type based on the rules in :doc:`nodes`.
+4. The tool will populate each node type based on the rules in :doc:`features`.
