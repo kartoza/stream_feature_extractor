@@ -24,17 +24,19 @@
 # this import required to enable PyQt API v2
 import qgis  # pylint: disable=W0611
 
-import custom_logging
+import custom_logging  # pylint: disable=relative-import
 
 
-sentry_url = (
+SENTRY_URL = (
     'http://b257c02328384628a50de20d257cf06e:'
     'ab515d8c88b746d484351321b0111b44@sentry.linfiniti.com/10')
-custom_logging.setup_logger(sentry_url)
+custom_logging.setup_logger(SENTRY_URL)
 
 
 # noinspection PyPep8Naming
-def classFactory(iface):
+def classFactory(iface):  # pylint: disable=invalid-name
     """load StreamFeatureExtractor class from file StreamFeatureExtractor."""
+    # pylint: disable=relative-import
     from stream_feature_extractor import StreamFeatureExtractor
+    # pylint: enable=relative-import
     return StreamFeatureExtractor(iface)

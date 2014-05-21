@@ -199,7 +199,8 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc . || true
+	@pylint --reports=n --rcfile=pylintrc . | \
+		grep -v locally-disabled || true
 
 
 # Run pep8 style checking
