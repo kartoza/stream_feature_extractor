@@ -16,6 +16,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   using_the_plugin
+   options_dialog
    features
    intermediate_layer
 
