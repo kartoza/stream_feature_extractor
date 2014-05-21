@@ -28,7 +28,7 @@ import logging
 # do it before Qt imports
 import qgis  # pylint: disable=W0611
 
-#from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 from PyQt4.QtCore import (
     Qt,
@@ -80,7 +80,7 @@ class StreamFeatureExtractor:
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'StreamFeatureExtractor_{}.qm'.format(self.locale))
+            '{}.qm'.format(self.locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()

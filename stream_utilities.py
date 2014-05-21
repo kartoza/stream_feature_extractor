@@ -911,8 +911,11 @@ def create_intermediate_layer(input_layer, threshold=0, callback=None):
     return intermediate_layer
 
 
-def create_new_features(intermediate_layer, self_intersections, intersections,
-                        segment_centers):
+def create_new_features(
+        intermediate_layer,
+        self_intersections,
+        intersections,
+        segment_centers):
     """Create list of features ready to add to final layer.
 
     This function will extract node from intermediate_layer, then add points
