@@ -770,7 +770,7 @@ def identify_segment_center(line):
     :param line: A line to be identified.
     :type line: QgsFeature
 
-    :returns: A linear segment center
+    :returns: A linear segment center.
     :rtype: QgsPoint
     """
     geometry = line.geometry()
@@ -819,13 +819,52 @@ def identify_segment_center(line):
     return QgsPoint(center_x, center_y)
 
 
-# noinspection PyPep8Naming,PyArgumentList,PyArgumentList
-def identify_features(input_layer, threshold=0, callback=None):
-    """Identify all features in one functions and put it in a layer.
+def identify_segment_centers(layer):
+    """Return a list of QgsPoint of linear segment centers in layer.
 
-    This function will find node that is an unseparated or ungetrennter (
-    germany). The definition of this type is a node that located in a line (
-    not in the start or end of a line).
+    :param layer: A vector line layer to be identified.
+    :type layer: QgsVectorLayer
+
+    :returns: A list of linear segment center.
+    :rtype: list
+    """
+    segment_centers = []
+    data_provider = layer.dataProvider()
+    features = data_provider.getFeatures()
+    for feature in features:
+        center = identify_segment_center(feature)
+        if center is not None:
+            segment_centers.append(center)
+
+    return segment_centers
+
+
+def identify_self_intersections_layer(layer):
+    """Return all self intersection points of a vector line layer.
+
+    :param layer: A vector line layer to be identified.
+    :type layer: QgsVectorLayer
+
+    :returns: List of QgsPoint that represent the intersection point.
+    :rtype: list
+    """
+
+    self_intersections_layer = []
+    data_provider = layer.dataProvider()
+    features = data_provider.getFeatures()
+    for feature in features:
+        self_intersections = identify_self_intersections(feature)
+        if self_intersections:
+            self_intersections_layer.extend(self_intersections)
+
+    return self_intersections_layer
+
+
+def create_intermediate_layer(input_layer, threshold=0, callback=None):
+    """Helper function to create intermediate layer.
+
+    Intermediate layer is a temporary layer that is used for helping the tool
+    to identify the nodes.
 
     :param input_layer: A vector line layer.
     :type input_layer: QGISVectorLayer
@@ -838,18 +877,17 @@ def identify_features(input_layer, threshold=0, callback=None):
         None.
     :type callback: function
 
-    :returns: A tuple of an intermediate layer that contains nodes and Map
-    layer (memory layer) containing identified features.
-    :rtype: tuple
-
+    :returns: Intermediate layer.
+    :rtype: QgsVectorLayer
     """
+    # Creating intermediate layer
     authority_id = input_layer.crs().authid()
     nodes = extract_nodes(layer=input_layer)
     nodes_layer_name = tr('Intermediate layer')
     # noinspection PyTypeChecker
-    memory_layer = create_nodes_layer(
+    intermediate_layer = create_nodes_layer(
         authority_id=authority_id, nodes=nodes, name=nodes_layer_name)
-    add_associated_nodes(memory_layer, threshold, callback)
+    add_associated_nodes(intermediate_layer, threshold, callback)
 
     # Create a collection of function references that we will call in turn
     # Note the actually run order is non deterministic so each function
@@ -866,55 +904,48 @@ def identify_features(input_layer, threshold=0, callback=None):
     index = 1
 
     for message, rule in rules.iteritems():
-        rule(memory_layer)
         callback(current=index, maximum=rule_count, message=message)
+        rule(intermediate_layer)
         index += 1
 
-    # Build a list of self intersections and segment centers
-    self_intersections = []
-    segment_centers = []
+    return intermediate_layer
 
-    data_provider = input_layer.dataProvider()
 
-    features = data_provider.getFeatures()
-    for feature in features:
-        feature_self_intersections = identify_self_intersections(feature)
-        try:
-            self_intersections.extend(feature_self_intersections)
-        except TypeError:
-            pass
-        center = identify_segment_center(feature)
-        if center is not None:
-            segment_centers.append(center)
+def create_new_features(intermediate_layer, self_intersections, intersections,
+                        segment_centers):
+    """Create list of features ready to add to final layer.
 
-    # create output layer
-    layer_name = tr('Stream Features')
-    output_layer = QgsVectorLayer(
-        'Point?crs=%s&index=yes' % authority_id, layer_name, 'memory')
-    # Start edit layer
-    output_data_provider = output_layer.dataProvider()
-    output_layer.startEditing()
+    This function will extract node from intermediate_layer, then add points
+    from self_intersections, intersections, and segment_centers to complete
+    the list of features.
+
+    :param intermediate_layer: An intermediate layer.
+    :type intermediate_layer: QgsVectorLayer
+
+    :param self_intersections: List of self_intersection points.
+    :type self_intersections: list
+
+    :param intersections: List of intersection points.
+    :type intersections: list
+
+    :param segment_centers: List of segment_center points.
+    :type segment_centers: list
+
+    :returns: List of QgsFeature
+    :rtype: list
+    """
     new_features = []
-    # Add fields (note you could also do this in uri of vector layer ctor TS)
-    output_data_provider.addAttributes([
-        QgsField('id', QVariant.Int),
-        QgsField('x', QVariant.Double),
-        QgsField('y', QVariant.Double),
-        QgsField('type', QVariant.String)])
+    id_index = intermediate_layer.fieldNameIndex('id')
+    upstream_index = intermediate_layer.fieldNameIndex('up_nodes')
+    downstream_index = intermediate_layer.fieldNameIndex('down_nodes')
+    well_index = intermediate_layer.fieldNameIndex('well')
+    sink_index = intermediate_layer.fieldNameIndex('sink')
+    branch_index = intermediate_layer.fieldNameIndex('branch')
+    confluence_index = intermediate_layer.fieldNameIndex('confluence')
+    pseudo_node_index = intermediate_layer.fieldNameIndex('pseudo')
+    watershed_index = intermediate_layer.fieldNameIndex('watershed')
+    unclear_bifurcation_index = intermediate_layer.fieldNameIndex('unclear_bi')
 
-    output_layer.commitChanges()
-
-    type_index = output_layer.fieldNameIndex('type')
-    id_index = memory_layer.fieldNameIndex('id')
-    upstream_index = memory_layer.fieldNameIndex('up_nodes')
-    downstream_index = memory_layer.fieldNameIndex('down_nodes')
-    well_index = memory_layer.fieldNameIndex('well')
-    sink_index = memory_layer.fieldNameIndex('sink')
-    branch_index = memory_layer.fieldNameIndex('branch')
-    confluence_index = memory_layer.fieldNameIndex('confluence')
-    pseudo_node_index = memory_layer.fieldNameIndex('pseudo')
-    watershed_index = memory_layer.fieldNameIndex('watershed')
-    unclear_bifurcation_index = memory_layer.fieldNameIndex('unclear_bi')
     feature_indexes = [
         well_index,
         sink_index,
@@ -933,12 +964,17 @@ def identify_features(input_layer, threshold=0, callback=None):
         tr('Watershed'),
         tr('Unclear Bifurcation')]
 
-    memory_data_provider = memory_layer.dataProvider()
-    nodes = memory_data_provider.getFeatures()
+    self_intersection_name = tr('Self Intersection')
+    segment_center_name = tr('Segment Center')
+    intersection_name = tr('Intersection')
+
+    intermediate_data_provider = intermediate_layer.dataProvider()
+    nodes = intermediate_data_provider.getFeatures()
+
     new_node_id = 1
     expired_node_id = set()
     for node in nodes:
-        # get data from memory layers
+        # get data from intermediate layers
         node_attribute = node.attributes()
         node_id = node_attribute[id_index]
         if str(node_id) in expired_node_id:
@@ -966,10 +1002,6 @@ def identify_features(input_layer, threshold=0, callback=None):
                     [new_node_id, x, y, feature_names[i]])
                 new_features.append(new_feature)
 
-    # self intersection
-    self_intersection_name = tr('Self Intersection')
-    segment_center_name = tr('Segment Center')
-    intersection_name = tr('Intersection')
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
@@ -978,6 +1010,7 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setAttributes(
             [new_node_id, x, y, tr(self_intersection_name)])
         new_features.append(new_feature)
+
     for segment_center in segment_centers:
         new_feature = QgsFeature()
         new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
@@ -986,7 +1019,6 @@ def identify_features(input_layer, threshold=0, callback=None):
         new_feature.setAttributes([new_node_id, x, y, segment_center_name])
         new_features.append(new_feature)
 
-    intersections = identify_intersections(input_layer)
     intersection_points = []
     for intersection in intersections:
         new_feature = QgsFeature()
@@ -997,17 +1029,33 @@ def identify_features(input_layer, threshold=0, callback=None):
         intersection_points.append(new_feature)
     new_features.extend(intersection_points)
 
-    output_data_provider.addFeatures(new_features)
-    output_layer.updateFields()
+    return new_features
 
-    output_layer.commitChanges()
 
-    output_spatial_index = get_spatial_index(output_data_provider)
+def get_duplicate_points(layer, threshold):
+    """Identified duplicated points from a layer based on a threshold.
 
+    It will return two list. The first list is unique points and the second
+    one is duplicated points.
+
+    True point will be decided from the points that have lower feature.id()
+
+    :param layer: A vector point layer.
+    :type layer: QgsVectorLayer
+
+    :param threshold: Distance threshold for deciding whether nodes are
+        converged or not.
+    :type threshold: float
+
+    :returns: List of real points and fake points
+    :rtype: list
+    """
+    data_provider = layer.dataProvider()
+    output_spatial_index = get_spatial_index(data_provider)
     duplicate_features = list()
-    true_features = []
-    fake_features = []
-    for feature in output_layer.getFeatures():
+    unique_features = []
+    duplicated_features = []
+    for feature in data_provider.getFeatures():
         geometry = feature.geometry()
         rectangle = QgsRectangle(
             geometry.asPoint().x() - threshold,
@@ -1020,16 +1068,102 @@ def identify_features(input_layer, threshold=0, callback=None):
             duplicate_feature.sort()
             if duplicate_feature not in duplicate_features:
                 duplicate_features.append(duplicate_feature)
-                true_features.append(int(duplicate_feature[0]))
-                fake_features.extend(duplicate_feature[1:])
+                unique_features.append(int(duplicate_feature[0]))
+                duplicated_features.extend(duplicate_feature[1:])
 
-    fake_features = [int(x) for x in fake_features]
-    output_data_provider.deleteFeatures(fake_features)
+    return  unique_features, duplicated_features
 
+
+# noinspection PyPep8Naming,PyArgumentList,PyArgumentList
+def identify_features(input_layer, threshold=0, callback=None):
+    """Identify all features in one functions and put it in a layer.
+
+    This function will find node that is an unseparated or ungetrennter (
+    germany). The definition of this type is a node that located in a line (
+    not in the start or end of a line).
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QGISVectorLayer
+
+    :param threshold: Distance threshold for node snapping. Defaults to 1.
+    :type threshold: float
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int) and 'maximum' (int). Defaults to
+        None.
+    :type callback: function
+
+    :returns: A tuple of an intermediate layer that contains nodes and Map
+    layer (memory layer) containing identified features.
+    :rtype: tuple
+
+    """
+    intermediate_layer = create_intermediate_layer(
+        input_layer, threshold, callback)
+    authority_id = input_layer.crs().authid()
+
+    index = 1
+    rule_count = 4
+    # Find self intersections
+    message = tr('Finding self intersections...')
+    callback(current=index, maximum=rule_count, message=message)
+    self_intersections = identify_self_intersections_layer(input_layer)
+    index += 1
+
+    # Find segment centers
+    message = tr('Finding segment centers...')
+    callback(current=index, maximum=rule_count, message=message)
+    segment_centers = identify_segment_centers(input_layer)
+    index += 1
+
+    # Find intersections
+    message = tr('Finding intersections...')
+    callback(current=index, maximum=rule_count, message=message)
+    intersections = identify_intersections(input_layer)
+    index += 1
+
+    # create output layer
+    layer_name = tr('Stream Features')
+    field_id = 'field=id:integer'
+    field_x = 'field=x:double'
+    field_y = 'field=y:double'
+    field_type = 'field=type:string(30)'
+
+    uri = ('Point?crs=%s&index=yes&%s&%s&%s&%s' % (
+        authority_id, field_id, field_x, field_y, field_type))
+
+    output_layer = QgsVectorLayer(uri, layer_name, 'memory')
+
+    # Start edit layer
+    output_data_provider = output_layer.dataProvider()
+    output_layer.startEditing()
+
+    type_index = output_layer.fieldNameIndex('type')
+
+    new_features = create_new_features(
+        intermediate_layer, self_intersections, intersections, segment_centers)
+
+    output_data_provider.addFeatures(new_features)
+    output_layer.updateFields()
+    output_layer.commitChanges()
+
+    message = tr('Finding Unseparated...')
+    callback(current=index, maximum=rule_count, message=message)
+    # How to find unseparated
+    # Basically, unseparated is an intersection point in well or sink. So,
+    # we find duplicate points, and replace it with Unseparated.
+    unique_features, duplicated_features = get_duplicate_points(
+        output_layer, threshold)
+
+    # Deleting duplicated features
+    duplicated_features = [int(x) for x in duplicated_features]
+    output_data_provider.deleteFeatures(duplicated_features)
+
+    # Replacing them with unseparated
     dictionary_attributes = {}
     attributes = {type_index: 'Unseparated'}
 
-    for true_feature in true_features:
+    for true_feature in unique_features:
         dictionary_attributes[true_feature] = attributes
     output_data_provider.changeAttributeValues(dictionary_attributes)
     output_layer.updateFields()
@@ -1041,13 +1175,14 @@ def identify_features(input_layer, threshold=0, callback=None):
     for feature in features:
         attributes = {0: i}
         dictionary_attributes[feature.id()] = attributes
+        feature.setFeatureId(i - 1)
         i += 1
     output_data_provider.changeAttributeValues(dictionary_attributes)
 
     output_layer.updateFields()
     output_layer.commitChanges()
 
-    return memory_layer, output_layer
+    return intermediate_layer, output_layer
 
 
 def is_line_layer(layer):

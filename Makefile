@@ -82,7 +82,7 @@ test_code: compile transcompile
 		nosetests -v --with-id --with-coverage --cover-package=. \
 		3>&1 1>&2 2>&3 3>&- || true
 
-deploy: compile doc transcompile
+deploy: compile doc transcompile compile_qml_styles
 	@echo
 	@echo "------------------------------------------"
 	@echo "Deploying plugin to your .qgis2 directory."
@@ -209,9 +209,9 @@ pep8:
 	@echo "-----------"
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude conf.py,pydev,resources_rc.py,third_party . || true
 
-compile_ui:
+compile_qml_styles:
 	@echo
-	@echo "-----------------"
-	@echo "Compile ui files."
-	@echo "-----------------"
-	pyuic4 -x stream_feature_extractor_dialog_base.ui -o stream_feature_extractor_dialog_base.py
+	@echo "-----------------------------------------"
+	@echo "Compile qml styles for supported locales."
+	@echo "-----------------------------------------"
+	@PYTHONPATH=. python scripts/translate_style.py $(LOCALES)
