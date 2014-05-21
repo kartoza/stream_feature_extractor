@@ -58,3 +58,4 @@ docs/_build/
 resources_rc.py
 *.*~
 pydev
+.qm
