@@ -10,7 +10,7 @@
 name=Stream Feature Extractor
 qgisMinimumVersion=2.0
 description=A tool to extract features from a stream network.
-version=1.0.0
+version=1.0.1
 author=Linfiniti Consulting CC.
 email=tim@linfiniti.com
 
