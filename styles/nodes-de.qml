@@ -4,15 +4,15 @@
     <categories>
       <category symbol="0" value="Kreuzung" label="Kreuzung"/>
       <category symbol="1" value="Pseudonode" label="Pseudonode"/>
-      <category symbol="2" value="Quelle" label="Well"/>
-      <category symbol="3" value="Segment Center" label="Segment Center"/>
+      <category symbol="2" value="Quelle" label="Quelle"/>
+      <category symbol="3" value="Segmentmitte" label="Segmentmitte"/>
       <category symbol="4" value="Senke" label="Senke"/>
       <category symbol="5" value="Top" label="Top"/>
-      <category symbol="6" value="Ungetrennter" label="Ungetrennter"/>
+      <category symbol="6" value="Unseparated" label="Unseparated"/>
       <category symbol="7" value="Unklare Bifurkation" label="Unklare Bifurkation"/>
       <category symbol="8" value="Verzweigung" label="Verzweigung"/>
       <category symbol="9" value="Zusammenfluss" label="Zusammenfluss"/>
-      <category symbol="10" value="Self Kreuzung" label="Self Kreuzung"/>
+      <category symbol="10" value="selbst Kreuzung" label="selbst Kreuzung"/>
     </categories>
     <symbols>
       <symbol alpha="1" type="marker" name="0">
