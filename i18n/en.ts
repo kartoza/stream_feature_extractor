@@ -3,102 +3,102 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="stream_utilities.py" line="168"/>
+        <location filename="stream_utilities.py" line="170"/>
         <source>Stream features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="886"/>
+        <location filename="stream_utilities.py" line="888"/>
         <source>Intermediate layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="896"/>
+        <location filename="stream_utilities.py" line="898"/>
         <source>Finding wells...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="897"/>
+        <location filename="stream_utilities.py" line="899"/>
         <source>Finding sinks...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="898"/>
+        <location filename="stream_utilities.py" line="900"/>
         <source>Finding branches...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="899"/>
+        <location filename="stream_utilities.py" line="901"/>
         <source>Finding confluences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="900"/>
+        <location filename="stream_utilities.py" line="902"/>
         <source>Finding pseudo nodes...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="901"/>
+        <location filename="stream_utilities.py" line="903"/>
         <source>Finding watersheds...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="902"/>
+        <location filename="stream_utilities.py" line="904"/>
         <source>Finding unclear bifurcations...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1126"/>
+        <location filename="stream_utilities.py" line="1131"/>
         <source>Stream Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="959"/>
+        <location filename="stream_utilities.py" line="964"/>
         <source>Well</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="960"/>
+        <location filename="stream_utilities.py" line="965"/>
         <source>Sink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="961"/>
+        <location filename="stream_utilities.py" line="966"/>
         <source>Branch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="962"/>
+        <location filename="stream_utilities.py" line="967"/>
         <source>Confluence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="963"/>
+        <location filename="stream_utilities.py" line="968"/>
         <source>Pseudo node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="964"/>
+        <location filename="stream_utilities.py" line="969"/>
         <source>Watershed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="965"/>
+        <location filename="stream_utilities.py" line="970"/>
         <source>Unclear Bifurcation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="967"/>
+        <location filename="stream_utilities.py" line="972"/>
         <source>Self Intersection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="968"/>
+        <location filename="stream_utilities.py" line="973"/>
         <source>Segment Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="969"/>
+        <location filename="stream_utilities.py" line="974"/>
         <source>Intersection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -108,22 +108,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1108"/>
+        <location filename="stream_utilities.py" line="1113"/>
         <source>Finding self intersections...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1114"/>
+        <location filename="stream_utilities.py" line="1119"/>
         <source>Finding segment centers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1120"/>
+        <location filename="stream_utilities.py" line="1125"/>
         <source>Finding intersections...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1150"/>
+        <location filename="stream_utilities.py" line="1155"/>
         <source>Finding Unseparated...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -146,32 +146,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="259"/>
+        <location filename="stream_feature_extractor.py" line="257"/>
         <source>Extracting stream features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="259"/>
+        <location filename="stream_feature_extractor.py" line="257"/>
         <source>Please stand by while calculation is in progress.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="310"/>
+        <location filename="stream_feature_extractor.py" line="308"/>
         <source>Please check logs for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="326"/>
+        <location filename="stream_feature_extractor.py" line="324"/>
         <source>Extraction completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="326"/>
+        <location filename="stream_feature_extractor.py" line="324"/>
         <source>Use &quot;Layer-&gt;Save as&quot; to save the results permanently.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="310"/>
+        <location filename="stream_feature_extractor.py" line="308"/>
         <source>Feature extraction error.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,129 +4,129 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="stream_utilities.py" line="1126"/>
+        <location filename="stream_utilities.py" line="1131"/>
         <source>Stream Features</source>
-        <translation type="unfinished">Strom Features</translation>
+        <translation>Strom Features</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="959"/>
+        <location filename="stream_utilities.py" line="964"/>
         <source>Well</source>
         <translation>Quelle</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="960"/>
+        <location filename="stream_utilities.py" line="965"/>
         <source>Sink</source>
         <translation>Senke</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="961"/>
+        <location filename="stream_utilities.py" line="966"/>
         <source>Branch</source>
         <translation>Verzweigung</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="962"/>
+        <location filename="stream_utilities.py" line="967"/>
         <source>Confluence</source>
         <translation>Zusammenfluss</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="963"/>
+        <location filename="stream_utilities.py" line="968"/>
         <source>Pseudo node</source>
         <translation>Pseudonode</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="964"/>
+        <location filename="stream_utilities.py" line="969"/>
         <source>Watershed</source>
         <translation>Top</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="965"/>
+        <location filename="stream_utilities.py" line="970"/>
         <source>Unclear Bifurcation</source>
         <translation>Unklare Bifurkation</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="967"/>
+        <location filename="stream_utilities.py" line="972"/>
         <source>Self Intersection</source>
-        <translation type="unfinished">selbst Kreuzung</translation>
+        <translation>selbst Kreuzung</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="968"/>
+        <location filename="stream_utilities.py" line="973"/>
         <source>Segment Center</source>
-        <translation type="unfinished">Segmentmitte</translation>
+        <translation>Segmentmitte</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="969"/>
+        <location filename="stream_utilities.py" line="974"/>
         <source>Intersection</source>
         <translation>Kreuzung</translation>
     </message>
     <message>
         <location filename="test_translations.py" line="49"/>
         <source>Good morning</source>
-        <translation type="unfinished">guten Morgen</translation>
+        <translation>guten Morgen</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="168"/>
+        <location filename="stream_utilities.py" line="170"/>
         <source>Stream features</source>
-        <translation type="unfinished">Strom Features</translation>
+        <translation>Strom Features</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="886"/>
+        <location filename="stream_utilities.py" line="888"/>
         <source>Intermediate layer</source>
-        <translation type="unfinished">Zwischenschicht</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="896"/>
-        <source>Finding wells...</source>
-        <translation type="unfinished">Finden Brunnen ...</translation>
-    </message>
-    <message>
-        <location filename="stream_utilities.py" line="897"/>
-        <source>Finding sinks...</source>
-        <translation type="unfinished">Finden Waschbecken ...</translation>
+        <translation>Zwischenschicht</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="898"/>
-        <source>Finding branches...</source>
-        <translation type="unfinished">Die Suche nach Fachbereiche ...</translation>
+        <source>Finding wells...</source>
+        <translation>Finden Brunnen ...</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="899"/>
-        <source>Finding confluences...</source>
-        <translation type="unfinished">Die Suche nach Zusammenhängen ...</translation>
+        <source>Finding sinks...</source>
+        <translation>Finden Waschbecken ...</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="900"/>
-        <source>Finding pseudo nodes...</source>
-        <translation type="unfinished">Finden pseudonodes ...</translation>
+        <source>Finding branches...</source>
+        <translation>Die Suche nach Fachbereiche ...</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="901"/>
-        <source>Finding watersheds...</source>
-        <translation type="unfinished">Die Suche nach Wassereinzugsgebieten ...</translation>
+        <source>Finding confluences...</source>
+        <translation>Die Suche nach Zusammenhängen ...</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="902"/>
+        <source>Finding pseudo nodes...</source>
+        <translation>Finden pseudonodes ...</translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="903"/>
+        <source>Finding watersheds...</source>
+        <translation>Die Suche nach Wassereinzugsgebieten ...</translation>
+    </message>
+    <message>
+        <location filename="stream_utilities.py" line="904"/>
         <source>Finding unclear bifurcations...</source>
-        <translation type="unfinished">Finden unklar Gabelungen ...</translation>
+        <translation>Finden unklar Gabelungen ...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1108"/>
+        <location filename="stream_utilities.py" line="1113"/>
         <source>Finding self intersections...</source>
-        <translation type="unfinished">Die Suche nach Selbstschnitte ...</translation>
+        <translation>Die Suche nach Selbstschnitte ...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1114"/>
+        <location filename="stream_utilities.py" line="1119"/>
         <source>Finding segment centers...</source>
-        <translation type="unfinished">Die Suche nach Segment Zentren ...</translation>
+        <translation>Die Suche nach Segment Zentren ...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1120"/>
+        <location filename="stream_utilities.py" line="1125"/>
         <source>Finding intersections...</source>
-        <translation type="unfinished">Die Suche nach Schnittpunkten ...</translation>
+        <translation>Die Suche nach Schnittpunkten ...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1150"/>
+        <location filename="stream_utilities.py" line="1155"/>
         <source>Finding Unseparated...</source>
-        <translation type="unfinished">Finden ungetrennt ...</translation>
+        <translation>Finden ungetrennt ...</translation>
     </message>
 </context>
 <context>
@@ -142,39 +142,39 @@
         <translation>Hilfe ...</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="259"/>
+        <location filename="stream_feature_extractor.py" line="257"/>
         <source>Extracting stream features</source>
         <translation>Extrahieren strom features</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="259"/>
+        <location filename="stream_feature_extractor.py" line="257"/>
         <source>Please stand by while calculation is in progress.</source>
-        <translation type="unfinished">Bitte warte, während die Berechnung läuft.</translation>
+        <translation>Bitte warte, während die Berechnung läuft.</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="310"/>
+        <location filename="stream_feature_extractor.py" line="308"/>
         <source>Please check logs for details.</source>
-        <translation type="unfinished">Bitte überprüfen Sie Protokolle für Einzelheiten.</translation>
+        <translation>Bitte überprüfen Sie Protokolle für Einzelheiten.</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="326"/>
+        <location filename="stream_feature_extractor.py" line="324"/>
         <source>Extraction completed.</source>
         <translation>Extahiren komplett.</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="326"/>
+        <location filename="stream_feature_extractor.py" line="324"/>
         <source>Use &quot;Layer-&gt;Save as&quot; to save the results permanently.</source>
-        <translation type="unfinished">Verwenden Sie &quot;als Schicht-&gt; Speichern&quot;, um die Ergebnisse dauerhaft zu speichern.</translation>
+        <translation>Verwenden Sie &quot;als Schicht-&gt; Speichern&quot;, um die Ergebnisse dauerhaft zu speichern.</translation>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="203"/>
         <source>Extract stream features from current layer</source>
-        <translation type="unfinished">Auszug Strom Features von aktuellen Ebene</translation>
+        <translation>Auszug Strom Features von aktuellen Ebene</translation>
     </message>
     <message>
-        <location filename="stream_feature_extractor.py" line="310"/>
+        <location filename="stream_feature_extractor.py" line="308"/>
         <source>Feature extraction error.</source>
-        <translation type="unfinished">Die Merkmalsextraktion Fehler.</translation>
+        <translation>Die Merkmalsextraktion Fehler.</translation>
     </message>
 </context>
 <context>
@@ -200,12 +200,12 @@
     <message>
         <location filename="stream_options_dialog_base.ui" line="20"/>
         <source>Show intermediate node count layer</source>
-        <translation type="unfinished">Zeigen Zwischenknotenzahl Schicht</translation>
+        <translation>Zeigen Zwischenknotenzahl Schicht</translation>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="51"/>
         <source>Help to improve Stream Feature Extractor by submitting errors to a remote server</source>
-        <translation type="unfinished">Hilfe zur Stream-Feature-Extractor durch Vorlage Fehler auf einen entfernten Server zu verbessern</translation>
+        <translation>Hilfe zur Stream-Feature-Extractor durch Vorlage Fehler auf einen entfernten Server zu verbessern</translation>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="27"/>
@@ -214,7 +214,7 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Set the search distance that will be used to determine of nodes are converged or not. The distance is calculated in map units of your stream layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
