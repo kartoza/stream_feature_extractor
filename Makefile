@@ -194,6 +194,18 @@ doc:
 	@echo "------------------------------------"
 	cd help; make clean; make html
 
+# Note that make runs commands in a subshell so 
+# variable context is lost from one line to the next
+# So we need to do everything as a single line command 
+tag:
+	@echo
+	@echo "------------------------------------"
+	@echo "Tagging the release."
+	@echo "------------------------------------"
+	@read -p "Version e.g. 1_0_0: " VERSION; \
+	git tag -s version-$$VERSION -m "Version $$VERSION" && \
+	git push --tags origin version-$$VERSION
+	
 pylint:
 	@echo
 	@echo "-----------------"
