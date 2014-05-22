@@ -178,8 +178,8 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
 
 
 # noinspection PyUnresolvedReferences,PyStatementEffect
-class TestUtilities(unittest.TestCase):
-    """Class for testing utilities."""
+class TestStreamUtilities(unittest.TestCase):
+    """Class for testing stream utilities."""
 
     @classmethod
     def setUpClass(cls):

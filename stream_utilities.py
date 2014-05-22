@@ -714,7 +714,14 @@ def identify_intersections(layer):
                         if vertices[-1] in temp_list:
                                 temp_list.remove(vertices[-1])
                     intersections.extend(temp_list)
-    return set(intersections)
+    # Note(ismailsunni): if I converted directly from list to set, there is a
+    # problem. The elements in the set are not unique in qgis 2.0.
+    # Yes, this is strange.
+    result = []
+    for intersection in intersections:
+        if intersection not in result:
+            result.append(intersection)
+    return result
 
 
 # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
