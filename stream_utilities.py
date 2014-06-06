@@ -412,7 +412,7 @@ def identify_sinks(layer):
     """Mark nodes from the layer if it is a sink.
 
     A node is identified as a sink if the number of upstream nodes == 0 and
-    the number downstream node = 1.
+    the number downstream node > 0.
     And add attribute `sink` for marking.
 
     :param layer: A vector point layer.
@@ -434,7 +434,7 @@ def identify_sinks(layer):
         node_attributes = node.attributes()
         up_num = node_attributes[up_num_index]
         down_num = node_attributes[down_num_index]
-        if up_num == 0 and down_num == 1:
+        if up_num == 0 and down_num > 0:
             sink_value = 1
         else:
             sink_value = 0
@@ -1171,7 +1171,7 @@ def identify_features(input_layer, threshold=0, callback=None):
 
     # Replacing them with unseparated
     dictionary_attributes = {}
-    attributes = {type_index: 'Unseparated'}
+    attributes = {type_index: tr('Unseparated')}
 
     for true_feature in unique_features:
         dictionary_attributes[true_feature] = attributes

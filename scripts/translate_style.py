@@ -46,7 +46,8 @@ def main():
         'Unclear Bifurcation',
         'Self Intersection',
         'Segment Center',
-        'Intersection'
+        'Intersection',
+        'Unseparated'
     ]
 
     f = open(style_file, 'r')

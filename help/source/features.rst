@@ -34,7 +34,7 @@ feature each node represents.
 4. Sink / *Senke*
 -----------------
 
-   A node that has no upstream node and 0 downstream nodes.
+   A node that has no upstream node and 1 or more downstream nodes.
 
    .. image:: /_static/sink.png
       :align: center

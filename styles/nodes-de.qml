@@ -7,7 +7,7 @@
       <category symbol="2" value="Quelle" label="Quelle"/>
       <category symbol="3" value="Segmentmitte" label="Segmentmitte"/>
       <category symbol="4" value="Senke" label="Senke"/>
-      <category symbol="5" value="Top" label="Top"/>
+      <category symbol="5" value="Einzugsgebiet" label="Einzugsgebiet"/>
       <category symbol="6" value="Ungetrennt" label="Ungetrennt"/>
       <category symbol="7" value="Unklare Bifurkation" label="Unklare Bifurkation"/>
       <category symbol="8" value="Verzweigung" label="Verzweigung"/>
