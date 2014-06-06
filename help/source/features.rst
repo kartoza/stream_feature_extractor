@@ -58,7 +58,7 @@ feature each node represents.
    .. image:: /_static/unseparated.png
       :align: center
 
-7. Unclear bifurcation / *Unklare Bifukation*
+7. Unclear bifurcation / *Unklare Bifurkation*
 ---------------------------------------------
 
    It has more than one upstream and more than one downstream node,
@@ -85,8 +85,8 @@ feature each node represents.
    .. image:: /_static/confluence.png
       :align: center
 
-10. Segment Center
-------------------
+10. Segment Center / *Segmentmitte*
+-----------------------------------
 
    Segment center is the linear center of a line. The tool finds the point
    in the line that has distance half of the length of the line.
@@ -94,8 +94,8 @@ feature each node represents.
    .. image:: /_static/segment_center.png
       :align: center
 
-11. Self Intersection
----------------------
+11. Self Intersection / *Selbstkreuzung*
+--------------------------------------
 
     Same with intersection, but this time the line intersects with itself.
 
