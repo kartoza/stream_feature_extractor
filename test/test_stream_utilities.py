@@ -648,20 +648,25 @@ class TestStreamUtilities(unittest.TestCase):
             [QgsPoint(4504960.94927519094198942, 5819710.47232702653855085),
              'Segment Center'],
             [QgsPoint(4506065.1831744248047471, 5819712.94692023564130068),
-              'Segment Center'],
+             'Segment Center'],
             [QgsPoint(4504974.16828893031924963, 5819660.41915996465831995),
              'Segment Center'],
             [QgsPoint(4504515.96725786849856377, 5819123.59523478243499994),
-             'Segment Center']
+             'Segment Center'],
+            [QgsPoint(4505754.27464655786752701, 5818549.32406418491154909),
+             'Sink']
         ]
+
+        for feature in output_layer.getFeatures():
+            point = feature.geometry().asPoint().toString(17)
+            result = [feature.geometry().asPoint(), feature.attributes()[3]]
+            message = '%s is not found %s' % (point, feature.id())
+            self.assertIn(result, expected_result, message)
+
         message = ('There should be %s features, but I got %s' %
                    (len(expected_result), features_count))
         self.assertEqual(features_count, len(expected_result), message)
 
-        for feature in output_layer.getFeatures():
-            result = [feature.geometry().asPoint(), feature.attributes()[3]]
-            message = '%s is not found %s' % (result, feature.id())
-            self.assertIn(result, expected_result, message)
         remove_temp_layer(sungai_layer.source())
 
     @unittest.expectedFailure
