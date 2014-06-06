@@ -8,11 +8,11 @@
       <category symbol="3" value="Segmentmitte" label="Segmentmitte"/>
       <category symbol="4" value="Senke" label="Senke"/>
       <category symbol="5" value="Top" label="Top"/>
-      <category symbol="6" value="Unseparated" label="Unseparated"/>
+      <category symbol="6" value="Ungetrennt" label="Ungetrennt"/>
       <category symbol="7" value="Unklare Bifurkation" label="Unklare Bifurkation"/>
       <category symbol="8" value="Verzweigung" label="Verzweigung"/>
       <category symbol="9" value="Zusammenfluss" label="Zusammenfluss"/>
-      <category symbol="10" value="selbst Kreuzung" label="selbst Kreuzung"/>
+      <category symbol="10" value="Selbstkreuzung" label="Selbstkreuzung"/>
     </categories>
     <symbols>
       <symbol alpha="1" type="marker" name="0">
