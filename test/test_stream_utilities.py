@@ -62,6 +62,7 @@ JAWA_NODES_SHP = os.path.join(DATA_TEST_DIR, 'nodes.shp')
 
 SUNGAI_BARU_SHP = os.path.join(
     DATA_TEST_DIR, 'small_test', 'sungai_baru.shp')
+RIVER_TEST_SHP = os.path.join(DATA_TEST_DIR, 'River_Test', 'River_Test.shp')
 
 DGN_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test.shp')
 DGN_NODES_SHP = os.path.join(DATA_TEST_DIR, 'dgn', 'dgn_test_nodes.shp')
@@ -756,6 +757,47 @@ class TestStreamUtilities(unittest.TestCase):
         self.assertEqual(len(intersections), 22, '%s' % len(intersections))
 
         remove_temp_layer(line_layer.source())
+
+    def test_identify_features_river_test(self):
+        """Test for identify_features on the River_Test dataset."""
+        sungai_layer = get_temp_shapefile_layer(
+            RIVER_TEST_SHP, 'River_Test')
+        _, output_layer = identify_features(
+            sungai_layer, 1, console_progress_callback)
+
+        num_sinks = 0
+        num_wells = 0
+        num_unseparated = 0
+        wells = []
+        for feature in output_layer.getFeatures():
+            point = feature.geometry().asPoint().toString(17)
+            result = [feature.geometry().asPoint(), feature.attributes()[3]]
+            message = '%s is not found %s' % (point, feature.id())
+            # self.assertIn(result, expected_result, message)
+            if result[1] == 'Sink':
+                num_sinks += 1
+            if result[1] == 'Well':
+                num_wells += 1
+                wells.append(point)
+            if result[1] == 'Unseparated':
+                num_unseparated += 1
+
+        message = ('There should be %s sinks, but I got %s' % (10, num_sinks))
+        self.assertEqual(10, num_sinks, message)
+
+        message = ('There should be %s wells, but I got %s' % (15, num_wells))
+        self.assertEqual(16, num_wells, message)
+
+        message = ('There should be %s unseparated, but I got %s' % (
+            5, num_unseparated))
+        self.assertEqual(4, num_unseparated, message)
+
+        message = ('There should be %s features, but I got %s' %
+                   (119, output_layer.featureCount()))
+        self.assertEqual(119, output_layer.featureCount(), message)
+
+        remove_temp_layer(sungai_layer.source())
+
 
 if __name__ == '__main__':
     unittest.main()
