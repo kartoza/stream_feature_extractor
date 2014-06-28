@@ -3,16 +3,16 @@
   <renderer-v2 attr="type" symbollevels="0" type="categorizedSymbol">
     <categories>
       <category symbol="0" value="Perpotongan" label="Perpotongan"/>
-      <category symbol="1" value="Pseudo node" label="Pseudo node"/>
+      <category symbol="1" value="Simpul semu" label="Simpul semu"/>
       <category symbol="2" value="Sumur" label="Sumur"/>
       <category symbol="3" value="Tengah-tengah segmen" label="Tengah-tengah segmen"/>
-      <category symbol="4" value="Sink" label="Sink"/>
-      <category symbol="5" value="Watershed" label="Watershed"/>
-      <category symbol="6" value="Unseparated" label="Unseparated"/>
-      <category symbol="7" value="Unclear Bifurcation" label="Unclear Bifurcation"/>
+      <category symbol="4" value="Sungai buntu" label="Sungai buntu"/>
+      <category symbol="5" value="Batas air" label="Batas air"/>
+      <category symbol="6" value="Tak terpisahkan" label="Tak terpisahkan"/>
+      <category symbol="7" value="Bifurkasi tak jelas" label="Bifurkasi tak jelas"/>
       <category symbol="8" value="Percabangan" label="Percabangan"/>
-      <category symbol="9" value="Confluence" label="Confluence"/>
-      <category symbol="10" value="Self Intersection" label="Self Intersection"/>
+      <category symbol="9" value="Pertemuan" label="Pertemuan"/>
+      <category symbol="10" value="Perpotongan sendiri" label="Perpotongan sendiri"/>
     </categories>
     <symbols>
       <symbol alpha="1" type="marker" name="0">
