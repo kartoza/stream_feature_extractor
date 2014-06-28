@@ -1,135 +1,135 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.0">
 <context>
     <name>@default</name>
     <message>
         <location filename="stream_utilities.py" line="168"/>
         <source>Stream features</source>
-        <translation>Gewässereigenschaften</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="893"/>
         <source>Intermediate layer</source>
-        <translation>Zwischenschicht</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="903"/>
         <source>Finding wells...</source>
-        <translation>Finde Brunnen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="904"/>
         <source>Finding sinks...</source>
-        <translation>Finde Senken ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="905"/>
         <source>Finding branches...</source>
-        <translation>Suche nach Abzweigungen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="906"/>
         <source>Finding confluences...</source>
-        <translation>Suche nach Zusammenflüssen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="907"/>
         <source>Finding pseudo nodes...</source>
-        <translation>Suche nach Pseudo-Nodes ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="908"/>
         <source>Finding watersheds...</source>
-        <translation>Suche nach Wassereinzugsgebieten ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="909"/>
         <source>Finding unclear bifurcations...</source>
-        <translation>Suche unklare Gabelungen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1136"/>
         <source>Stream Features</source>
-        <translation>Fließgewässereigenschaften</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="969"/>
         <source>Well</source>
-        <translation>Quelle</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="970"/>
         <source>Sink</source>
-        <translation>Senke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="971"/>
         <source>Branch</source>
-        <translation>Verzweigung</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="972"/>
         <source>Confluence</source>
-        <translation>Zusammenfluss</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="973"/>
         <source>Pseudo node</source>
-        <translation>Pseudonode</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="974"/>
         <source>Watershed</source>
-        <translation>Top</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="975"/>
         <source>Unclear Bifurcation</source>
-        <translation>Unklare Bifurkation</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="977"/>
         <source>Self Intersection</source>
-        <translation>Selbstkreuzung</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="978"/>
         <source>Segment Center</source>
-        <translation>Segmentmitte</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="979"/>
         <source>Intersection</source>
-        <translation>Kreuzung</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="test_translations.py" line="49"/>
         <source>Good morning</source>
-        <translation>Guten Morgen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1118"/>
         <source>Finding self intersections...</source>
-        <translation>Suche Selbstkreuzungen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1124"/>
         <source>Finding segment centers...</source>
-        <translation>Suche Segmentmitten ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1130"/>
         <source>Finding intersections...</source>
-        <translation>Suche Kreuzungen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1160"/>
         <source>Finding Unseparated...</source>
-        <translation>Suche Ungetrennt ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_utilities.py" line="1174"/>
         <source>Unseparated</source>
-        <translation>Ungetrennt</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -137,47 +137,47 @@
     <message>
         <location filename="stream_feature_extractor.py" line="203"/>
         <source>Extract stream features from current layer</source>
-        <translation>Extrahiere Gewässereigenschaften aus aktuellem Layer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="210"/>
         <source>Options ...</source>
-        <translation>Optionen ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="218"/>
         <source>Help ...</source>
-        <translation>Hilfe ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="257"/>
         <source>Extracting stream features</source>
-        <translation>Extrahiere Gewässereigenschaften</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="257"/>
         <source>Please stand by while calculation is in progress.</source>
-        <translation>Bitte warten Sie, während die Berechnung läuft.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="308"/>
         <source>Please check logs for details.</source>
-        <translation>Bitte prüfen Sie Protokolle für Einzelheiten.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="324"/>
         <source>Extraction completed.</source>
-        <translation>Extrahieren beendet.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="324"/>
         <source>Use &quot;Layer-&gt;Save as&quot; to save the results permanently.</source>
-        <translation>Verwenden Sie &quot;Layer-&gt; Speichern als&quot;, um die Ergebnisse dauerhaft zu speichern.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_feature_extractor.py" line="308"/>
         <source>Feature extraction error.</source>
-        <translation>Fehler beim Extrahieren von Eigenschaften.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -185,12 +185,12 @@
     <message>
         <location filename="stream_help_dialog_base.ui" line="14"/>
         <source>Stream Feature Extractor - Documentation</source>
-        <translation>Stream Feature Extractor - Dokumentation</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_help_dialog_base.ui" line="26"/>
         <source>about:blank</source>
-        <translation>über:leer</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -198,17 +198,17 @@
     <message>
         <location filename="stream_options_dialog_base.ui" line="14"/>
         <source>Options</source>
-        <translation>Optionen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="20"/>
         <source>Show intermediate node count layer</source>
-        <translation>Zeige Layer mit Zwischenknotenanzahl</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="51"/>
         <source>Help to improve Stream Feature Extractor by submitting errors to a remote server</source>
-        <translation>Helfen Sie den Stream Feature Extractor zu verbessern, indem Sie Fehler an einen entfernten Server melden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="stream_options_dialog_base.ui" line="27"/>
@@ -217,7 +217,7 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Set the search distance that will be used to determine of nodes are converged or not. The distance is calculated in map units of your stream layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Setzen Sie die Suchentfernung, die zur Bestimmung der Knotenüberlagerung verwendet werden soll. Die Entfernung wird in Karteneinheiten ihres Gewässerlayers berechnet.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
