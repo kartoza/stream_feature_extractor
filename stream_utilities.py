@@ -129,6 +129,9 @@ def extract_nodes(layer):
     lines = layer.getFeatures()
     for feature in lines:
         geom = feature.geometry()
+        # for handling feature with None geometry
+        if geom is None:
+            continue
         points = geom.asPolyline()
         if len(points) < 1:
             continue

@@ -79,7 +79,7 @@
     <message>
         <location filename="stream_utilities.py" line="974"/>
         <source>Watershed</source>
-        <translation>Einzugsgebiet</translation>
+        <translation>Top</translation>
     </message>
     <message>
         <location filename="stream_utilities.py" line="975"/>

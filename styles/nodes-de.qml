@@ -2,17 +2,17 @@
 <qgis version="2.2.0-Valmiera" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="3" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
   <renderer-v2 attr="type" symbollevels="0" type="categorizedSymbol">
     <categories>
-      <category symbol="0" value="Intersection" label="Intersection"/>
-      <category symbol="1" value="Pseudo node" label="Pseudo node"/>
-      <category symbol="2" value="Well" label="Well"/>
-      <category symbol="3" value="Segment Center" label="Segment Center"/>
-      <category symbol="4" value="Sink" label="Sink"/>
-      <category symbol="5" value="Watershed" label="Watershed"/>
-      <category symbol="6" value="Unseparated" label="Unseparated"/>
-      <category symbol="7" value="Unclear Bifurcation" label="Unclear Bifurcation"/>
-      <category symbol="8" value="Branch" label="Branch"/>
-      <category symbol="9" value="Confluence" label="Confluence"/>
-      <category symbol="10" value="Self Intersection" label="Self Intersection"/>
+      <category symbol="0" value="Kreuzung" label="Kreuzung"/>
+      <category symbol="1" value="Pseudonode" label="Pseudonode"/>
+      <category symbol="2" value="Quelle" label="Quelle"/>
+      <category symbol="3" value="Segmentmitte" label="Segmentmitte"/>
+      <category symbol="4" value="Senke" label="Senke"/>
+      <category symbol="5" value="Top" label="Top"/>
+      <category symbol="6" value="Ungetrennt" label="Ungetrennt"/>
+      <category symbol="7" value="Unklare Bifurkation" label="Unklare Bifurkation"/>
+      <category symbol="8" value="Verzweigung" label="Verzweigung"/>
+      <category symbol="9" value="Zusammenfluss" label="Zusammenfluss"/>
+      <category symbol="10" value="Selbstkreuzung" label="Selbstkreuzung"/>
     </categories>
     <symbols>
       <symbol alpha="1" type="marker" name="0">
@@ -46,7 +46,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="1.25"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -139,7 +139,7 @@
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
           <prop k="color" v="25,59,160,0"/>
-          <prop k="color_border" v="0,0,0,255"/>
+          <prop k="color_border" v="98,98,98,255"/>
           <prop k="horizontal_anchor_point" v="1"/>
           <prop k="name" v="rectangle"/>
           <prop k="offset" v="0,0"/>
@@ -148,14 +148,14 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="1.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
           <prop k="color" v="255,0,0,255"/>
-          <prop k="color_border" v="0,0,0,255"/>
+          <prop k="color_border" v="113,113,113,255"/>
           <prop k="horizontal_anchor_point" v="1"/>
           <prop k="name" v="cross"/>
           <prop k="offset" v="0,0"/>
@@ -164,7 +164,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="1.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -182,7 +182,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="2.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -200,7 +200,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="2.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -227,7 +227,7 @@
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
           <prop k="color" v="170,0,255,255"/>
-          <prop k="color_border" v="0,0,0,255"/>
+          <prop k="color_border" v="170,0,255,255"/>
           <prop k="horizontal_anchor_point" v="1"/>
           <prop k="name" v="diamond"/>
           <prop k="offset" v="0,0"/>
@@ -236,7 +236,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="2.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -254,7 +254,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="2.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -262,7 +262,7 @@
       <symbol alpha="1" type="marker" name="9">
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
-          <prop k="color" v="134,141,58,255"/>
+          <prop k="color" v="170,170,0,255"/>
           <prop k="color_border" v="0,0,0,255"/>
           <prop k="horizontal_anchor_point" v="1"/>
           <prop k="name" v="diamond"/>
@@ -272,7 +272,7 @@
           <prop k="outline_width" v="0"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="2.5"/>
           <prop k="size_unit" v="MM"/>
           <prop k="vertical_anchor_point" v="1"/>
         </layer>
@@ -330,7 +330,7 @@
     <property key="labeling/fieldName" value=""/>
     <property key="labeling/fontBold" value="false"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
+    <property key="labeling/fontFamily" value="MS Shell Dlg 2"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontLimitPixelSize" value="false"/>
@@ -359,7 +359,7 @@
     <property key="labeling/minFeatureSize" value="0"/>
     <property key="labeling/multilineAlign" value="0"/>
     <property key="labeling/multilineHeight" value="1"/>
-    <property key="labeling/namedStyle" value="Regular"/>
+    <property key="labeling/namedStyle" value="Normal"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placeDirectionSymbol" value="0"/>
     <property key="labeling/placement" value="0"/>
