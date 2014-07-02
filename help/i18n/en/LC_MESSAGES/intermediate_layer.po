@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013, Linfiniti Consulting CC.
+# This file is distributed under the same license as the StreamFeatureExtractor package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: StreamFeatureExtractor 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-25 16:15+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 7850cf8fcc4a41c88c93af3faaafdadd
+#: ../../source/intermediate_layer.rst:4
+msgid "Intermediate Layer"
+msgstr ""
+
+# 754a5839af314d9d9d0ab3af4ab88aa1
+#: ../../source/intermediate_layer.rst:6
+msgid ""
+"Intermediate layer is a temporary layer that is used for helping the tool to "
+"identify the nodes. You can show it when you run the tool by check the "
+"option in options dialog."
+msgstr ""
+
+# fea31a84ec9d413e9a28e9a8e0f7dfb5
+#: ../../source/intermediate_layer.rst:10
+msgid ""
+"If you open the attribute table of this intermediate layer, you will find "
+"something like this:"
+msgstr ""
+
+# d708651fdfe6421c9ecda900cf18957f
+#: ../../source/intermediate_layer.rst:17
+msgid "How to obtain this intermediate layer:"
+msgstr ""
+
+# cae9f9a3703f443084e35a8f40dcb593
+#: ../../source/intermediate_layer.rst:19
+msgid ""
+"For each line in input layer, the tool will retrieve the first and the last "
+"vertex. The first one will be assigned as upstream node, and the last one "
+"will be assigned as downstream node for *node_type*. We also add the "
+"*line_id* as the attribute of the nodes."
+msgstr ""
+
+# c5c2158862944d038b248e4903cfd451
+#: ../../source/intermediate_layer.rst:24
+msgid ""
+"The tool will find the nearby nodes for each nodes according to their type "
+"and add their id on the attributes (*up_nodes* and *down_nodes*)."
+msgstr ""
+
+# cd7d05a7082a453786252e9badbe4b46
+#: ../../source/intermediate_layer.rst:27
+msgid ""
+"The tool add another attributes, up_num and down_num. Basically, they "
+"represent the number of nearby upstream nodes and downstream nodes "
+"respectively. We will add 1 to *up_num* if the node is upstream_node, this "
+"applies for *down_num*."
+msgstr ""
+
+# 7f28acaf2474432e90bce25397438df0
+#: ../../source/intermediate_layer.rst:32
+msgid ""
+"The tool will populate each node type based on the rules in :doc:`features`."
+msgstr ""

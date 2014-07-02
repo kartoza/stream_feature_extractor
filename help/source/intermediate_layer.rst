@@ -10,7 +10,7 @@ in options dialog.
 If you open the attribute table of this intermediate layer,
 you will find something like this:
 
-   .. image:: /_static/intermediate_layer.png
+   .. image:: /static/intermediate_layer.png
       :align: center
       :scale: 70 %
 

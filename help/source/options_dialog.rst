@@ -12,7 +12,7 @@ You can access this dialog by:
 
 You will get a options dialog windows like this:
 
-   .. image:: /_static/options_dialog.png
+   .. image:: /static/options_dialog.png
       :align: center
 
 Options Dialog's Features
