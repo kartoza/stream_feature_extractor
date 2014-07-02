@@ -22,7 +22,7 @@ Extracting Features
 2. Find Stream Feature Extractor icon in tool bar, click it to extract the
    features from your layer.
 
-   .. image:: /_static/toolbar_icon.png
+   .. image:: /static/toolbar_icon.png
       :align: center
       :scale: 50 %
 
