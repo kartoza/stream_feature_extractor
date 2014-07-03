@@ -113,6 +113,22 @@ debugdeploy: deploy
 	cp -rvf $(PYDEV) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(THIRD_PARTY) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/third_party
 
+# Help prepare target extracts strings for translation for the sphinx help
+prepare_help:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Preparing help for translation."
+	@echo "-----------------------------------"
+	scripts/prepare_documentation_translations.sh
+
+# Help compile target compiles sphinx for the help system
+compile_help:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Compiling help for translation."
+	@echo "-----------------------------------"
+	scripts/compile_documentation.sh
+
 # The dclean target removes compiled python files from plugin directory
 dclean:
 	@echo
