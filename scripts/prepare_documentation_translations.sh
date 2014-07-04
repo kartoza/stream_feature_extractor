@@ -17,7 +17,7 @@ SOURCE=source
 # Name of the dir containing static files
 STATIC=static
 
-LOCALES='en de'
+LOCALES='en de id'
 
 if [ $1 ]; then
   LOCALES=$1
