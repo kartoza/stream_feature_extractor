@@ -96,7 +96,9 @@ do
 
   echo "Building HTML for locale '${LOCALE}'..."
   LOG=/tmp/sphinx$$.log
+
   ${SPHINXBUILD} -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b html source ${HTMLDIR}/${LOCALE} > $LOG
+
   WARNINGS=`cat $LOG | grep warning`
   ERRORS=`cat $LOG | grep ERROR`
   if [[  $WARNINGS ]]

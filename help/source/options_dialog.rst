@@ -1,4 +1,4 @@
-.. _options_dialog:
+.. _options_dialog-label:
 
 Options Dialog
 ==============
