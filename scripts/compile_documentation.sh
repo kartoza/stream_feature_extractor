@@ -145,11 +145,16 @@ do
       exit 1
   fi
 
+  pushd .
+  cd build/latex/$LOCALE
   echo "Building PDF's in " `pwd`
   texi2pdf --quiet StreamFeatureExtractor.tex > /dev/null 2>&1
   texi2pdf --quiet StreamFeatureExtractor.tex > /dev/null 2>&1
   texi2pdf --quiet StreamFeatureExtractor.tex > /dev/null 2>&1
-  cp StreamFeatureExtractor.pdf $CURRENT_DIR
+  cp StreamFeatureExtractor.pdf $CURRENT_DIR/StreamFeatureExtractor-$LOCALE.pdf
+  # Leave latex dir
+  popd
+  # Leave help dir
   popd
 done
 
