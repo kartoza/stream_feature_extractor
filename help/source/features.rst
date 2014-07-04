@@ -1,4 +1,4 @@
-.. _node_documentation:
+.. _features-label:
 
 Feature Definitions
 ===================

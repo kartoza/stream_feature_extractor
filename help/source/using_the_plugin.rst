@@ -1,4 +1,4 @@
-.. _using_the_plugin:
+.. _using_the_plugin-label:
 
 Using The Plugin
 ================
