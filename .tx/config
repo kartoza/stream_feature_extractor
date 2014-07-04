@@ -6,3 +6,32 @@ file_filter = i18n/<lang>.ts
 source_file = i18n/en.ts
 source_lang = en
 
+[stream-feature-extractor.featurespo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/features.po
+source_file = help/i18n/en/LC_MESSAGES/features.po
+source_lang = en
+
+[stream-feature-extractor.indexpo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/index.po
+source_file = help/i18n/en/LC_MESSAGES/index.po
+source_lang = en
+
+[stream-feature-extractor.indexpo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/index.po
+source_file = help/i18n/en/LC_MESSAGES/index.po
+source_lang = en
+
+[stream-feature-extractor.intermediate_layerpo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/intermediate_layer.po
+source_file = help/i18n/en/LC_MESSAGES/intermediate_layer.po
+source_lang = en
+
+[stream-feature-extractor.options_dialogpo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/options_dialog.po
+source_file = help/i18n/en/LC_MESSAGES/options_dialog.po
+source_lang = en
+
+[stream-feature-extractor.using_the_pluginpo]
+file_filter = help/i18n/<lang>/LC_MESSAGES/using_the_plugin.po
+source_file = help/i18n/en/LC_MESSAGES/using_the_plugin.po
+source_lang = en
