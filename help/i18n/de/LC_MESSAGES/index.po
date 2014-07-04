@@ -1,26 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2013, Linfiniti Consulting CC.
 # This file is distributed under the same license as the StreamFeatureExtractor package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Hinrich Paulsen <paulsen@terrestris.de>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: StreamFeatureExtractor 0.1\n"
+"Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-25 16:15+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2014-07-02 13:21+0000\n"
+"Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-extractor/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # 7c3850527f8e4bc281194a7791334731
 #: ../../source/index.rst:3
 msgid "Stream Feature Extractor documentation"
-msgstr ""
+msgstr "Dokumentation des Stream Feature Extractor"
 
 # 1a11738b0dc94685ac3c0c7a23d9201e
 #: ../../source/index.rst:5
@@ -29,7 +30,7 @@ msgid ""
 "from a stream network. The easiest way to install this plugin is to use the "
 "QGIS plugin manager to install it (just search for 'stream' in the plugin "
 "manager)."
-msgstr ""
+msgstr "Ein QGIS-Plugin, das Stromeigenschaften (Quellen, Senken, Zusammenflüsse etc.) aus einem Gewässernetz extrahiert. Die einfachste Art dieses Plugin zu installieren ist den QGIS-Plugin Manager zu verwenden (einfach nach 'stream' im Plugin Manager suchen)."
 
 # d5196b45043f4b3b852533dcd6f116c9
 #: ../../source/index.rst:10
@@ -37,80 +38,80 @@ msgid ""
 "This plugin is Free and Open Source Software and is released under the GPL "
 "V2. See the LICENSE file included with the plugin (and in this repository) "
 "for more information about this license."
-msgstr ""
+msgstr "Dieses Plugin ist Freie und Open Source Software und wird unter der GPL V2 zur Verfügung gestellt. Konsultieren Sie die dem Plugin hinzugefügte LICENSE Datei (und in diesem Repository) für weitere Informationen zu dieser Lizenz."
 
 # a4f132bfb76a43fbbab0fc1bd82a9f59
 #: ../../source/index.rst:14
 msgid "Contents:"
-msgstr ""
+msgstr "Inhalte:"
 
 # a91434df82824952bbac5f215a6761e2
 #: ../../source/index.rst:26
 msgid "Contributing"
-msgstr ""
+msgstr "Beitragen"
 
 # 8282004888854bbc97f403a01f6fd83f
 #: ../../source/index.rst:28
 msgid ""
-"If you would like to contribute an enhancement, bug fix, translation etc. to "
-"this plugin, please make a fork of the repository on github at:"
-msgstr ""
+"If you would like to contribute an enhancement, bug fix, translation etc. to"
+" this plugin, please make a fork of the repository on github at:"
+msgstr "Wenn Sie eine Verbesserung, eine Fehlerbehebung, eine Übersetzung etc. zu diesem Plugin beitragen möchten, dann legen Sie sich eine Arbeitskopie dieses Repositories auf github an:"
 
 # 9562991e036f49889a12172e33f5f929
 #: ../../source/index.rst:31
 msgid "http://github.com/timlinux/stream-feature-extractor"
-msgstr ""
+msgstr "http://github.com/timlinux/stream-feature-extractor"
 
 # cc910f1c56394550b20c561ddb68c3f6
 #: ../../source/index.rst:33
 msgid ""
 "Then make your improvements and make a github pull request. Please follow "
 "the existing coding conventions if you want us to include your changes."
-msgstr ""
+msgstr "Erstellen Sie Ihre Verbesserungen und lösen anschließend einen pull-request aus. Bitte halten Sie sich an die Code-Konventionen, wenn Sie möchten, dass wir Ihre Verbesserungen in das Plugin aufnehmen."
 
 # 22ab5d84d58a448e97b79c034634913e
 #: ../../source/index.rst:37
 msgid "This plugin was implemented by:"
-msgstr ""
+msgstr "Dieses Plugin wurde implementiert von:"
 
 # 181635c6d69942639957b72a5763f0d6
 #: ../../source/index.rst:39
 msgid "**Linfiniti Consulting CC.** http://linfiniti.com"
-msgstr ""
+msgstr "**Linfiniti Consulting CC.** http://linfiniti.com"
 
 # cdc3f19d87524257b4704d2365435137
 #: ../../source/index.rst:42
 msgid "**Tim Sutton** tim@linfiniti.com"
-msgstr ""
+msgstr "**Tim Sutton** tim@linfiniti.com"
 
 # 3b1cfc522f754c4e8621c334a10617bc
 #: ../../source/index.rst:45
 msgid "and"
-msgstr ""
+msgstr "und"
 
 # 8f032853c1e44acebe0632070d2d13cb
 #: ../../source/index.rst:47
 msgid "**Ismail Sunni** ismail@linfiniti.com"
-msgstr ""
+msgstr "**Ismail Sunni** ismail@linfiniti.com"
 
 # 36b37054d5ee48e2b317592f0412df2c
 #: ../../source/index.rst:52
 msgid "Under subcontract to:"
-msgstr ""
+msgstr "Unterauftragnehmer von:"
 
 # 9411a1d042b044878bb01d065662440b
 #: ../../source/index.rst:54
 msgid "**Terrestris** http://www.terrestris.de/"
-msgstr ""
+msgstr "**terrestris** http://www.terrestris.de/"
 
 # 16f737b512e54770b2e0ae4ca1f0cdb2
 #: ../../source/index.rst:59
 msgid "This plugin was sponsored by:"
-msgstr ""
+msgstr "Dieses Plugin wurde finanziert von:"
 
 # 331f2a4a7b7046f189505f130d948d2d
 #: ../../source/index.rst:61
 msgid ""
-"**Landesbetrieb fuer Hochwasserschutz und Wasserwirtschaft Sachsen-Anhalt,** "
-"Otto-von-Guericke-Strasse 5, 39104 Magdeburg, Germany."
-msgstr ""
+"**Landesbetrieb fuer Hochwasserschutz und Wasserwirtschaft Sachsen-Anhalt,**"
+" Otto-von-Guericke-Strasse 5, 39104 Magdeburg, Germany."
+msgstr "**Landesbetrieb für Hochwasserschutz und Wasserwirtschaft Sachsen-Anhalt,** Otto-von-Guericke-Strasse 5, 39104 Magdeburg"
