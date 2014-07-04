@@ -327,10 +327,19 @@ class StreamFeatureExtractor:
             level=QgsMessageBar.INFO,
             duration=10)
 
-    @staticmethod
-    def show_help():
+    def show_help(self):
         """Display application help to the user."""
-        help_file = 'file:///%s/help/index.html' % os.path.dirname(__file__)
+        locale_path = os.path.join(
+            self.plugin_dir,
+            'help',
+            '{}'.format(self.locale))
+
+        if os.path.exists(locale_path):
+            help_file = 'file:///%s/help/%s/index.html' % os.path.dirname(
+                __file__, self.locale)
+        else:
+            help_file = 'file:///%s/help/en/index.html' % os.path.dirname(
+                __file__)
         LOGGER.debug('Opening this help file:\n%s' % help_file)
         results_dialog = HelpDialog()
         results_dialog.web_view.load(QUrl(help_file))
