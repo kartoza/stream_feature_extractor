@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2013, Linfiniti Consulting CC.
 # This file is distributed under the same license as the StreamFeatureExtractor package.
-# 
+#
 # Translators:
 # Hinrich Paulsen <paulsen@terrestris.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 16:15+0800\n"
+"POT-Creation-Date: 2014-07-05 13:00\n"
 "PO-Revision-Date: 2014-07-02 13:11+0000\n"
 "Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-extractor/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
+"extractor/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # e9d5dad59ea3477aa93d2f6db1c6e039
@@ -26,9 +27,11 @@ msgstr "Eigenschaftsdefinitionen"
 # 1a58a77378354cf09a03a6cc99a686f7
 #: ../../source/features.rst:6
 msgid ""
-"This document describes the logic used for determining what type (if any) of"
-" feature each node represents."
-msgstr "Dieses Dokument beschreibt die Logik,  die bei der Bestimmung der Art der Knoteneigenschaft (wenn überhaupt) verwendet wird."
+"This document describes the logic used for determining what type (if any) of "
+"feature each node represents."
+msgstr ""
+"Dieses Dokument beschreibt die Logik,  die bei der Bestimmung der Art der "
+"Knoteneigenschaft (wenn überhaupt) verwendet wird."
 
 # b7794529734642e68b7c260c1764c0f3
 #: ../../source/features.rst:10
@@ -48,9 +51,12 @@ msgstr "2. Pseudoknoten"
 # 7680a9b669a04093847f58fd41702c23
 #: ../../source/features.rst:20
 msgid ""
-"A node that has one upstream and one downstream node. The node is superflous"
-" as it can be represented by one line instead of two."
-msgstr "Ein Knoten, der einen stromaufwärts und einen stromabwärts gelegenen Knoten besitzt. Der Knoten ist überflüssig, da er durch eine Linie anstatt zwei Linien repräsentiert werden kann."
+"A node that has one upstream and one downstream node. The node is superflous "
+"as it can be represented by one line instead of two."
+msgstr ""
+"Ein Knoten, der einen stromaufwärts und einen stromabwärts gelegenen Knoten "
+"besitzt. Der Knoten ist überflüssig, da er durch eine Linie anstatt zwei "
+"Linien repräsentiert werden kann."
 
 # a6a53e20cb764d2e96339022e883980e
 #: ../../source/features.rst:27
@@ -60,7 +66,9 @@ msgstr "3. Quelle"
 # 30ceef70973b4ed794412b14993b38b0
 #: ../../source/features.rst:29
 msgid "A node that has 1 upstream node and 0 downstream nodes."
-msgstr "Ein Knoten, der 1 flussaufwärts gelegenen Knoten und 0 flussabwärts gelegene Knoten besitzt."
+msgstr ""
+"Ein Knoten, der 1 flussaufwärts gelegenen Knoten und 0 flussabwärts gelegene "
+"Knoten besitzt."
 
 # 6112207d860f49bb966950b6619adcc7
 #: ../../source/features.rst:35
@@ -70,7 +78,9 @@ msgstr "4. Senke"
 # 8b60536c6e1a4305a48bbce88c4dc388
 #: ../../source/features.rst:37
 msgid "A node that has no upstream node and 1 or more downstream nodes."
-msgstr "Ein Knoten, der keine stromaufwärts gelegene Knoten, dafür aber 1 oder mehr stromabwärts gelegene Knoten besitzt."
+msgstr ""
+"Ein Knoten, der keine stromaufwärts gelegene Knoten, dafür aber 1 oder mehr "
+"stromabwärts gelegene Knoten besitzt."
 
 # 5b60f123ce8044f48ae5d4524d632eaf
 #: ../../source/features.rst:43
@@ -80,7 +90,9 @@ msgstr "5. Top"
 # 1957320722a24f82a06a0db1980bed32
 #: ../../source/features.rst:45
 msgid "A node that has more than one upstream node and 0 downstream nodes."
-msgstr "Ein Knoten, der mehr als einen stromaufwärts gelegenen Knoten besitzt und 0 stromabwärts gelegene Knoten."
+msgstr ""
+"Ein Knoten, der mehr als einen stromaufwärts gelegenen Knoten besitzt und 0 "
+"stromabwärts gelegene Knoten."
 
 # 8d239269b4ea43178bdd727e4c7f8fe4
 #: ../../source/features.rst:51
@@ -91,9 +103,13 @@ msgstr "6. Ungetrennter"
 #: ../../source/features.rst:53
 msgid ""
 "Only 1 upstream node or only 1 downstream node and intersects with one or "
-"more other lines. Note that in the lines below, there is only one node under"
-" the star, the other line has no node at the position of the star."
-msgstr "Nur 1 stromaufwärts gelegener Knoten oder nur 1 stromabwärts gelegener Knoten und wird von einer oder mehreren Linien gekreuzt. Zur Beachtung: In den untenstehenden Linien existiert nur ein Knoten unterhalb des Sterns, die andere Linie weist keinen Knoten an der Position des Sterns auf."
+"more other lines. Note that in the lines below, there is only one node under "
+"the star, the other line has no node at the position of the star."
+msgstr ""
+"Nur 1 stromaufwärts gelegener Knoten oder nur 1 stromabwärts gelegener "
+"Knoten und wird von einer oder mehreren Linien gekreuzt. Zur Beachtung: In "
+"den untenstehenden Linien existiert nur ein Knoten unterhalb des Sterns, die "
+"andere Linie weist keinen Knoten an der Position des Sterns auf."
 
 # 03687e21f8ef487f80dd839c8432382c
 #: ../../source/features.rst:62
@@ -105,7 +121,10 @@ msgstr "7. Unklare Bifurkation"
 msgid ""
 "It has more than one upstream and more than one downstream node, but the "
 "number of upstream and downstream nodes are same."
-msgstr "Es existieren mehr als ein stromaufwärts und mehr als ein stromabwärts gelegener Knoten, aber die Anzahl der stromaufwärts und stromabwärts gelegenen Knoten ist gleich."
+msgstr ""
+"Es existieren mehr als ein stromaufwärts und mehr als ein stromabwärts "
+"gelegener Knoten, aber die Anzahl der stromaufwärts und stromabwärts "
+"gelegenen Knoten ist gleich."
 
 # a6f9335b6bcd4bd3a3aa71bf2244fcec
 #: ../../source/features.rst:71
@@ -117,7 +136,9 @@ msgstr "8. Verzweigung"
 msgid ""
 "It has more upstream nodes than downstream nodes. The minimum number of "
 "downstream nodes is one."
-msgstr "Es gibt mehr stromaufwärts als stromabwärts gelegene Knoten. Die minimale Anzahl der stromabwärts gelegenen Knoten beträgt 1."
+msgstr ""
+"Es gibt mehr stromaufwärts als stromabwärts gelegene Knoten. Die minimale "
+"Anzahl der stromabwärts gelegenen Knoten beträgt 1."
 
 # 9a887080c1c64abeacec091705ea0e1e
 #: ../../source/features.rst:80
@@ -129,7 +150,9 @@ msgstr "9. Zusammenfluss"
 msgid ""
 "It has more downstream nodes than upstream nodes. The minimum number of "
 "upstream nodes is one."
-msgstr "Es hat mehr stromabwärts als stromaufwärts gelegene Knoten. Die minimale Anzahl der stromaufwärts gelegenen Knoten beträgt 1."
+msgstr ""
+"Es hat mehr stromabwärts als stromaufwärts gelegene Knoten. Die minimale "
+"Anzahl der stromaufwärts gelegenen Knoten beträgt 1."
 
 # 2604599fc3814f9db197559c550fb0a2
 #: ../../source/features.rst:89
@@ -141,7 +164,9 @@ msgstr "10. Segmentmitte"
 msgid ""
 "Segment center is the linear center of a line. The tool finds the point in "
 "the line that has distance half of the length of the line."
-msgstr "Die Segmentmitte ist das lineare Zentrum einer Linie. Das Werkzeug findet den Punkt auf der Linie, der der halben Linienlänge entspricht."
+msgstr ""
+"Die Segmentmitte ist das lineare Zentrum einer Linie. Das Werkzeug findet "
+"den Punkt auf der Linie, der der halben Linienlänge entspricht."
 
 # bfec135c66be4db9a14725dfdcfd5937
 #: ../../source/features.rst:98
@@ -151,4 +176,6 @@ msgstr "11. Selbstkreuzung"
 # 96cfe918a8dc4e38956ecd9a258c26c1
 #: ../../source/features.rst:100
 msgid "Same with intersection, but this time the line intersects with itself."
-msgstr "Das gleiche wie eine Kreuzung, allerdings kreuzt sich die Linie in diesem Fall selbst."
+msgstr ""
+"Das gleiche wie eine Kreuzung, allerdings kreuzt sich die Linie in diesem "
+"Fall selbst."

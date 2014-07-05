@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2013, Linfiniti Consulting CC.
 # This file is distributed under the same license as the StreamFeatureExtractor package.
-# 
+#
 # Translators:
 # Hinrich Paulsen <paulsen@terrestris.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 16:15+0800\n"
+"POT-Creation-Date: 2014-07-05 13:00\n"
 "PO-Revision-Date: 2014-07-03 08:41+0000\n"
 "Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-extractor/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
+"extractor/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # 7850cf8fcc4a41c88c93af3faaafdadd
@@ -26,17 +27,22 @@ msgstr "Zwischenlayer"
 # 754a5839af314d9d9d0ab3af4ab88aa1
 #: ../../source/intermediate_layer.rst:6
 msgid ""
-"Intermediate layer is a temporary layer that is used for helping the tool to"
-" identify the nodes. You can show it when you run the tool by check the "
+"Intermediate layer is a temporary layer that is used for helping the tool to "
+"identify the nodes. You can show it when you run the tool by check the "
 "option in options dialog."
-msgstr "Ein Zwischenlayer ist ein temporärer Layer, der dem Werkzeug hilft die Knoten zu identifizieren. Sie können ihn sich anzeigen lassen, wenn Sie das Werkzeug ausführen, indem Sie die Checkbox im Optionen-Dialog anhaken."
+msgstr ""
+"Ein Zwischenlayer ist ein temporärer Layer, der dem Werkzeug hilft die "
+"Knoten zu identifizieren. Sie können ihn sich anzeigen lassen, wenn Sie das "
+"Werkzeug ausführen, indem Sie die Checkbox im Optionen-Dialog anhaken."
 
 # fea31a84ec9d413e9a28e9a8e0f7dfb5
 #: ../../source/intermediate_layer.rst:10
 msgid ""
 "If you open the attribute table of this intermediate layer, you will find "
 "something like this:"
-msgstr "Wenn Sie die Attributtabelle dieses Zwischenlayers öffnen, werden Sie in etwa das Folgende sehen:"
+msgstr ""
+"Wenn Sie die Attributtabelle dieses Zwischenlayers öffnen, werden Sie in "
+"etwa das Folgende sehen:"
 
 # d708651fdfe6421c9ecda900cf18957f
 #: ../../source/intermediate_layer.rst:17
@@ -50,14 +56,21 @@ msgid ""
 "vertex. The first one will be assigned as upstream node, and the last one "
 "will be assigned as downstream node for *node_type*. We also add the "
 "*line_id* as the attribute of the nodes."
-msgstr "Für jede Linie im Eingangslayer wird das Werkzeug den ersten und den letzten Knoten ermitteln. Der erste Knoten wird als stromaufwärts gelegener Knoten deklariert und der letzte Knoten als stromabwärts gelegener Knoten für *Knotenart*. Wir fügen auch die *line_id* als Attribut des Knotens hinzu."
+msgstr ""
+"Für jede Linie im Eingangslayer wird das Werkzeug den ersten und den letzten "
+"Knoten ermitteln. Der erste Knoten wird als stromaufwärts gelegener Knoten "
+"deklariert und der letzte Knoten als stromabwärts gelegener Knoten für "
+"*Knotenart*. Wir fügen auch die *line_id* als Attribut des Knotens hinzu."
 
 # c5c2158862944d038b248e4903cfd451
 #: ../../source/intermediate_layer.rst:24
 msgid ""
 "The tool will find the nearby nodes for each nodes according to their type "
 "and add their id on the attributes (*up_nodes* and *down_nodes*)."
-msgstr "Das Werkzeug findet die einem Knoten nächstgelegenen weiteren Knoten gemäß ihrer Art für jeden Knoten und fügt deren ID der Attributtabelle hinzu (*up_nodes* und *down_nodes*)"
+msgstr ""
+"Das Werkzeug findet die einem Knoten nächstgelegenen weiteren Knoten gemäß "
+"ihrer Art für jeden Knoten und fügt deren ID der Attributtabelle hinzu "
+"(*up_nodes* und *down_nodes*)"
 
 # cd7d05a7082a453786252e9badbe4b46
 #: ../../source/intermediate_layer.rst:27
@@ -66,10 +79,18 @@ msgid ""
 "represent the number of nearby upstream nodes and downstream nodes "
 "respectively. We will add 1 to *up_num* if the node is upstream_node, this "
 "applies for *down_num*."
-msgstr "Das Werkzeug fügt weitere Attribute, 'up_num' und 'down_num', der Attributtabelle hinzu. Im Prinzip repräsentieren diese jeweils die Anzahl der nächstgelegenen stromaufwärts und stromabwärts gelegenen Knoten. Wir addieren 1 zu *up_num* wenn der Knoten stromaufwärts gelegen ist und addieren 1 zu *down_num*, wenn der Knoten stromabwärts gelegen ist."
+msgstr ""
+"Das Werkzeug fügt weitere Attribute, 'up_num' und 'down_num', der "
+"Attributtabelle hinzu. Im Prinzip repräsentieren diese jeweils die Anzahl "
+"der nächstgelegenen stromaufwärts und stromabwärts gelegenen Knoten. Wir "
+"addieren 1 zu *up_num* wenn der Knoten stromaufwärts gelegen ist und "
+"addieren 1 zu *down_num*, wenn der Knoten stromabwärts gelegen ist."
 
 # 7f28acaf2474432e90bce25397438df0
 #: ../../source/intermediate_layer.rst:32
+#, fuzzy
 msgid ""
-"The tool will populate each node type based on the rules in :doc:`features`."
-msgstr "Das Werkzeug wird jedem Knoten Eigenschaften zuweisen gemäß den Regeln in :doc:'features'."
+"The tool will populate each node type based on the rules in :doc:`/features`."
+msgstr ""
+"Das Werkzeug wird jedem Knoten Eigenschaften zuweisen gemäß den Regeln in :"
+"doc:'features'."

@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2013, Linfiniti Consulting CC.
 # This file is distributed under the same license as the StreamFeatureExtractor package.
-# 
+#
 # Translators:
 # Hinrich Paulsen <paulsen@terrestris.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 16:15+0800\n"
+"POT-Creation-Date: 2014-07-05 13:00\n"
 "PO-Revision-Date: 2014-07-02 12:31+0000\n"
 "Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-extractor/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
+"extractor/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # 8d2088b22ea545d598f70abd565b5ccd
@@ -56,10 +57,13 @@ msgstr "Schwellwert setzen"
 # d8f64bb0512b47039461c084e1b75e7d
 #: ../../source/options_dialog.rst:23
 msgid ""
-"User can set the search distance that will be used to determine of nodes are"
-" converged or not. The distance is calculated in map units of your stream "
+"User can set the search distance that will be used to determine of nodes are "
+"converged or not. The distance is calculated in map units of your stream "
 "layer."
-msgstr "Der Nutzer kann die Suchdistanz bestimmen, ab der Knoten zusammengeführt werden oder nicht. Die Entfernung wird in Karteneinheiten des Gewässer-Layers berechnet."
+msgstr ""
+"Der Nutzer kann die Suchdistanz bestimmen, ab der Knoten zusammengeführt "
+"werden oder nicht. Die Entfernung wird in Karteneinheiten des Gewässer-"
+"Layers berechnet."
 
 # 98573d3f9010417cb1a79b3059b93e35
 #: ../../source/options_dialog.rst:27
@@ -71,7 +75,9 @@ msgstr "Zeige Layer mit Zwischenknotenanzahl"
 msgid ""
 "If checked, an intermediate layer that is used to extract the features is "
 "loaded to QGIS."
-msgstr "Wenn angehakt, wird ein Zwischenlayer zur Extraktion von Eigenschaften in QGIS geladen."
+msgstr ""
+"Wenn angehakt, wird ein Zwischenlayer zur Extraktion von Eigenschaften in "
+"QGIS geladen."
 
 # 05fb9da0b8714118bd117866883a5c79
 #: ../../source/options_dialog.rst:32
@@ -83,4 +89,6 @@ msgstr "Melde Fehler an entfernten Server."
 msgid ""
 "If checked, the Tool will submit error messages to remote server for "
 "debugging and fixing the errors."
-msgstr "Wenn angehakt, wird das Werkzeug Fehlermeldungen an einen entfernten Server zwecks Debugging und Behebung des Fehlers melden."
+msgstr ""
+"Wenn angehakt, wird das Werkzeug Fehlermeldungen an einen entfernten Server "
+"zwecks Debugging und Behebung des Fehlers melden."
