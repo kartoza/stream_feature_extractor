@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: StreamFeatureExtractor 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 16:15+0800\n"
+"POT-Creation-Date: 2014-07-05 13:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,8 +67,8 @@ msgid ""
 "applies for *down_num*."
 msgstr ""
 
-# 7f28acaf2474432e90bce25397438df0
+# 0c35db77d2c247b3a1db224aee60d6c0
 #: ../../source/intermediate_layer.rst:32
 msgid ""
-"The tool will populate each node type based on the rules in :doc:`features`."
+"The tool will populate each node type based on the rules in :doc:`/features`."
 msgstr ""

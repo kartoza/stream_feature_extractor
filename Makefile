@@ -52,7 +52,7 @@ PYDEV = pydev
 # Normally you would not need to edit below here
 #################################################
 
-HELP = help/build/html
+HELP = help/output/html
 
 THIRD_PARTY = third_party
 

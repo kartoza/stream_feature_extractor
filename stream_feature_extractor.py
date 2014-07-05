@@ -335,8 +335,8 @@ class StreamFeatureExtractor:
             '{}'.format(self.locale))
 
         if os.path.exists(locale_path):
-            help_file = 'file:///%s/help/%s/index.html' % os.path.dirname(
-                __file__, self.locale)
+            help_file = 'file:///%s/help/%s/index.html' % (os.path.dirname(
+                __file__), self.locale)
         else:
             help_file = 'file:///%s/help/en/index.html' % os.path.dirname(
                 __file__)
