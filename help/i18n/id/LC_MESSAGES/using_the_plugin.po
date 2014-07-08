@@ -3,43 +3,40 @@
 # This file is distributed under the same license as the StreamFeatureExtractor package.
 #
 # Translators:
-# Hinrich Paulsen <paulsen@terrestris.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-08 10:09\n"
-"PO-Revision-Date: 2014-07-02 13:51+0000\n"
-"Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
-"extractor/language/de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2014-07-02 11:46+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/stream-"
+"feature-extractor/language/id/)\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 1e1bf09983854c328b5a22059bd64570
 #: ../../source/using_the_plugin.rst:4
 msgid "Using The Plugin"
-msgstr "Benutzung des Plugin"
+msgstr ""
 
 # 731e3f8450934b73bfadf60613fc99cc
 #: ../../source/using_the_plugin.rst:8
 msgid "Installation"
-msgstr "Installation"
+msgstr ""
 
 # 59b0d63299c24b8295d3c2657bafd7de
 #: ../../source/using_the_plugin.rst:9
 msgid "To install Stream Feature Extractor, use the plugin manager in QGIS:"
 msgstr ""
-"Um den Stream Feature Extractor zu installieren, benutzen Sie den Plugin "
-"Manager von QGIS:"
 
 # 278134df6c8a429c9ed1062e1c9e1b6b
 #: ../../source/using_the_plugin.rst:11
 msgid "`Plugins --> Fetch Python Plugins`"
-msgstr "`Plugins --> Hole Python Plugins`"
+msgstr ""
 
 # c5211c969e0b43cb9e9d9e8aa90bc85d
 #: ../../source/using_the_plugin.rst:13
@@ -47,19 +44,16 @@ msgid ""
 "Search for 'Stream Feature Extractor', select it and click the install "
 "button. The plugin will now be added to your plugins menu."
 msgstr ""
-"Suchen Sie nach 'Stream Feature Extractor', selektieren sie es und klicken "
-"Sie auf den Installationsknopf. Das Plugin wird jetzt Ihrem Plugin-Menü "
-"hinzugefügt."
 
 # 3401fdea60cf4caca367ed1a2afde02d
 #: ../../source/using_the_plugin.rst:18
 msgid "Extracting Features"
-msgstr "Eigenschaften extrahieren"
+msgstr ""
 
 # af7a97f463104eab8ef67d100e790583
 #: ../../source/using_the_plugin.rst:20
 msgid "Load a vector line layer to QGIS and select it."
-msgstr "Laden Sie einen Vektor Linien-Layer in QGIS und selektieren Sie ihn."
+msgstr ""
 
 # 815d09e2066f46ada3b9e444d717023e
 #: ../../source/using_the_plugin.rst:22
@@ -67,13 +61,11 @@ msgid ""
 "Find Stream Feature Extractor icon in tool bar, click it to extract the "
 "features from your layer."
 msgstr ""
-"Finden Sie das Icon für Stream Feature Extractor in Ihrer Werkzeugleiste und "
-"klicken Sie es, um die Eigenschaften aus Ihrem Layer zu extrahieren."
 
 # 83eeee33de7a47cca577f5f4a816ffa7
 #: ../../source/using_the_plugin.rst:29
 msgid "You can also do it from menu bar:"
-msgstr "Sie können es auch über das Menü ansteuern:"
+msgstr ""
 
 # a14dff2a81b94394af60713153c419b3
 #: ../../source/using_the_plugin.rst:31
@@ -81,5 +73,3 @@ msgid ""
 "`Vector --> Stream feature extractor --> Extract stream features from "
 "current layer.`"
 msgstr ""
-"'Vektor --> Stream Feature Extractor --> Extrahiere Gewässereigenschaften "
-"aus dem aktuellen Layer'"

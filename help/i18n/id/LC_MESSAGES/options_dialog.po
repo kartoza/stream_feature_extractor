@@ -3,56 +3,56 @@
 # This file is distributed under the same license as the StreamFeatureExtractor package.
 #
 # Translators:
-# Hinrich Paulsen <paulsen@terrestris.de>, 2014
+# Ismail Sunni, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-08 10:09\n"
-"PO-Revision-Date: 2014-07-02 12:31+0000\n"
-"Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
-"extractor/language/de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2014-07-07 15:32+0000\n"
+"Last-Translator: Ismail Sunni\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/stream-"
+"feature-extractor/language/id/)\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 8d2088b22ea545d598f70abd565b5ccd
 #: ../../source/options_dialog.rst:4
 msgid "Options Dialog"
-msgstr "Optionen-Dialog"
+msgstr "Dialog Pilihan"
 
 # ec5f45c496164bbfbfb9f3085402cd21
 #: ../../source/options_dialog.rst:7
 msgid "Accessing Options Dialog"
-msgstr "Zugang zum Optionen-Dialog"
+msgstr "Membuka Dialog Pilihan"
 
 # daef881961b149348315d4ecbd6c60c0
 #: ../../source/options_dialog.rst:9
 msgid "You can access this dialog by:"
-msgstr "Sie haben Zugang zu diesem Dialog über:"
+msgstr "Anda dapat membuka dialog ini dengan:"
 
 # ff2c6433ee6947cb85688335d435790b
 #: ../../source/options_dialog.rst:11
 msgid "`Vector --> Stream feature extractor --> Options ...`"
-msgstr "Vektor --> Stream feature extractor --> Optionen ..."
+msgstr "`Vector --> Stream feature extractor --> Pilihan ...`"
 
 # f0c1319d4ae14a6ea9c3cdc3bad7fd58
 #: ../../source/options_dialog.rst:13
 msgid "You will get a options dialog windows like this:"
-msgstr "Sie erhalten ein Optionen-Dialog Fenster wie folgt:"
+msgstr "Anda aka mendapatkan jendela dialog pilihan seperti ini:"
 
 # ee0a048979444e6b9cd4b881150bb579
 #: ../../source/options_dialog.rst:19
 msgid "Options Dialog's Features"
-msgstr "Optionen-Dialog Eigenschaften"
+msgstr "Dialog Pilihan Fitur"
 
 # 3dbf7e77944e4fbeb5ef6f7ebc75b34c
 #: ../../source/options_dialog.rst:21
 msgid "Set threshold"
-msgstr "Schwellwert setzen"
+msgstr "Atur batas"
 
 # d8f64bb0512b47039461c084e1b75e7d
 #: ../../source/options_dialog.rst:23
@@ -61,14 +61,11 @@ msgid ""
 "converged or not. The distance is calculated in map units of your stream "
 "layer."
 msgstr ""
-"Der Nutzer kann die Suchdistanz bestimmen, ab der Knoten zusammengeführt "
-"werden oder nicht. Die Entfernung wird in Karteneinheiten des Gewässer-"
-"Layers berechnet."
 
 # 98573d3f9010417cb1a79b3059b93e35
 #: ../../source/options_dialog.rst:27
 msgid "Show intermediate node count layer"
-msgstr "Zeige Layer mit Zwischenknotenanzahl"
+msgstr "Perlihatkan lapisan penghitung simpul menengah"
 
 # 2fac16fa172c4e599e6e4058657cc859
 #: ../../source/options_dialog.rst:29
@@ -76,13 +73,11 @@ msgid ""
 "If checked, an intermediate layer that is used to extract the features is "
 "loaded to QGIS."
 msgstr ""
-"Wenn angehakt, wird ein Zwischenlayer zur Extraktion von Eigenschaften in "
-"QGIS geladen."
 
 # 05fb9da0b8714118bd117866883a5c79
 #: ../../source/options_dialog.rst:32
 msgid "Submit errors to remote server."
-msgstr "Melde Fehler an entfernten Server."
+msgstr ""
 
 # ad0a4de383af4dfdbd6204c9db8cd820
 #: ../../source/options_dialog.rst:34
@@ -90,5 +85,3 @@ msgid ""
 "If checked, the Tool will submit error messages to remote server for "
 "debugging and fixing the errors."
 msgstr ""
-"Wenn angehakt, wird das Werkzeug Fehlermeldungen an einen entfernten Server "
-"zwecks Debugging und Behebung des Fehlers melden."
