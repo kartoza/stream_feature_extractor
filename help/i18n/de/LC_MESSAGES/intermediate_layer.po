@@ -4,13 +4,14 @@
 #
 # Translators:
 # Hinrich Paulsen <paulsen@terrestris.de>, 2014
+# Ismail Sunni, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Stream Feature Extractor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-05 13:22\n"
-"PO-Revision-Date: 2014-07-03 08:41+0000\n"
-"Last-Translator: Hinrich Paulsen <paulsen@terrestris.de>\n"
+"POT-Creation-Date: 2014-07-08 10:09\n"
+"PO-Revision-Date: 2014-07-08 03:08+0000\n"
+"Last-Translator: Ismail Sunni\n"
 "Language-Team: German (http://www.transifex.com/projects/p/stream-feature-"
 "extractor/language/de/)\n"
 "Language: de\n"
@@ -86,11 +87,10 @@ msgstr ""
 "addieren 1 zu *up_num* wenn der Knoten stromaufwärts gelegen ist und "
 "addieren 1 zu *down_num*, wenn der Knoten stromabwärts gelegen ist."
 
-# 7f28acaf2474432e90bce25397438df0
+# 0c35db77d2c247b3a1db224aee60d6c0
 #: ../../source/intermediate_layer.rst:32
-#, fuzzy
 msgid ""
 "The tool will populate each node type based on the rules in :doc:`/features`."
 msgstr ""
 "Das Werkzeug wird jedem Knoten Eigenschaften zuweisen gemäß den Regeln in :"
-"doc:'features'."
+"doc:`/features`."

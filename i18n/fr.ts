@@ -2,102 +2,102 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="stream_utilities.py" line="168"/>
+        <location filename="stream_utilities.py" line="171"/>
         <source>Stream features</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="893"/>
+        <location filename="stream_utilities.py" line="896"/>
         <source>Intermediate layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="903"/>
+        <location filename="stream_utilities.py" line="906"/>
         <source>Finding wells...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="904"/>
+        <location filename="stream_utilities.py" line="907"/>
         <source>Finding sinks...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="905"/>
+        <location filename="stream_utilities.py" line="908"/>
         <source>Finding branches...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="906"/>
+        <location filename="stream_utilities.py" line="909"/>
         <source>Finding confluences...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="907"/>
+        <location filename="stream_utilities.py" line="910"/>
         <source>Finding pseudo nodes...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="908"/>
+        <location filename="stream_utilities.py" line="911"/>
         <source>Finding watersheds...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="909"/>
+        <location filename="stream_utilities.py" line="912"/>
         <source>Finding unclear bifurcations...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1136"/>
+        <location filename="stream_utilities.py" line="1139"/>
         <source>Stream Features</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="969"/>
+        <location filename="stream_utilities.py" line="972"/>
         <source>Well</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="970"/>
+        <location filename="stream_utilities.py" line="973"/>
         <source>Sink</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="971"/>
+        <location filename="stream_utilities.py" line="974"/>
         <source>Branch</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="972"/>
+        <location filename="stream_utilities.py" line="975"/>
         <source>Confluence</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="973"/>
+        <location filename="stream_utilities.py" line="976"/>
         <source>Pseudo node</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="974"/>
+        <location filename="stream_utilities.py" line="977"/>
         <source>Watershed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="975"/>
+        <location filename="stream_utilities.py" line="978"/>
         <source>Unclear Bifurcation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="977"/>
+        <location filename="stream_utilities.py" line="980"/>
         <source>Self Intersection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="978"/>
+        <location filename="stream_utilities.py" line="981"/>
         <source>Segment Center</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="979"/>
+        <location filename="stream_utilities.py" line="982"/>
         <source>Intersection</source>
         <translation type="unfinished"/>
     </message>
@@ -107,27 +107,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1118"/>
+        <location filename="stream_utilities.py" line="1121"/>
         <source>Finding self intersections...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1124"/>
+        <location filename="stream_utilities.py" line="1127"/>
         <source>Finding segment centers...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1130"/>
+        <location filename="stream_utilities.py" line="1133"/>
         <source>Finding intersections...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1160"/>
+        <location filename="stream_utilities.py" line="1163"/>
         <source>Finding Unseparated...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1174"/>
+        <location filename="stream_utilities.py" line="1177"/>
         <source>Unseparated</source>
         <translation type="unfinished"/>
     </message>

@@ -2,102 +2,102 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="stream_utilities.py" line="168"/>
+        <location filename="stream_utilities.py" line="171"/>
         <source>Stream features</source>
         <translation>Fitur sungai</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="893"/>
+        <location filename="stream_utilities.py" line="896"/>
         <source>Intermediate layer</source>
         <translation>Lapisan menengah</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="903"/>
+        <location filename="stream_utilities.py" line="906"/>
         <source>Finding wells...</source>
         <translation>Mencari sumur...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="904"/>
+        <location filename="stream_utilities.py" line="907"/>
         <source>Finding sinks...</source>
         <translation>Mencari sungai buntu...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="905"/>
+        <location filename="stream_utilities.py" line="908"/>
         <source>Finding branches...</source>
         <translation>Mencari percabangan ...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="906"/>
+        <location filename="stream_utilities.py" line="909"/>
         <source>Finding confluences...</source>
         <translation>Mencari pertemuan...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="907"/>
+        <location filename="stream_utilities.py" line="910"/>
         <source>Finding pseudo nodes...</source>
         <translation>Mencari simpul semu...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="908"/>
+        <location filename="stream_utilities.py" line="911"/>
         <source>Finding watersheds...</source>
         <translation>Mencari batas air...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="909"/>
+        <location filename="stream_utilities.py" line="912"/>
         <source>Finding unclear bifurcations...</source>
         <translation>Mencari bifurkasi tak jelas...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1136"/>
+        <location filename="stream_utilities.py" line="1139"/>
         <source>Stream Features</source>
         <translation>Fitur Sungai</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="969"/>
+        <location filename="stream_utilities.py" line="972"/>
         <source>Well</source>
         <translation>Sumur</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="970"/>
+        <location filename="stream_utilities.py" line="973"/>
         <source>Sink</source>
         <translation>Sungai buntu</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="971"/>
+        <location filename="stream_utilities.py" line="974"/>
         <source>Branch</source>
         <translation>Percabangan</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="972"/>
+        <location filename="stream_utilities.py" line="975"/>
         <source>Confluence</source>
         <translation>Pertemuan</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="973"/>
+        <location filename="stream_utilities.py" line="976"/>
         <source>Pseudo node</source>
         <translation>Simpul semu</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="974"/>
+        <location filename="stream_utilities.py" line="977"/>
         <source>Watershed</source>
         <translation>Batas air</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="975"/>
+        <location filename="stream_utilities.py" line="978"/>
         <source>Unclear Bifurcation</source>
         <translation>Bifurkasi tak jelas</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="977"/>
+        <location filename="stream_utilities.py" line="980"/>
         <source>Self Intersection</source>
         <translation>Perpotongan sendiri</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="978"/>
+        <location filename="stream_utilities.py" line="981"/>
         <source>Segment Center</source>
         <translation>Tengah-tengah segmen</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="979"/>
+        <location filename="stream_utilities.py" line="982"/>
         <source>Intersection</source>
         <translation>Perpotongan</translation>
     </message>
@@ -107,27 +107,27 @@
         <translation>Selamat pagi</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1118"/>
+        <location filename="stream_utilities.py" line="1121"/>
         <source>Finding self intersections...</source>
         <translation>Mnecari perpotongan sendiri...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1124"/>
+        <location filename="stream_utilities.py" line="1127"/>
         <source>Finding segment centers...</source>
         <translation>Mencari tengah-tengah segmen...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1130"/>
+        <location filename="stream_utilities.py" line="1133"/>
         <source>Finding intersections...</source>
         <translation>Mencari perpotongan...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1160"/>
+        <location filename="stream_utilities.py" line="1163"/>
         <source>Finding Unseparated...</source>
         <translation>Mencari tak terpisahkan...</translation>
     </message>
     <message>
-        <location filename="stream_utilities.py" line="1174"/>
+        <location filename="stream_utilities.py" line="1177"/>
         <source>Unseparated</source>
         <translation>Tak terpisahkan</translation>
     </message>
