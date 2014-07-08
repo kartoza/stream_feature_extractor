@@ -56,7 +56,7 @@ HELP = help/output/html
 
 THIRD_PARTY = third_party
 
-PLUGIN_UPLOAD = $(c)/plugin_upload.py
+PLUGIN_UPLOAD = ./plugin_upload.py
 
 QGISDIR=.qgis2
 
