@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013, Linfiniti Consulting CC.
+# This file is distributed under the same license as the StreamFeatureExtractor package.
+#
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Stream Feature Extractor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-08 10:09\n"
+"PO-Revision-Date: 2014-07-02 11:45+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/stream-"
+"feature-extractor/language/id/)\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# e9d5dad59ea3477aa93d2f6db1c6e039
+#: ../../source/features.rst:4
+msgid "Feature Definitions"
+msgstr ""
+
+# 1a58a77378354cf09a03a6cc99a686f7
+#: ../../source/features.rst:6
+msgid ""
+"This document describes the logic used for determining what type (if any) of "
+"feature each node represents."
+msgstr ""
+
+# b7794529734642e68b7c260c1764c0f3
+#: ../../source/features.rst:10
+msgid "1. Crossing / *Kreuzung*"
+msgstr ""
+
+# 8b8477d94e3b463a8547a9747dc6b963
+#: ../../source/features.rst:12
+msgid "When two lines cross each other."
+msgstr ""
+
+# 6f869ebb5749407dbe5b11cccc99959b
+#: ../../source/features.rst:18
+msgid "2. Pseudo node / *Pseudonode*"
+msgstr ""
+
+# 7680a9b669a04093847f58fd41702c23
+#: ../../source/features.rst:20
+msgid ""
+"A node that has one upstream and one downstream node. The node is superflous "
+"as it can be represented by one line instead of two."
+msgstr ""
+
+# a6a53e20cb764d2e96339022e883980e
+#: ../../source/features.rst:27
+msgid "3. Well / *Quelle*"
+msgstr ""
+
+# 30ceef70973b4ed794412b14993b38b0
+#: ../../source/features.rst:29
+msgid "A node that has 1 upstream node and 0 downstream nodes."
+msgstr ""
+
+# 6112207d860f49bb966950b6619adcc7
+#: ../../source/features.rst:35
+msgid "4. Sink / *Senke*"
+msgstr ""
+
+# 8b60536c6e1a4305a48bbce88c4dc388
+#: ../../source/features.rst:37
+msgid "A node that has no upstream node and 1 or more downstream nodes."
+msgstr ""
+
+# 5b60f123ce8044f48ae5d4524d632eaf
+#: ../../source/features.rst:43
+msgid "5. Watershed / *Top*"
+msgstr ""
+
+# 1957320722a24f82a06a0db1980bed32
+#: ../../source/features.rst:45
+msgid "A node that has more than one upstream node and 0 downstream nodes."
+msgstr ""
+
+# 8d239269b4ea43178bdd727e4c7f8fe4
+#: ../../source/features.rst:51
+msgid "6. Unseparated / *Ungetrennter*"
+msgstr ""
+
+# b77018445bcc42a4b4db979baf149a43
+#: ../../source/features.rst:53
+msgid ""
+"Only 1 upstream node or only 1 downstream node and intersects with one or "
+"more other lines. Note that in the lines below, there is only one node under "
+"the star, the other line has no node at the position of the star."
+msgstr ""
+
+# 03687e21f8ef487f80dd839c8432382c
+#: ../../source/features.rst:62
+msgid "7. Unclear bifurcation / *Unklare Bifurkation*"
+msgstr ""
+
+# cd5f78ff15c44c1a9919f011fedfb1a3
+#: ../../source/features.rst:64
+msgid ""
+"It has more than one upstream and more than one downstream node, but the "
+"number of upstream and downstream nodes are same."
+msgstr ""
+
+# a6f9335b6bcd4bd3a3aa71bf2244fcec
+#: ../../source/features.rst:71
+msgid "8. Tributary, Branch / *Verzweigung*"
+msgstr ""
+
+# 163a0e99bc2946de87055c484191ca7d
+#: ../../source/features.rst:73
+msgid ""
+"It has more upstream nodes than downstream nodes. The minimum number of "
+"downstream nodes is one."
+msgstr ""
+
+# 9a887080c1c64abeacec091705ea0e1e
+#: ../../source/features.rst:80
+msgid "9. Confluence / *Zusammenfluss*"
+msgstr ""
+
+# 34bc5e84fdce4e96bed23116a642b4ca
+#: ../../source/features.rst:82
+msgid ""
+"It has more downstream nodes than upstream nodes. The minimum number of "
+"upstream nodes is one."
+msgstr ""
+
+# 2604599fc3814f9db197559c550fb0a2
+#: ../../source/features.rst:89
+msgid "10. Segment Center / *Segmentmitte*"
+msgstr ""
+
+# 6c5dcfa8d4454b64bad7e6c20b8738a8
+#: ../../source/features.rst:91
+msgid ""
+"Segment center is the linear center of a line. The tool finds the point in "
+"the line that has distance half of the length of the line."
+msgstr ""
+
+# bfec135c66be4db9a14725dfdcfd5937
+#: ../../source/features.rst:98
+msgid "11. Self Intersection / *Selbstkreuzung*"
+msgstr ""
+
+# 96cfe918a8dc4e38956ecd9a258c26c1
+#: ../../source/features.rst:100
+msgid "Same with intersection, but this time the line intersects with itself."
+msgstr ""
