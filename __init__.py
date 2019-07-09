@@ -20,11 +20,12 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+from __future__ import absolute_import
+
+from . import custom_logging  # pylint: disable=relative-import
+
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
-import custom_logging  # pylint: disable=relative-import
 
 
 SENTRY_URL = (
@@ -37,6 +38,6 @@ custom_logging.setup_logger(SENTRY_URL)
 def classFactory(iface):  # pylint: disable=invalid-name
     """load StreamFeatureExtractor class from file StreamFeatureExtractor."""
     # pylint: disable=relative-import
-    from stream_feature_extractor import StreamFeatureExtractor
+    from .stream_feature_extractor import StreamFeatureExtractor
     # pylint: enable=relative-import
     return StreamFeatureExtractor(iface)

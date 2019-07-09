@@ -6,6 +6,10 @@
 
 """
 from __future__ import division
+from __future__ import print_function
+
+from builtins import str
+from builtins import range
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
@@ -13,13 +17,12 @@ __date__ = '17/04/2014'
 __license__ = "GPL"
 __copyright__ = ''
 
-
 from math import sqrt
 
-from PyQt4.QtCore import QVariant, QCoreApplication
+from qgis.PyQt.QtCore import QVariant, QCoreApplication
 
 from qgis.core import (
-    QGis,
+    Qgis,
     QgsField,
     QgsVectorLayer,
     QgsFeature,
@@ -324,7 +327,7 @@ def add_associated_nodes(layer, threshold, callback=None):
         counter += 1
         node_fid = int(node.id())
         node_attributes = node.attributes()
-        #node_id = node_attributes[id_index]
+        # node_id = node_attributes[id_index]
         node_type = node_attributes[node_type_index]
         upstream_nodes, downstream_nodes = get_nearby_nodes(
             layer, node, threshold)
@@ -701,11 +704,11 @@ def identify_intersections(layer):
             line_id = int(intersect_line)
             data_provider.getFeatures(
                 QgsFeatureRequest().setFilterFid(line_id)).nextFeature(
-                    feature_2)
+                feature_2)
             geometry_2 = feature_2.geometry()
             if geometry.intersects(geometry_2):
                 temp_geom = geometry.intersection(geometry_2)
-                if temp_geom.type() == QGis.Point:
+                if temp_geom.type() == Qgis.Point:
                     temp_list = []
                     if temp_geom.isMultipart():
                         temp_list = temp_geom.asMultiPoint()
@@ -715,7 +718,7 @@ def identify_intersections(layer):
                         if vertices[0] in temp_list:
                             temp_list.remove(vertices[0])
                         if vertices[-1] in temp_list:
-                                temp_list.remove(vertices[-1])
+                            temp_list.remove(vertices[-1])
                     intersections.extend(temp_list)
     # Note(ismailsunni): if I converted directly from list to set, there is a
     # problem. The elements in the set are not unique in qgis 2.0.
@@ -913,7 +916,7 @@ def create_intermediate_layer(input_layer, threshold=0, callback=None):
     rule_count = len(rules)
     index = 1
 
-    for message, rule in rules.iteritems():
+    for message, rule in rules.items():
         callback(current=index, maximum=rule_count, message=message)
         rule(intermediate_layer)
         index += 1
@@ -1084,7 +1087,7 @@ def get_duplicate_points(layer, threshold):
                 unique_features.append(int(duplicate_feature[0]))
                 duplicated_features.extend(duplicate_feature[1:])
 
-    return  unique_features, duplicated_features
+    return unique_features, duplicated_features
 
 
 # noinspection PyPep8Naming,PyArgumentList,PyArgumentList
@@ -1209,7 +1212,7 @@ def is_line_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Line)
+                layer.geometryType() == Qgis.Line)
     except AttributeError:
         return False
 
@@ -1230,5 +1233,7 @@ def console_progress_callback(current, maximum, message=None):
     if maximum > 1000 and current % 1000 != 0 and current != maximum:
         return
     if message is not None:
-        print message
-    print 'Task progress: %i of %i' % (current, maximum)
+        # fix_print_with_import
+        print(message)
+    # fix_print_with_import
+    print('Task progress: %i of %i' % (current, maximum))

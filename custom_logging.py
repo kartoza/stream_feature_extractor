@@ -8,6 +8,7 @@ Custom logging for Stream feature extractor.
      (at your option) any later version.
 
 """
+from __future__ import print_function
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -22,7 +23,7 @@ from datetime import date
 import getpass
 from tempfile import mkstemp
 
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 third_party_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'third_party'))
@@ -33,6 +34,7 @@ if third_party_path not in sys.path:
 from raven.handlers.logging import SentryHandler
 # noinspection PyUnresolvedReferences
 from raven import Client
+
 # pylint: enable=F0401
 LOGGER = logging.getLogger('SFE')
 
@@ -56,16 +58,18 @@ class QgsLogHandler(logging.Handler):
             # like line number etc. you can get from the log message.
             # noinspection PyCallByClass
             QgsMessageLog.logMessage(message, 'QGIS', 0)
-        #Make sure it doesn't crash if using without QGIS
+        # Make sure it doesn't crash if using without QGIS
         except ImportError:
             pass
         except MemoryError:
             message = (
                 'Due to memory limitations on this machine, the full log '
                 'cannot be handled.')
-            print message
-            # noinspection PyUnboundLocalVariable
-            QgsMessageLog.logMessage(message, 'QGIS', 0)
+            # fix_print_with_import
+            # fix_print_with_import
+        print(message)
+        # noinspection PyUnboundLocalVariable
+        QgsMessageLog.logMessage(message, 'QGIS', 0)
 
 
 def add_logging_handler_once(logger, handler):
@@ -205,7 +209,7 @@ def temp_dir(sub_dir='work'):
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
         old_mask = os.umask(0000)
-        os.makedirs(temp_path, 0777)
+        os.makedirs(temp_path, 0o777)
         # Reinstate the old mask for tmp
         os.umask(old_mask)
     return temp_path

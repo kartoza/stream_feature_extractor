@@ -6,7 +6,9 @@
 
 """
 from __future__ import division
+from __future__ import print_function
 
+from builtins import range
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
 __date__ = '21/05/2014'
@@ -17,7 +19,7 @@ __copyright__ = ''
 import sys
 import os
 
-from PyQt4.QtCore import QCoreApplication, QTranslator
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 
 from test.utilities_for_testing import get_qgis_app
 
@@ -55,7 +57,8 @@ def main():
     f.close()
 
     for local in locales:
-        print 'Compiling style for %s' % local
+        # fix_print_with_import
+        print('Compiling style for %s' % local)
         file_path = os.path.join(dir_path, 'i18n', '%s.qm' % local)
         translator = QTranslator()
         translator.load(file_path)

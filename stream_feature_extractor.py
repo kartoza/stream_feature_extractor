@@ -19,43 +19,35 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
 
-import os
 import logging
+import os
+from builtins import object
+
+from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication, QUrl
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction, QProgressBar
+from qgis.core import QgsMapLayer
+from qgis.gui import QgsMessageBar
+
+from .stream_help_dialog import HelpDialog
+from .stream_options_dialog import OptionsDialog
+# Initialize Qt resources from file resources.py
+# Import the code for the dialog
+from .stream_utilities import is_line_layer, identify_features
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
 # do it before Qt imports
-import qgis  # pylint: disable=W0611
-
 # from pydev import pydevd  # pylint: disable=F0401
-
-from PyQt4.QtCore import (
-    Qt,
-    QSettings,
-    QTranslator,
-    qVersion,
-    QCoreApplication,
-    QUrl)
-from PyQt4.QtGui import (
-    QAction,
-    QIcon,
-    QProgressBar)
-from qgis.core import QgsMapLayerRegistry
-from qgis.gui import QgsMessageBar
-# Initialize Qt resources from file resources.py
-import resources_rc
-# Import the code for the dialog
-from stream_utilities import is_line_layer, identify_features
-from stream_options_dialog import OptionsDialog
-from stream_help_dialog import HelpDialog
 
 MENU_GROUP_LABEL = u'Stream feature extractor'
 MENU_RUN_LABEL = u'Extract from current layer'
 LOGGER = logging.getLogger('QGIS')
 
 
-class StreamFeatureExtractor:
+class StreamFeatureExtractor(object):
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -202,7 +194,7 @@ class StreamFeatureExtractor:
         icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
         self.run_action = self.add_action(
             icon_path,
-            text=self.tr(u'Extract stream features from current layer',),
+            text=self.tr(u'Extract stream features from current layer', ),
             callback=self.run,
             parent=self.iface.mainWindow(),
             add_to_menu=True)
@@ -250,7 +242,7 @@ class StreamFeatureExtractor:
             style_path = os.path.join(
                 os.path.dirname(__file__), 'styles/nodes.qml')
         nodes.loadNamedStyle(style_path)
-        QgsMapLayerRegistry.instance().addMapLayer(nodes)
+        QgsMapLayer.instance().addMapLayer(nodes)
 
     def run(self):
         """Run method that performs all the real work."""
@@ -262,11 +254,11 @@ class StreamFeatureExtractor:
         progress_bar = QProgressBar()
         progress_bar.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         # Need to implement a separate worker thread if we want cancel
-        #cancel_button = QPushButton()
-        #cancel_button.setText(self.tr('Cancel'))
-        #cancel_button.clicked.connect(worker.kill)
+        # cancel_button = QPushButton()
+        # cancel_button.setText(self.tr('Cancel'))
+        # cancel_button.clicked.connect(worker.kill)
         message_bar.layout().addWidget(progress_bar)
-        #message_bar.layout().addWidget(cancel_button)
+        # message_bar.layout().addWidget(cancel_button)
         self.iface.messageBar().pushWidget(
             message_bar, self.iface.messageBar().INFO)
         self.message_bar = message_bar
@@ -318,9 +310,9 @@ class StreamFeatureExtractor:
         self._load_nodes_with_style(nodes)
 
         if load_intermediate_layer:
-            QgsMapLayerRegistry.instance().addMapLayer(intermediate_layer)
+            QgsMapLayer.instance().addMapLayer(intermediate_layer)
 
-        #QgsMapLayerRegistry.instance().addMapLayers([layer])
+        # QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.iface.messageBar().pushMessage(
             self.tr('Extraction completed.'),
             self.tr('Use "Layer->Save as" to save the results permanently.'),
