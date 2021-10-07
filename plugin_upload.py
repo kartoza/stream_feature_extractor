@@ -3,7 +3,7 @@
 """This script uploads a plugin package on the server.
 Authors: A. Pasotti, V. Picavet
 """
-from __future__ import print_function
+
 
 
 from future import standard_library
@@ -127,7 +127,7 @@ if __name__ == "__main__":
         # fix_print_with_import
         # fix_print_with_import
         print("Please enter user name [%s] :" % username, end=' ')
-        res = input()
+        res = eval(input())
         if res != "":
             options.username = res
         else:

@@ -8,7 +8,7 @@ Custom logging for Stream feature extractor.
      (at your option) any later version.
 
 """
-from __future__ import print_function
+
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'

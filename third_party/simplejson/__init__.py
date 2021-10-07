@@ -97,7 +97,7 @@ Using simplejson.tool from the shell to validate and pretty-print::
     $ echo '{ 1.2:3.4}' | python -m simplejson.tool
     Expecting property name: line 1 column 3 (char 2)
 """
-from __future__ import absolute_import
+
 __version__ = '3.3.0'
 __all__ = [
     'dump', 'dumps', 'load', 'loads',

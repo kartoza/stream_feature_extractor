@@ -8,7 +8,7 @@
      (at your option) any later version.
 
 """
-from __future__ import absolute_import
+
 __author__ = 'tim@linfiniti.com'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '

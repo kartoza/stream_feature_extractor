@@ -73,7 +73,7 @@ class DictSerializer(Serializer):
     types = (dict,)
 
     def serialize(self, value):
-        return dict((to_string(k), self.recurse(v)) for k, v in iter(value.items()))
+        return dict((to_string(k), self.recurse(v)) for k, v in iter(list(value.items())))
 
 
 class UnicodeSerializer(Serializer):

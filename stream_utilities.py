@@ -5,8 +5,8 @@
    Detailed multi-paragraph description...
 
 """
-from __future__ import division
-from __future__ import print_function
+
+
 
 from builtins import str
 from builtins import range
@@ -916,7 +916,7 @@ def create_intermediate_layer(input_layer, threshold=0, callback=None):
     rule_count = len(rules)
     index = 1
 
-    for message, rule in rules.items():
+    for message, rule in list(rules.items()):
         callback(current=index, maximum=rule_count, message=message)
         rule(intermediate_layer)
         index += 1

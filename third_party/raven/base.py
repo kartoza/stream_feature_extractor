@@ -6,7 +6,7 @@ raven.base
 :license: BSD, see LICENSE for more details.
 """
 
-from __future__ import absolute_import
+
 
 from future import standard_library
 standard_library.install_aliases()
@@ -255,7 +255,7 @@ class Client(object):
         if data.get('culprit'):
             culprit = data['culprit']
 
-        for k, v in result.items():
+        for k, v in list(result.items()):
             if k not in data:
                 data[k] = v
 
@@ -290,7 +290,7 @@ class Client(object):
         data.setdefault('level', logging.ERROR)
 
         # Shorten lists/strings
-        for k, v in extra.items():
+        for k, v in list(extra.items()):
             data['extra'][k] = shorten(v, string_length=self.string_max_length,
                     list_length=self.list_max_length)
 

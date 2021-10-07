@@ -19,7 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 """
-from __future__ import absolute_import
+
 
 import logging
 import os
@@ -42,8 +42,8 @@ from .stream_utilities import is_line_layer, identify_features
 # do it before Qt imports
 # from pydev import pydevd  # pylint: disable=F0401
 
-MENU_GROUP_LABEL = u'Stream feature extractor'
-MENU_RUN_LABEL = u'Extract from current layer'
+MENU_GROUP_LABEL = 'Stream feature extractor'
+MENU_RUN_LABEL = 'Extract from current layer'
 LOGGER = logging.getLogger('QGIS')
 
 
@@ -93,7 +93,7 @@ class StreamFeatureExtractor(object):
         self.menu = self.tr(MENU_GROUP_LABEL)
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(MENU_GROUP_LABEL)
-        self.toolbar.setObjectName(u'StreamFeatureExtractor')
+        self.toolbar.setObjectName('StreamFeatureExtractor')
 
         # To enable/disable the run menu option
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -190,18 +190,18 @@ class StreamFeatureExtractor(object):
     # noinspection PyPep8Naming
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        self.menu = u'Stream feature extractor'
+        self.menu = 'Stream feature extractor'
         icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
         self.run_action = self.add_action(
             icon_path,
-            text=self.tr(u'Extract stream features from current layer', ),
+            text=self.tr('Extract stream features from current layer', ),
             callback=self.run,
             parent=self.iface.mainWindow(),
             add_to_menu=True)
 
         self.options_action = self.add_action(
             icon_path,
-            text=self.tr(u'Options ...', ),
+            text=self.tr('Options ...', ),
             callback=self.show_options,
             parent=self.iface.mainWindow(),
             add_to_menu=True,
@@ -209,7 +209,7 @@ class StreamFeatureExtractor(object):
 
         self.help_action = self.add_action(
             icon_path,
-            text=self.tr(u'Help ...', ),
+            text=self.tr('Help ...', ),
             callback=self.show_help,
             parent=self.iface.mainWindow(),
             add_to_menu=True,

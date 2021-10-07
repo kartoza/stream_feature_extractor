@@ -1,6 +1,6 @@
 """Implementation of JSONEncoder
 """
-from __future__ import absolute_import
+
 from builtins import chr
 from builtins import str
 from builtins import range
@@ -22,7 +22,7 @@ from simplejson.decoder import PosInf
 #ESCAPE = re.compile(ur'[\x00-\x1f\\"\b\f\n\r\t\u2028\u2029]')
 # This is required because u() will mangle the string and ur'' isn't valid
 # python3 syntax
-ESCAPE = re.compile(u'[\\x00-\\x1f\\\\"\\b\\f\\n\\r\\t\u2028\u2029]')
+ESCAPE = re.compile('[\\x00-\\x1f\\\\"\\b\\f\\n\\r\\t\u2028\u2029]')
 ESCAPE_ASCII = re.compile(r'([\\"]|[^\ -~])')
 HAS_UTF8 = re.compile(r'[\x80-\xff]')
 ESCAPE_DCT = {
@@ -269,7 +269,7 @@ class JSONEncoder(object):
         if self.ensure_ascii:
             return ''.join(chunks)
         else:
-            return u''.join(chunks)
+            return ''.join(chunks)
 
     def iterencode(self, o, _one_shot=False):
         """Encode the given object and yield each string
@@ -362,7 +362,7 @@ class JSONEncoderForHTML(JSONEncoder):
         if self.ensure_ascii:
             return ''.join(chunks)
         else:
-            return u''.join(chunks)
+            return ''.join(chunks)
 
     def iterencode(self, o, _one_shot=False):
         chunks = super(JSONEncoderForHTML, self).iterencode(o, _one_shot)
@@ -510,7 +510,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         if _PY3:
             iteritems = list(dct.items())
         else:
-            iteritems = iter(dct.items())
+            iteritems = iter(list(dct.items()))
         if _item_sort_key:
             items = []
             for k, v in list(dct.items()):

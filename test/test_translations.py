@@ -7,7 +7,7 @@
      (at your option) any later version.
 
 """
-from __future__ import absolute_import
+
 from .utilities_for_testing import get_qgis_app
 
 __author__ = 'ismailsunni@yahoo.co.id'
@@ -27,12 +27,12 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test."""
-        if 'LANG' in iter(os.environ.keys()):
+        if 'LANG' in iter(list(os.environ.keys())):
             os.environ.__delitem__('LANG')
 
     def tearDown(self):
         """Runs after each test."""
-        if 'LANG' in iter(os.environ.keys()):
+        if 'LANG' in iter(list(os.environ.keys())):
             os.environ.__delitem__('LANG')
 
     def test_qgis_translations(self):

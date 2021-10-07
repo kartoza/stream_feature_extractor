@@ -16,7 +16,7 @@ def get_headers(environ):
     """
     Returns only proper HTTP headers.
     """
-    for key, value in environ.items():
+    for key, value in list(environ.items()):
         key = str(key)
         if key.startswith('HTTP_') and key not in \
            ('HTTP_CONTENT_TYPE', 'HTTP_CONTENT_LENGTH'):
