@@ -25,10 +25,12 @@ import logging
 import os
 from builtins import object
 
+from qgis.core import Qgis
+
 from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QProgressBar
-from qgis.core import QgsMapLayer
+from qgis.core import QgsProject, QgsMapLayer
 from qgis.gui import QgsMessageBar
 
 from .stream_help_dialog import HelpDialog
@@ -242,7 +244,7 @@ class StreamFeatureExtractor(object):
             style_path = os.path.join(
                 os.path.dirname(__file__), 'styles/nodes.qml')
         nodes.loadNamedStyle(style_path)
-        QgsMapLayer.instance().addMapLayer(nodes)
+        QgsProject.instance().addMapLayer(nodes)
 
     def run(self):
         """Run method that performs all the real work."""
@@ -260,7 +262,7 @@ class StreamFeatureExtractor(object):
         message_bar.layout().addWidget(progress_bar)
         # message_bar.layout().addWidget(cancel_button)
         self.iface.messageBar().pushWidget(
-            message_bar, self.iface.messageBar().INFO)
+            message_bar, Qgis.Info)
         self.message_bar = message_bar
 
         def progress_callback(current, maximum, message=None):
@@ -294,13 +296,13 @@ class StreamFeatureExtractor(object):
                 self.iface.activeLayer(),
                 threshold=distance,
                 callback=progress_callback)
-        except Exception:
-            LOGGER.exception('A failure occurred calling identify_features.')
+        except Exception as exception:
+            LOGGER.exception(f"A failure occurred calling identify_features. {exception}")
             self.iface.messageBar().popWidget(message_bar)
             self.iface.messageBar().pushMessage(
                 self.tr('Feature extraction error.'),
                 self.tr('Please check logs for details.'),
-                level=QgsMessageBar.CRITICAL,
+                level=Qgis.Critical,
                 duration=5)
             return
 
@@ -316,7 +318,7 @@ class StreamFeatureExtractor(object):
         self.iface.messageBar().pushMessage(
             self.tr('Extraction completed.'),
             self.tr('Use "Layer->Save as" to save the results permanently.'),
-            level=QgsMessageBar.INFO,
+            level=Qgis.Info,
             duration=10)
 
     def show_help(self):
