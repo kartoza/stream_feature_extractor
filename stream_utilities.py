@@ -5,7 +5,11 @@
    Detailed multi-paragraph description...
 
 """
-from __future__ import division
+
+
+
+from builtins import str
+from builtins import range
 
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
@@ -13,22 +17,24 @@ __date__ = '17/04/2014'
 __license__ = "GPL"
 __copyright__ = ''
 
-
 from math import sqrt
 
-from PyQt4.QtCore import QVariant, QCoreApplication
+from qgis.PyQt.QtCore import QVariant, QCoreApplication
 
 from qgis.core import (
-    QGis,
-    QgsField,
-    QgsVectorLayer,
+    Qgis,
     QgsFeature,
-    QgsGeometry,
-    QgsPoint,
-    QgsMapLayer,
-    QgsRectangle,
     QgsFeatureRequest,
-    QgsSpatialIndex)
+    QgsField,
+    QgsGeometry,
+    QgsMapLayer,
+    QgsPoint,
+    QgsPointXY,
+    QgsRectangle,
+    QgsSpatialIndex,
+    QgsVectorLayer,
+    QgsWkbTypes,
+    )
 
 
 def tr(message):
@@ -103,7 +109,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
     :param qvariant: Attribute type of the new attribute.
     :type qvariant: QVariant
     """
-    id_index = layer.fieldNameIndex(attribute_name)
+    id_index = layer.fields().indexFromName(attribute_name)
     if id_index == -1:
         data_provider = layer.dataProvider()
         layer.startEditing()
@@ -199,7 +205,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
         # Add upstream node
         feature = QgsFeature()
         # noinspection PyArgumentList
-        feature.setGeometry(QgsGeometry.fromPoint(first_point))
+        feature.setGeometry(QgsGeometry.fromPointXY(first_point))
         feature.setAttributes([node_id, line_id, 'upstream'])
         features.append(feature)
         node_id += 1
@@ -207,7 +213,7 @@ def create_nodes_layer(authority_id='EPSG:4326', nodes=None, name=None):
         # Add upstream node
         feature = QgsFeature()
         # noinspection PyArgumentList
-        feature.setGeometry(QgsGeometry.fromPoint(last_point))
+        feature.setGeometry(QgsGeometry.fromPointXY(last_point))
         feature.setAttributes([node_id, line_id, 'downstream'])
         features.append(feature)
         node_id += 1
@@ -236,11 +242,11 @@ def get_nearby_nodes(layer, node, threshold):
     :returns: Tuple of list of nodes. (upstream_nodes, downstream_nodes).
     :rtype: tuple
     """
-    id_index = layer.fieldNameIndex('id')
+    id_index = layer.fields().indexFromName('id')
     node_attributes = node.attributes()
     node_id = node_attributes[id_index]
-    id_index = layer.fieldNameIndex('id')
-    node_type_index = layer.fieldNameIndex('node_type')
+    id_index = layer.fields().indexFromName('id')
+    node_type_index = layer.fields().indexFromName('node_type')
     center_node_point = node.geometry().asPoint()
 
     rectangle = QgsRectangle(
@@ -296,7 +302,7 @@ def add_associated_nodes(layer, threshold, callback=None):
 
     """
     nodes = layer.getFeatures()
-    node_type_index = layer.fieldNameIndex('node_type')
+    node_type_index = layer.fields().indexFromName('node_type')
 
     # add attributes
     data_provider = layer.dataProvider()
@@ -306,10 +312,10 @@ def add_associated_nodes(layer, threshold, callback=None):
     add_layer_attribute(layer, 'up_num', QVariant.Int)
     add_layer_attribute(layer, 'down_num', QVariant.Int)
 
-    up_nodes_index = layer.fieldNameIndex('up_nodes')
-    down_nodes_index = layer.fieldNameIndex('down_nodes')
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
+    up_nodes_index = layer.fields().indexFromName('up_nodes')
+    down_nodes_index = layer.fields().indexFromName('down_nodes')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
 
     layer.startEditing()
 
@@ -324,7 +330,7 @@ def add_associated_nodes(layer, threshold, callback=None):
         counter += 1
         node_fid = int(node.id())
         node_attributes = node.attributes()
-        #node_id = node_attributes[id_index]
+        # node_id = node_attributes[id_index]
         node_type = node_attributes[node_type_index]
         upstream_nodes, downstream_nodes = get_nearby_nodes(
             layer, node, threshold)
@@ -361,10 +367,10 @@ def check_associated_attributes(layer):
     :returns: True if so, else False.
     :rtype: bool
     """
-    up_nodes_index = layer.fieldNameIndex('up_nodes')
-    down_nodes_index = layer.fieldNameIndex('down_nodes')
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
+    up_nodes_index = layer.fields().indexFromName('up_nodes')
+    down_nodes_index = layer.fields().indexFromName('down_nodes')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
 
     if -1 in [up_nodes_index, down_nodes_index, up_num_index, down_num_index]:
         return False
@@ -388,9 +394,9 @@ def identify_wells(layer):
     add_layer_attribute(layer, 'well', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    well_index = layer.fieldNameIndex('well')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    well_index = layer.fields().indexFromName('well')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -427,9 +433,9 @@ def identify_sinks(layer):
     add_layer_attribute(layer, 'sink', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    sink_index = layer.fieldNameIndex('sink')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    sink_index = layer.fields().indexFromName('sink')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -466,9 +472,9 @@ def identify_watersheds(layer):
     add_layer_attribute(layer, 'watershed', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    watershed_index = layer.fieldNameIndex('watershed')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    watershed_index = layer.fields().indexFromName('watershed')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -506,9 +512,9 @@ def identify_unclear_bifurcations(layer):
     add_layer_attribute(layer, 'unclear_bi', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    unclear_bifurcation_index = layer.fieldNameIndex('unclear_bi')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    unclear_bifurcation_index = layer.fields().indexFromName('unclear_bi')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -545,9 +551,9 @@ def identify_branches(layer):
     add_layer_attribute(layer, 'branch', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    branch_index = layer.fieldNameIndex('branch')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    branch_index = layer.fields().indexFromName('branch')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -584,9 +590,9 @@ def identify_confluences(layer):
     add_layer_attribute(layer, 'confluence', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    confluence_index = layer.fieldNameIndex('confluence')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    confluence_index = layer.fields().indexFromName('confluence')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -623,9 +629,9 @@ def identify_pseudo_nodes(layer):
     add_layer_attribute(layer, 'pseudo', QVariant.Int)
     nodes = layer.getFeatures()
 
-    up_num_index = layer.fieldNameIndex('up_num')
-    down_num_index = layer.fieldNameIndex('down_num')
-    pseudo_node_index = layer.fieldNameIndex('pseudo')
+    up_num_index = layer.fields().indexFromName('up_num')
+    down_num_index = layer.fields().indexFromName('down_num')
+    pseudo_node_index = layer.fields().indexFromName('pseudo')
 
     dictionary_attributes = {}
     for node in nodes:
@@ -701,11 +707,11 @@ def identify_intersections(layer):
             line_id = int(intersect_line)
             data_provider.getFeatures(
                 QgsFeatureRequest().setFilterFid(line_id)).nextFeature(
-                    feature_2)
+                feature_2)
             geometry_2 = feature_2.geometry()
             if geometry.intersects(geometry_2):
                 temp_geom = geometry.intersection(geometry_2)
-                if temp_geom.type() == QGis.Point:
+                if temp_geom.type() == QgsWkbTypes.PointGeometry:
                     temp_list = []
                     if temp_geom.isMultipart():
                         temp_list = temp_geom.asMultiPoint()
@@ -715,7 +721,7 @@ def identify_intersections(layer):
                         if vertices[0] in temp_list:
                             temp_list.remove(vertices[0])
                         if vertices[-1] in temp_list:
-                                temp_list.remove(vertices[-1])
+                            temp_list.remove(vertices[-1])
                     intersections.extend(temp_list)
     # Note(ismailsunni): if I converted directly from list to set, there is a
     # problem. The elements in the set are not unique in qgis 2.0.
@@ -913,7 +919,7 @@ def create_intermediate_layer(input_layer, threshold=0, callback=None):
     rule_count = len(rules)
     index = 1
 
-    for message, rule in rules.iteritems():
+    for message, rule in list(rules.items()):
         callback(current=index, maximum=rule_count, message=message)
         rule(intermediate_layer)
         index += 1
@@ -948,16 +954,16 @@ def create_new_features(
     :rtype: list
     """
     new_features = []
-    id_index = intermediate_layer.fieldNameIndex('id')
-    upstream_index = intermediate_layer.fieldNameIndex('up_nodes')
-    downstream_index = intermediate_layer.fieldNameIndex('down_nodes')
-    well_index = intermediate_layer.fieldNameIndex('well')
-    sink_index = intermediate_layer.fieldNameIndex('sink')
-    branch_index = intermediate_layer.fieldNameIndex('branch')
-    confluence_index = intermediate_layer.fieldNameIndex('confluence')
-    pseudo_node_index = intermediate_layer.fieldNameIndex('pseudo')
-    watershed_index = intermediate_layer.fieldNameIndex('watershed')
-    unclear_bifurcation_index = intermediate_layer.fieldNameIndex('unclear_bi')
+    id_index = intermediate_layer.fields().indexFromName('id')
+    upstream_index = intermediate_layer.fields().indexFromName('up_nodes')
+    downstream_index = intermediate_layer.fields().indexFromName('down_nodes')
+    well_index = intermediate_layer.fields().indexFromName('well')
+    sink_index = intermediate_layer.fields().indexFromName('sink')
+    branch_index = intermediate_layer.fields().indexFromName('branch')
+    confluence_index = intermediate_layer.fields().indexFromName('confluence')
+    pseudo_node_index = intermediate_layer.fields().indexFromName('pseudo')
+    watershed_index = intermediate_layer.fields().indexFromName('watershed')
+    unclear_bifurcation_index = intermediate_layer.fields().indexFromName('unclear_bi')
 
     feature_indexes = [
         well_index,
@@ -1010,14 +1016,15 @@ def create_new_features(
         for i in range(len(feature_indexes)):
             if node_attribute[feature_indexes[i]] == 1:
                 new_feature = QgsFeature()
-                new_feature.setGeometry(QgsGeometry.fromPoint(node_point))
+                new_feature.setGeometry(QgsGeometry.fromPointXY(node_point))
                 new_feature.setAttributes(
                     [new_node_id, x, y, feature_names[i]])
                 new_features.append(new_feature)
 
     for self_intersection in self_intersections:
         new_feature = QgsFeature()
-        new_feature.setGeometry(QgsGeometry.fromPoint(self_intersection))
+        point_xy = QgsPointXY(self_intersection)
+        new_feature.setGeometry(QgsGeometry.fromPointXY(point_xy))
         x = self_intersection.x()
         y = self_intersection.y()
         new_feature.setAttributes(
@@ -1026,7 +1033,8 @@ def create_new_features(
 
     for segment_center in segment_centers:
         new_feature = QgsFeature()
-        new_feature.setGeometry(QgsGeometry.fromPoint(segment_center))
+        point_xy = QgsPointXY(self_intersection)
+        new_feature.setGeometry(QgsGeometry.fromPointXY(point_xy))
         x = segment_center.x()
         y = segment_center.y()
         new_feature.setAttributes([new_node_id, x, y, segment_center_name])
@@ -1035,7 +1043,7 @@ def create_new_features(
     intersection_points = []
     for intersection in intersections:
         new_feature = QgsFeature()
-        new_feature.setGeometry(QgsGeometry.fromPoint(intersection))
+        new_feature.setGeometry(QgsGeometry.fromPointXY(intersection))
         x = intersection.x()
         y = intersection.y()
         new_feature.setAttributes([new_node_id, x, y, intersection_name])
@@ -1084,7 +1092,7 @@ def get_duplicate_points(layer, threshold):
                 unique_features.append(int(duplicate_feature[0]))
                 duplicated_features.extend(duplicate_feature[1:])
 
-    return  unique_features, duplicated_features
+    return unique_features, duplicated_features
 
 
 # noinspection PyPep8Naming,PyArgumentList,PyArgumentList
@@ -1151,7 +1159,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     output_data_provider = output_layer.dataProvider()
     output_layer.startEditing()
 
-    type_index = output_layer.fieldNameIndex('type')
+    type_index = output_layer.fields().indexFromName('type')
 
     new_features = create_new_features(
         intermediate_layer, self_intersections, intersections, segment_centers)
@@ -1188,7 +1196,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     for feature in features:
         attributes = {0: i}
         dictionary_attributes[feature.id()] = attributes
-        feature.setFeatureId(i - 1)
+        feature.setId(i - 1)
         i += 1
     output_data_provider.changeAttributeValues(dictionary_attributes)
 
@@ -1209,7 +1217,7 @@ def is_line_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Line)
+                layer.geometryType() == QgsWkbTypes.LineGeometry)
     except AttributeError:
         return False
 
@@ -1230,5 +1238,7 @@ def console_progress_callback(current, maximum, message=None):
     if maximum > 1000 and current % 1000 != 0 and current != maximum:
         return
     if message is not None:
-        print message
-    print 'Task progress: %i of %i' % (current, maximum)
+        # fix_print_with_import
+        print(message)
+    # fix_print_with_import
+    print('Task progress: %i of %i' % (current, maximum))

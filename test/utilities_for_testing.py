@@ -1,6 +1,7 @@
 # coding=utf-8
 """Common functionality used by regression tests."""
 
+
 import sys
 import logging
 
@@ -23,10 +24,10 @@ def get_qgis_app():
     """
 
     try:
-        from PyQt4 import QtGui, QtCore
+        from qgis.PyQt import QtGui, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
-        from qgis_interface import QgisInterface
+        from .qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 

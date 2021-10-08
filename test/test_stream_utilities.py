@@ -5,7 +5,10 @@
    Detailed multi-paragraph description...
 
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import range
 __author__ = 'Ismail Sunni <ismail@linfiniti.com>'
 __revision__ = '$Format:%H$'
 __date__ = '17/04/2014'
@@ -23,7 +26,7 @@ from qgis.core import (
     QgsPoint,
     QgsGeometry,
     QgsFeature)
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from stream_utilities import (
     list_to_str,
@@ -709,15 +712,32 @@ class TestStreamUtilities(unittest.TestCase):
             if node_type == 'Unseparated':
                 num_unseparated += 1
 
-        print 'wells', num_wells
-        print 'sinks', num_sinks
-        print 'branches', num_branches
-        print 'confluences', num_confluences
-        print 'pseudo nodes', num_pseudo_nodes
-        print 'watersheds', num_watersheds
-        print 'self intersections', num_self_intersections
-        print 'segment center', num_segment_center
-        print 'unseparated', num_unseparated
+        # fix_print_with_import
+        print('wells', num_wells)
+        # fix_print_with_import
+        # fix_print_with_import
+print('sinks', num_sinks)
+        # fix_print_with_import
+        # fix_print_with_import
+print('branches', num_branches)
+        # fix_print_with_import
+        # fix_print_with_import
+print('confluences', num_confluences)
+        # fix_print_with_import
+        # fix_print_with_import
+print('pseudo nodes', num_pseudo_nodes)
+        # fix_print_with_import
+        # fix_print_with_import
+print('watersheds', num_watersheds)
+        # fix_print_with_import
+        # fix_print_with_import
+print('self intersections', num_self_intersections)
+        # fix_print_with_import
+        # fix_print_with_import
+print('segment center', num_segment_center)
+        # fix_print_with_import
+        # fix_print_with_import
+print('unseparated', num_unseparated)
 
         feature_count = output_layer.featureCount()
         message = (

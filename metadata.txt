@@ -8,11 +8,11 @@
 
 [general]
 name=Stream Feature Extractor
-qgisMinimumVersion=2.0
+qgisMinimumVersion=3.0
 description=A tool to extract features from a stream network.
-version=1.0.4
-author=Linfiniti Consulting CC.
-email=tim@linfiniti.com
+version=2.0.0
+author=Kartoza.
+email=tim@kartoza.com
 
 # End of mandatory metadata
 

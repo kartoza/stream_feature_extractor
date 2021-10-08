@@ -14,13 +14,14 @@ Help dialog implementation.
 
 import os
 
-from PyQt4 import QtGui, uic
+from PyQt5.QtWidgets import QDialog
+from qgis.PyQt import uic
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'stream_help_dialog_base.ui'))
 
 
-class HelpDialog(QtGui.QDialog, FORM_CLASS):
+class HelpDialog(QDialog, FORM_CLASS):
     """Dialog for showing the results of the plugin creation process."""
     def __init__(self, parent=None):
         super(HelpDialog, self).__init__(parent)
