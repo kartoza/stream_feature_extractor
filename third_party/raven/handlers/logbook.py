@@ -2,7 +2,7 @@
 raven.handlers.logbook
 ~~~~~~~~~~~~~~~~~~~~~~
 
-:copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
+:copyright: (c) 2010-2012 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
 
@@ -13,6 +13,7 @@ import logbook
 import sys
 import traceback
 
+from raven.utils.compat import string_types
 from raven.base import Client
 from raven.utils.encoding import to_string
 
@@ -21,8 +22,8 @@ class SentryHandler(logbook.Handler):
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             arg = args[0]
-            if isinstance(arg, str):
-                self.client = kwargs.pop('client_cls', Client)(dsn=arg)
+            if isinstance(arg, string_types):
+                self.client = kwargs.pop('client_cls', Client)(dsn=arg, **kwargs)
             elif isinstance(arg, Client):
                 self.client = arg
             else:
@@ -40,46 +41,61 @@ class SentryHandler(logbook.Handler):
 
     def emit(self, record):
         try:
-            self.format(record)
-
             # Avoid typical config issues by overriding loggers behavior
-            if record.channel.startswith('sentry.errors'):
-                # fix_print_with_import
-                print(to_string(record.message), file=sys.stderr)
+            if record.channel.startswith(('sentry.errors', 'raven')):
+                print(to_string(self.format(record)), file=sys.stderr)
                 return
 
             return self._emit(record)
         except Exception:
-            # fix_print_with_import
+            if self.client.raise_send_errors:
+                raise
             print("Top level Sentry exception caught - failed creating log record", file=sys.stderr)
-            # fix_print_with_import
-            # fix_print_with_import
-print(to_string(record.msg), file=sys.stderr)
-            # fix_print_with_import
-            # fix_print_with_import
-print(to_string(traceback.format_exc()), file=sys.stderr)
+            print(to_string(record.msg), file=sys.stderr)
+            print(to_string(traceback.format_exc()))
 
             try:
-                self.client.capture('Exception')
+                self.client.captureException()
             except Exception:
                 pass
 
     def _emit(self, record):
         data = {
-            'level': record.level,
+            'level': logbook.get_level_name(record.level).lower(),
             'logger': record.channel,
         }
+
+        event_type = 'raven.events.Message'
+
+        handler_kwargs = {
+            'message': record.msg,
+            'params': record.args,
+            'formatted': self.format(record),
+        }
+
+        if 'tags' in record.kwargs:
+            handler_kwargs['tags'] = record.kwargs['tags']
 
         # If there's no exception being processed, exc_info may be a 3-tuple of None
         # http://docs.python.org/library/sys.html#sys.exc_info
         if record.exc_info is True or (record.exc_info and all(record.exc_info)):
-            handler = self.client.get_handler('raven.events.Exception')
+            handler = self.client.get_handler(event_type)
+            data.update(handler.capture(**handler_kwargs))
 
-            data.update(handler.capture(exc_info=record.exc_info))
+            event_type = 'raven.events.Exception'
+            handler_kwargs['exc_info'] = record.exc_info
 
-        return self.client.capture('Message',
-            message=record.msg,
-            params=record.args,
+        extra = {
+            'lineno': record.lineno,
+            'filename': record.filename,
+            'function': record.func_name,
+            'process': record.process,
+            'process_name': record.process_name,
+        }
+        extra.update(record.extra)
+
+        return self.client.capture(event_type,
             data=data,
-            extra=record.extra,
+            extra=extra,
+            **handler_kwargs
         )
