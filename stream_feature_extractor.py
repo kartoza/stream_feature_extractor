@@ -31,13 +31,13 @@ from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplicat
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QProgressBar
 from qgis.core import QgsProject, QgsMapLayer
-from qgis.gui import QgsMessageBar
 
 from .stream_help_dialog import HelpDialog
 from .stream_options_dialog import OptionsDialog
 # Initialize Qt resources from file resources.py
 # Import the code for the dialog
 from .stream_utilities import is_line_layer, identify_features
+from .utilities.resources import resources_path
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
@@ -193,7 +193,7 @@ class StreamFeatureExtractor(object):
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         self.menu = 'Stream feature extractor'
-        icon_path = ':/plugins/StreamFeatureExtractor/icon.svg'
+        icon_path = resources_path('icon.svg')
         self.run_action = self.add_action(
             icon_path,
             text=self.tr('Extract stream features from current layer', ),
