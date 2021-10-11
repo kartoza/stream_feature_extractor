@@ -1033,7 +1033,7 @@ def create_new_features(
 
     for segment_center in segment_centers:
         new_feature = QgsFeature()
-        point_xy = QgsPointXY(self_intersection)
+        point_xy = QgsPointXY(segment_center)
         new_feature.setGeometry(QgsGeometry.fromPointXY(point_xy))
         x = segment_center.x()
         y = segment_center.y()
@@ -1119,6 +1119,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     :rtype: tuple
 
     """
+
     intermediate_layer = create_intermediate_layer(
         input_layer, threshold, callback)
     authority_id = input_layer.crs().authid()
