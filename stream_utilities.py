@@ -145,7 +145,6 @@ def extract_nodes(layer):
         first_point = points[0]
         last_point = points[-1]
         nodes.append((line_id, first_point, last_point))
-
     return nodes
 
 
@@ -1033,7 +1032,7 @@ def create_new_features(
 
     for segment_center in segment_centers:
         new_feature = QgsFeature()
-        point_xy = QgsPointXY(self_intersection)
+        point_xy = QgsPointXY(segment_center)
         new_feature.setGeometry(QgsGeometry.fromPointXY(point_xy))
         x = segment_center.x()
         y = segment_center.y()
@@ -1095,6 +1094,61 @@ def get_duplicate_points(layer, threshold):
     return unique_features, duplicated_features
 
 
+def check_if_multipart(input_layer):
+    """Checks if a layer stores multipart or singlepart features.
+
+    Checks if a layer is multipart or singlepart by checking the first
+    feature which does have a geometry
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QGISVectorLayer
+
+    :returns: True if the layer is multipart, otherwise False.
+    :rtype: Boolean
+    """
+    if input_layer.hasFeatures():
+        features = input_layer.getFeatures()
+        for feat in features:
+            feat_geom = feat.geometry()
+            if feat_geom.isEmpty():
+                continue
+            elif feat_geom.isMultipart():
+                return True
+            else:
+                return False
+
+
+def convert_multipart_to_singlepart(input_layer):
+    """Converts a vector layer's multipart features to singlepart.
+
+    Converts each feature of the input_layer to a singlepart feature
+    and stores the singlepart feature in a temporary vector layer
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QGISVectorLayer
+
+    :returns: input_layer converted to singlepart features.
+    :rtype: QGISVectorLayer
+    """
+    input_crs = input_layer.sourceCrs()
+    crs_auth_identifier = input_crs.authid()
+
+    temp_layer = QgsVectorLayer("Linestring?crs=" + crs_auth_identifier.lower(), "temp", "memory")
+
+    temp_layer.startEditing()
+    for input_feat in input_layer.getFeatures():
+        feat_geom = input_feat.geometry()
+        feat_geom.convertToSingleType()
+
+        temp_feature = QgsFeature()
+        temp_feature.setGeometry(feat_geom)
+
+        temp_layer.addFeature(temp_feature)
+    temp_layer.commitChanges()
+
+    return temp_layer
+
+
 # noinspection PyPep8Naming,PyArgumentList,PyArgumentList
 def identify_features(input_layer, threshold=0, callback=None):
     """Identify all features in one functions and put it in a layer.
@@ -1119,6 +1173,10 @@ def identify_features(input_layer, threshold=0, callback=None):
     :rtype: tuple
 
     """
+
+    if check_if_multipart(input_layer):
+        input_layer = convert_multipart_to_singlepart(input_layer)
+
     intermediate_layer = create_intermediate_layer(
         input_layer, threshold, callback)
     authority_id = input_layer.crs().authid()
