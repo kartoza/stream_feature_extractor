@@ -312,9 +312,8 @@ class StreamFeatureExtractor(object):
         self._load_nodes_with_style(nodes)
 
         if load_intermediate_layer:
-            QgsMapLayer.instance().addMapLayer(intermediate_layer)
+            QgsProject.instance().addMapLayer(intermediate_layer)
 
-        # QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.iface.messageBar().pushMessage(
             self.tr('Extraction completed.'),
             self.tr('Use "Layer->Save as" to save the results permanently.'),

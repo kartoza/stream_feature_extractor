@@ -1174,12 +1174,9 @@ def identify_features(input_layer, threshold=0, callback=None):
 
     """
 
-<<<<<<< HEAD
     if check_if_multipart(input_layer):
         input_layer = convert_multipart_to_singlepart(input_layer)
 
-=======
->>>>>>> 35bd53f0d4fe4254096027c983975503ab3d8f4b
     intermediate_layer = create_intermediate_layer(
         input_layer, threshold, callback)
     authority_id = input_layer.crs().authid()

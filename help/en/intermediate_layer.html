@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Intermediate Layer &#8212; StreamFeatureExtractor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Feature Definitions" href="features.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="features.html" title="Feature Definitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Intermediate Layer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="intermediate-layer">
+<span id="intermediate-layer-label"></span><h1>Intermediate Layer<a class="headerlink" href="#intermediate-layer" title="Permalink to this headline">¶</a></h1>
+<p>Intermediate layer is a temporary layer that is used for helping the tool to
+identify the nodes. You can show it when you run the tool by check the option
+in options dialog.</p>
+<p>If you open the attribute table of this intermediate layer,
+you will find something like this:</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/intermediate_layer.png"><img alt="_images/intermediate_layer.png" class="align-center" src="_images/intermediate_layer.png" style="width: 824.5999999999999px; height: 351.4px;" /></a>
+</div></blockquote>
+<p>How to obtain this intermediate layer:</p>
+<ol class="arabic simple">
+<li><p>For each line in input layer, the tool will retrieve the first and the last
+vertex. The first one will be assigned as upstream node,
+and the last one will be assigned as downstream node for <em>node_type</em>. We
+also add the <em>line_id</em> as the attribute of the nodes.</p></li>
+<li><p>The tool will find the nearby nodes for each nodes according to their type
+and add their id on the attributes (<em>up_nodes</em> and <em>down_nodes</em>).</p></li>
+<li><p>The tool add another attributes, up_num and down_num. Basically,
+they represent the number of nearby upstream nodes and downstream nodes
+respectively. We will add 1 to <em>up_num</em> if the node is upstream_node,
+this applies for <em>down_num</em>.</p></li>
+<li><p>The tool will populate each node type based on the rules in <a class="reference internal" href="features.html"><span class="doc">Feature Definitions</span></a>.</p></li>
+</ol>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="features.html"
+                        title="previous chapter">Feature Definitions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intermediate_layer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="features.html" title="Feature Definitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Intermediate Layer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kartoza (Pty) Ltd..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

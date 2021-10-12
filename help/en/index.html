@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Stream Feature Extractor documentation &#8212; StreamFeatureExtractor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using The Plugin" href="using_the_plugin.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="using_the_plugin.html" title="Using The Plugin"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Stream Feature Extractor documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="stream-feature-extractor-documentation">
+<h1>Stream Feature Extractor documentation<a class="headerlink" href="#stream-feature-extractor-documentation" title="Permalink to this headline">¶</a></h1>
+<p>A QGIS plugin to extract stream features (wells, sinks, confluences etc.)
+from a stream network. The easiest way to install this plugin is to use
+the QGIS plugin manager to install it (just search for ‘stream’ in the
+plugin manager).</p>
+<p>This plugin is Free and Open Source Software and is released under the GPL V2.
+See the LICENSE file included with the plugin (and in this repository) for
+more information about this license.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using_the_plugin.html">Using The Plugin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_the_plugin.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_the_plugin.html#extracting-features">Extracting Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="options_dialog.html">Options Dialog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="options_dialog.html#accessing-options-dialog">Accessing Options Dialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="options_dialog.html#options-dialog-s-features">Options Dialog’s Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="features.html#crossing-kreuzung">1. Crossing / <em>Kreuzung</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#pseudo-node-pseudonode">2. Pseudo node / <em>Pseudonode</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#well-quelle">3. Well / <em>Quelle</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#sink-senke">4. Sink / <em>Senke</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#watershed-top">5. Watershed / <em>Top</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#unseparated-ungetrennter">6. Unseparated / <em>Ungetrennter</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#unclear-bifurcation-unklare-bifurkation">7. Unclear bifurcation / <em>Unklare Bifurkation</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#tributary-branch-verzweigung">8. Tributary, Branch / <em>Verzweigung</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#confluence-zusammenfluss">9. Confluence / <em>Zusammenfluss</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#segment-center-segmentmitte">10. Segment Center / <em>Segmentmitte</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html#self-intersection-selbstkreuzung">11. Self Intersection / <em>Selbstkreuzung</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="intermediate_layer.html">Intermediate Layer</a></li>
+</ul>
+</div>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to contribute an enhancement, bug fix, translation etc. to
+this plugin, please make a fork of the repository on github at:</p>
+<p><a class="reference external" href="https://github.com/kartoza/stream_feature_extractor">https://github.com/kartoza/stream_feature_extractor</a></p>
+<p>Then make your improvements and make a github pull request. Please follow
+the existing coding conventions if you want us to include your changes.</p>
+<section id="this-plugin-was-implemented-by">
+<h3>This plugin was implemented by:<a class="headerlink" href="#this-plugin-was-implemented-by" title="Permalink to this headline">¶</a></h3>
+<p><strong>Kartoza (Pty) Ltd.</strong>
+<a class="reference external" href="https://kartoza.com/">https://kartoza.com/</a></p>
+<p><strong>Tim Sutton</strong>
+<a class="reference external" href="mailto:tim&#37;&#52;&#48;kartoza&#46;com">tim<span>&#64;</span>kartoza<span>&#46;</span>com</a></p>
+</section>
+<section id="under-subcontract-to">
+<h3>Under subcontract to:<a class="headerlink" href="#under-subcontract-to" title="Permalink to this headline">¶</a></h3>
+<p><strong>Terrestris</strong>
+<a class="reference external" href="http://www.terrestris.de/">http://www.terrestris.de/</a></p>
+</section>
+</section>
+<section id="this-plugin-was-sponsored-by">
+<h2>This plugin was sponsored by:<a class="headerlink" href="#this-plugin-was-sponsored-by" title="Permalink to this headline">¶</a></h2>
+<p><strong>Landesbetrieb fuer Hochwasserschutz und Wasserwirtschaft Sachsen-Anhalt,</strong>
+Otto-von-Guericke-Strasse 5,
+39104
+Magdeburg, Germany.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Stream Feature Extractor documentation</a><ul>
+<li><a class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a class="reference internal" href="#this-plugin-was-implemented-by">This plugin was implemented by:</a></li>
+<li><a class="reference internal" href="#under-subcontract-to">Under subcontract to:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#this-plugin-was-sponsored-by">This plugin was sponsored by:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="using_the_plugin.html"
+                        title="next chapter">Using The Plugin</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="using_the_plugin.html" title="Using The Plugin"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Stream Feature Extractor documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kartoza (Pty) Ltd..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>
