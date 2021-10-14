@@ -48,7 +48,7 @@ from stream_utilities import (
     identify_features,
     console_progress_callback,
     identify_intersections,
-    )
+    preprocess_layer)
 
 from test.utilities_for_testing import get_qgis_app
 
@@ -830,7 +830,7 @@ print('unseparated', num_unseparated)
 
         test_some_null = os.path.join(DATA_TEST_DIR, "qgis3_tests/multilinestring/some_null.gpkg")
         some_null = QgsVectorLayer(test_some_null, 'some_null')
-        some_null_processed = self.preprocess_layer(some_null)
+        some_null_processed = preprocess_layer(some_null)
 
         all_features = some_null_processed.getFeatures()
         for feat in all_features:
@@ -861,9 +861,9 @@ print('unseparated', num_unseparated)
 
         test_including_null = os.path.join(DATA_TEST_DIR, "qgis3_tests/linestring/linestring_null_values_included.gpkg")
         linestring_null_values_included = QgsVectorLayer(test_including_null, 'linestring_null_values_included')
-        null_values_processed = self.preprocess_layer(linestring_null_values_included)
+        null_values_processed = preprocess_layer(linestring_null_values_included)
 
-        all_features = some_null_processed.getFeatures()
+        all_features = null_values_processed.getFeatures()
         for feat in all_features:
             feat_cnt = feat_cnt + 1
 
