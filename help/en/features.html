@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Feature Definitions &#8212; StreamFeatureExtractor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Intermediate Layer" href="intermediate_layer.html" />
+    <link rel="prev" title="Options Dialog" href="options_dialog.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intermediate_layer.html" title="Intermediate Layer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="options_dialog.html" title="Options Dialog"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Feature Definitions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="feature-definitions">
+<span id="features-label"></span><h1>Feature Definitions<a class="headerlink" href="#feature-definitions" title="Permalink to this headline">¶</a></h1>
+<p>This document describes the logic used for determining what type (if any) of
+feature each node represents.</p>
+<section id="crossing-kreuzung">
+<h2>1. Crossing / <em>Kreuzung</em><a class="headerlink" href="#crossing-kreuzung" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>When two lines cross each other.</p>
+<img alt="_images/crossing.png" class="align-center" src="_images/crossing.png" />
+</div></blockquote>
+</section>
+<section id="pseudo-node-pseudonode">
+<h2>2. Pseudo node / <em>Pseudonode</em><a class="headerlink" href="#pseudo-node-pseudonode" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A node that has one upstream and one downstream node. The node is
+superfluous as it can be represented by one line instead of two.</p>
+<img alt="_images/pseudo_node.png" class="align-center" src="_images/pseudo_node.png" />
+</div></blockquote>
+</section>
+<section id="well-quelle">
+<h2>3. Well / <em>Quelle</em><a class="headerlink" href="#well-quelle" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A node that has one upstream node and zero downstream nodes.</p>
+<img alt="_images/well.png" class="align-center" src="_images/well.png" />
+</div></blockquote>
+</section>
+<section id="sink-senke">
+<h2>4. Sink / <em>Senke</em><a class="headerlink" href="#sink-senke" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A node that has no upstream node and one or more downstream nodes.</p>
+<img alt="_images/sink.png" class="align-center" src="_images/sink.png" />
+</div></blockquote>
+</section>
+<section id="watershed-top">
+<h2>5. Watershed / <em>Top</em><a class="headerlink" href="#watershed-top" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A node that has more than one upstream node and zero downstream nodes.</p>
+<img alt="_images/watershed.png" class="align-center" src="_images/watershed.png" />
+</div></blockquote>
+</section>
+<section id="unseparated-ungetrennter">
+<h2>6. Unseparated / <em>Ungetrennter</em><a class="headerlink" href="#unseparated-ungetrennter" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Only one upstream node or only one downstream node and intersects with
+one or more other lines. Note that in the lines below, there is only one
+node under the star, the other line has no node at the position of the
+star.</p>
+<img alt="_images/unseparated.png" class="align-center" src="_images/unseparated.png" />
+</div></blockquote>
+</section>
+<section id="unclear-bifurcation-unklare-bifurkation">
+<h2>7. Unclear bifurcation / <em>Unklare Bifurkation</em><a class="headerlink" href="#unclear-bifurcation-unklare-bifurkation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>It has more than one upstream and more than one downstream node,
+but the number of upstream and downstream nodes are same.</p>
+<img alt="_images/unclear_bifurcation.png" class="align-center" src="_images/unclear_bifurcation.png" />
+</div></blockquote>
+</section>
+<section id="tributary-branch-verzweigung">
+<h2>8. Tributary, Branch / <em>Verzweigung</em><a class="headerlink" href="#tributary-branch-verzweigung" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>It has more upstream nodes than downstream nodes. The minimum number of
+downstream nodes is one.</p>
+<img alt="_images/branch.png" class="align-center" src="_images/branch.png" />
+</div></blockquote>
+</section>
+<section id="confluence-zusammenfluss">
+<h2>9. Confluence / <em>Zusammenfluss</em><a class="headerlink" href="#confluence-zusammenfluss" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>It has more downstream nodes than upstream nodes. The minimum number of
+upstream nodes is one.</p>
+<img alt="_images/confluence.png" class="align-center" src="_images/confluence.png" />
+</div></blockquote>
+</section>
+<section id="segment-center-segmentmitte">
+<h2>10. Segment Center / <em>Segmentmitte</em><a class="headerlink" href="#segment-center-segmentmitte" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Segment center is the linear center of a line. The tool finds the point
+in the line that has distance half of the length of the line.</p>
+<img alt="_images/segment_center.png" class="align-center" src="_images/segment_center.png" />
+</div></blockquote>
+</section>
+<section id="self-intersection-selbstkreuzung">
+<h2>11. Self Intersection / <em>Selbstkreuzung</em><a class="headerlink" href="#self-intersection-selbstkreuzung" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Same with intersection, but this time the line intersects with itself.</p>
+<img alt="_images/self_intersection.png" class="align-center" src="_images/self_intersection.png" />
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Feature Definitions</a><ul>
+<li><a class="reference internal" href="#crossing-kreuzung">1. Crossing / <em>Kreuzung</em></a></li>
+<li><a class="reference internal" href="#pseudo-node-pseudonode">2. Pseudo node / <em>Pseudonode</em></a></li>
+<li><a class="reference internal" href="#well-quelle">3. Well / <em>Quelle</em></a></li>
+<li><a class="reference internal" href="#sink-senke">4. Sink / <em>Senke</em></a></li>
+<li><a class="reference internal" href="#watershed-top">5. Watershed / <em>Top</em></a></li>
+<li><a class="reference internal" href="#unseparated-ungetrennter">6. Unseparated / <em>Ungetrennter</em></a></li>
+<li><a class="reference internal" href="#unclear-bifurcation-unklare-bifurkation">7. Unclear bifurcation / <em>Unklare Bifurkation</em></a></li>
+<li><a class="reference internal" href="#tributary-branch-verzweigung">8. Tributary, Branch / <em>Verzweigung</em></a></li>
+<li><a class="reference internal" href="#confluence-zusammenfluss">9. Confluence / <em>Zusammenfluss</em></a></li>
+<li><a class="reference internal" href="#segment-center-segmentmitte">10. Segment Center / <em>Segmentmitte</em></a></li>
+<li><a class="reference internal" href="#self-intersection-selbstkreuzung">11. Self Intersection / <em>Selbstkreuzung</em></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="options_dialog.html"
+                        title="previous chapter">Options Dialog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intermediate_layer.html"
+                        title="next chapter">Intermediate Layer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/features.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intermediate_layer.html" title="Intermediate Layer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="options_dialog.html" title="Options Dialog"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Feature Definitions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kartoza (Pty) Ltd..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>
