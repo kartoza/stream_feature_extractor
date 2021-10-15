@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-QGIS_IMAGE_V_3_16=qgis-testing-environment:3_16
-QGIS_IMAGE_V_3_20=qgis/qgis:release-3_20
+QGIS_IMAGE_V_3_16=samtwesa/qgis-testing-environment-docker:release-3_16
 
-IMAGES=($QGIS_IMAGE_V_3_16 $QGIS_IMAGE_V_3_20)
+IMAGES=($QGIS_IMAGE_V_3_16)
 
 
 for IMAGE in "${IMAGES[@]}"

@@ -9,8 +9,7 @@ env:
     - IMAGE=qgis/qgis
 
   matrix:
-    - QGIS_IMAGE=qgis-testing-environment:3_16
-    - QGIS_IMAGE=qgis-testing-environment:3_20
+    - QGIS_IMAGE=samtwesa/qgis-testing-environment-docker:release-3_16
 language: python
 
 cache:

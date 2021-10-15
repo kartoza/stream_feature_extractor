@@ -51,7 +51,7 @@ from stream_utilities import (
     console_progress_callback,
     identify_intersections)
 
-from test.utilities_for_testing import get_qgis_app
+from utilities_for_testing import get_qgis_app
 
 QGIS_APP = get_qgis_app()
 
@@ -84,7 +84,7 @@ def get_random_string(length=7):
     :returns: random string
     :rtype: str
     """
-    return hashlib.sha512(str(datetime.now())).hexdigest()[:length]
+    return hashlib.sha512(str(datetime.now()).encode('utf-8')).hexdigest()[:length]
 
 
 def remove_temp_layer(shapefile_path):
