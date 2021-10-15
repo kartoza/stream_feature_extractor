@@ -21,11 +21,13 @@ from datetime import datetime
 from shutil import copy2
 import unittest
 from qgis.core import (
-    QGis,
+    Qgis,
     QgsVectorLayer,
     QgsPoint,
     QgsGeometry,
-    QgsFeature)
+    QgsFeature,
+    QgsWkbTypes
+)
 from qgis.PyQt.QtCore import QVariant
 
 from stream_utilities import (
@@ -277,8 +279,8 @@ class TestStreamUtilities(unittest.TestCase):
             'Title should be %s' % layer.name())
         assert layer.isValid(), 'Layer is not valid'
         assert layer.featureCount() == 6, 'Feature count is not equal to 6'
-        assert layer.geometryType() == QGis.Line, (
-            'Geometry type should be %s' % QGis.Line)
+        assert layer.geometryType() == QgsWkbTypes.LineGeometry, (
+            'Geometry type should be %s' % QgsWkbTypes.LineGeometry)
 
     def test_extract_nodes(self):
         """Test for extracting nodes."""
@@ -325,8 +327,8 @@ class TestStreamUtilities(unittest.TestCase):
         message = 'Feature count is not equal to 12'
         self.assertEqual(point_layer.featureCount(), 12, message)
 
-        assert point_layer.geometryType() == QGis.Point, (
-            'Geometry type should be %s' % QGis.Point)
+        assert point_layer.geometryType() == QgsWkbTypes.PointGeometry, (
+            'Geometry type should be %s' % QgsWkbTypes.PointGeometry)
 
         expected_nodes = [
             [0, 0, 'upstream'],
@@ -716,28 +718,28 @@ class TestStreamUtilities(unittest.TestCase):
         print('wells', num_wells)
         # fix_print_with_import
         # fix_print_with_import
-print('sinks', num_sinks)
+        print('sinks', num_sinks)
         # fix_print_with_import
         # fix_print_with_import
-print('branches', num_branches)
+        print('branches', num_branches)
         # fix_print_with_import
         # fix_print_with_import
-print('confluences', num_confluences)
+        print('confluences', num_confluences)
         # fix_print_with_import
         # fix_print_with_import
-print('pseudo nodes', num_pseudo_nodes)
+        print('pseudo nodes', num_pseudo_nodes)
         # fix_print_with_import
         # fix_print_with_import
-print('watersheds', num_watersheds)
+        print('watersheds', num_watersheds)
         # fix_print_with_import
         # fix_print_with_import
-print('self intersections', num_self_intersections)
+        print('self intersections', num_self_intersections)
         # fix_print_with_import
         # fix_print_with_import
-print('segment center', num_segment_center)
+        print('segment center', num_segment_center)
         # fix_print_with_import
         # fix_print_with_import
-print('unseparated', num_unseparated)
+        print('unseparated', num_unseparated)
 
         feature_count = output_layer.featureCount()
         message = (
