@@ -5,6 +5,12 @@ from a stream network. The easiest way to install this plugin is to use
 the QGIS plugin manager to install it (just search for 'stream' in the
 plugin manager).
 
+QGIS 3.16    [![Build1][1]][2]
+
+
+[1]: https://travis-ci.org/kartoza/stream_feature_extractor.svg?branch=develop
+[2]: https://travis-ci.org/kartoza/stream_feature_extractor/
+
 Visit our [home page](https://github.com/kartoza/stream_feature_extractor) for more details.
 
 This plugin is Free and Open Source Software and is released under the GPL V2.
