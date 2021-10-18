@@ -48,6 +48,7 @@ from stream_utilities import (
     identify_self_intersections,
     identify_segment_center,
     identify_features,
+    console_progress_callback,
     identify_intersections,
     list_to_str,
     str_to_list,
@@ -827,6 +828,70 @@ class TestStreamUtilities(unittest.TestCase):
         self.assertEqual(119, output_layer.featureCount(), message)
 
         remove_temp_layer(sungai_layer.source())
+
+
+    def test_preprocess_layer(self):
+        # Multilinestring with features with null geometry
+        null_cnt = 0
+        feat_cnt = 0
+        multipart_cnt = 0
+        expected_feature_count = '2'
+        expected_count = '0'
+
+        test_some_null = os.path.join(DATA_TEST_DIR, "qgis3_tests/multilinestring/some_null.gpkg")
+        some_null = QgsVectorLayer(test_some_null, 'some_null')
+        some_null_processed = preprocess_layer(some_null)
+
+        all_features = some_null_processed.getFeatures()
+        for feat in all_features:
+            feat_cnt = feat_cnt + 1
+
+            feat_geom = feat.geometry()
+            if feat_geom.isNull():
+                null_cnt = null_cnt + 1
+            else:
+                if feat_geom.isMultipart():
+                    multipart_cnt = multipart_cnt + 1
+
+        message = 'Expected %s features but got %s' % (expected_feature_count, str(feat_cnt))
+        self.assertEqual(expected_feature_count, str(feat_cnt), message)
+
+        message = 'Expected %s features with null geometry but got %s' % (expected_count, str(null_cnt))
+        self.assertEqual(expected_count, str(null_cnt), message)
+
+        message = 'Expected %s multipart features but got %s' % (expected_count, str(multipart_cnt))
+        self.assertEqual(expected_count, str(multipart_cnt), message)
+
+        # LineString with features with null geometry
+        null_cnt = 0
+        feat_cnt = 0
+        multipart_cnt = 0
+        expected_feature_count = '2'
+        expected_count = '0'
+
+        test_including_null = os.path.join(DATA_TEST_DIR, "qgis3_tests/linestring/linestring_null_values_included.gpkg")
+        linestring_null_values_included = QgsVectorLayer(test_including_null, 'linestring_null_values_included')
+        null_values_processed = preprocess_layer(linestring_null_values_included)
+
+        all_features = null_values_processed.getFeatures()
+        for feat in all_features:
+            feat_cnt = feat_cnt + 1
+
+            feat_geom = feat.geometry()
+            if feat_geom.isNull():
+                null_cnt = null_cnt + 1
+            else:
+                if feat_geom.isMultipart():
+                    multipart_cnt = multipart_cnt + 1
+
+        message = 'Expected %s features but got %s' % (expected_feature_count, str(feat_cnt))
+        self.assertEqual(expected_feature_count, str(feat_cnt), message)
+
+        message = 'Expected %s features with null geometry but got %s' % (expected_count, str(null_cnt))
+        self.assertEqual(expected_count, str(null_cnt), message)
+
+        message = 'Expected %s multipart features but got %s' % (expected_count, str(multipart_cnt))
+        self.assertEqual(expected_count, str(multipart_cnt), message)
 
 
 if __name__ == '__main__':
