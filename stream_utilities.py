@@ -101,7 +101,7 @@ def add_layer_attribute(layer, attribute_name, qvariant):
     """Add new attribute called attribute_name to layer.
 
     :param layer: A Vector layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
 
     :param attribute_name: The name of the new attribute.
     :type attribute_name: str
@@ -125,7 +125,7 @@ def extract_nodes(layer):
     line_id, first_point of the line, and last_point of the line.
 
     :param layer: A vector line layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
 
     :returns: list of tuple. The tuple contains line_id, first_point of the
         line, and last_point of the line.
@@ -145,7 +145,6 @@ def extract_nodes(layer):
         first_point = points[0]
         last_point = points[-1]
         nodes.append((line_id, first_point, last_point))
-
     return nodes
 
 
@@ -231,7 +230,7 @@ def get_nearby_nodes(layer, node, threshold):
     nodes.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
 
     :param node: The point/node.
     :type node: QgsFeature
@@ -290,7 +289,7 @@ def add_associated_nodes(layer, threshold, callback=None):
     it will use get_nearby_nodes function to populate them.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
 
     :param threshold: Distance threshold.
     :type threshold: float
@@ -362,7 +361,7 @@ def check_associated_attributes(layer):
     Associated attributed : up_nodes, down_nodes, up_num, down_num
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
 
     :returns: True if so, else False.
     :rtype: bool
@@ -386,7 +385,7 @@ def identify_wells(layer):
     And add attribute `well` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -425,7 +424,7 @@ def identify_sinks(layer):
     And add attribute `sink` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -464,7 +463,7 @@ def identify_watersheds(layer):
     And add attribute `watershed` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -504,7 +503,7 @@ def identify_unclear_bifurcations(layer):
     And add attribute `unclear_bi` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -543,7 +542,7 @@ def identify_branches(layer):
     And add attribute `branch` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -582,7 +581,7 @@ def identify_confluences(layer):
     And add attribute `confluence` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -621,7 +620,7 @@ def identify_pseudo_nodes(layer):
     And add attribute `pseudo_node` for marking.
 
     :param layer: A vector point layer.
-    :type layer: QGISVectorLayer
+    :type layer: QgsVectorLayer
     """
     if not check_associated_attributes(layer):
         raise Exception('You should add associated node first')
@@ -883,7 +882,7 @@ def create_intermediate_layer(input_layer, threshold=0, callback=None):
     to identify the nodes.
 
     :param input_layer: A vector line layer.
-    :type input_layer: QGISVectorLayer
+    :type input_layer: QgsVectorLayer
 
     :param threshold: Distance threshold for node snapping. Defaults to 1.
     :type threshold: float
@@ -1033,7 +1032,7 @@ def create_new_features(
 
     for segment_center in segment_centers:
         new_feature = QgsFeature()
-        point_xy = QgsPointXY(self_intersection)
+        point_xy = QgsPointXY(segment_center)
         new_feature.setGeometry(QgsGeometry.fromPointXY(point_xy))
         x = segment_center.x()
         y = segment_center.y()
@@ -1095,6 +1094,41 @@ def get_duplicate_points(layer, threshold):
     return unique_features, duplicated_features
 
 
+def preprocess_layer(input_layer):
+    """Checks of each feature is valid and makes necessary changes where required.
+
+    Creates a temporary layer which only stores features with a valid geometry.
+    Multipart features ('MultiLineString') are also converted to singlepart ('LineString').
+
+    :param input_layer: A vector line layer.
+    :type input_layer: QgsVectorLayer
+
+    :returns: input_layer with features which has a valid geometry and is singlepart.
+    :rtype: QgsVectorLayer
+    """
+    input_crs = input_layer.crs()
+    if input_crs.isValid():  # Checks if the coordinate system is valid
+        crs_auth_identifier = input_crs.authid()
+        temp_layer = QgsVectorLayer("Linestring?crs=" + crs_auth_identifier.lower(), "temp", "memory")
+    else:
+        temp_layer = QgsVectorLayer("Linestring", "temp", "memory")
+
+    temp_layer.startEditing()
+    for input_feat in input_layer.getFeatures():
+        feat_geom = input_feat.geometry()
+        if not feat_geom.isNull():  # Excludes features with a null geometry
+            if feat_geom.isMultipart():
+                # Multipart to singlepart conversion if the feature is multipart
+                feat_geom.convertToSingleType()
+
+            temp_feature = QgsFeature()
+            temp_feature.setGeometry(feat_geom)
+            temp_layer.addFeature(temp_feature)
+    temp_layer.commitChanges()
+
+    return temp_layer
+
+
 # noinspection PyPep8Naming,PyArgumentList,PyArgumentList
 def identify_features(input_layer, threshold=0, callback=None):
     """Identify all features in one functions and put it in a layer.
@@ -1104,7 +1138,7 @@ def identify_features(input_layer, threshold=0, callback=None):
     not in the start or end of a line).
 
     :param input_layer: A vector line layer.
-    :type input_layer: QGISVectorLayer
+    :type input_layer: QgsVectorLayer
 
     :param threshold: Distance threshold for node snapping. Defaults to 1.
     :type threshold: float
@@ -1119,6 +1153,9 @@ def identify_features(input_layer, threshold=0, callback=None):
     :rtype: tuple
 
     """
+
+    input_layer = preprocess_layer(input_layer)
+
     intermediate_layer = create_intermediate_layer(
         input_layer, threshold, callback)
     authority_id = input_layer.crs().authid()

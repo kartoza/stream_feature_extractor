@@ -21,17 +21,19 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+import os
 
-from . import custom_logging  # pylint: disable=relative-import
+mute_logs = os.getenv('MUTE_LOGS')
 
-# Import the PyQt and QGIS libraries
-# this import required to enable PyQt API v2
+# On testing environment logs are muted, check if we are in a testing enviroment,
+# if so no need of loading logs libraries
+if not mute_logs:
+    from . import custom_logging  # pylint: disable=relative-import
 
-
-SENTRY_URL = (
-    'http://b257c02328384628a50de20d257cf06e:'
-    'ab515d8c88b746d484351321b0111b44@sentry.linfiniti.com/10')
-custom_logging.setup_logger(SENTRY_URL)
+    SENTRY_URL = (
+        'http://b257c02328384628a50de20d257cf06e:'
+        'ab515d8c88b746d484351321b0111b44@sentry.linfiniti.com/10')
+    custom_logging.setup_logger(SENTRY_URL)
 
 
 # noinspection PyPep8Naming

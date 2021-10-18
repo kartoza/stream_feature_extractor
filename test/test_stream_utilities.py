@@ -21,22 +21,24 @@ from datetime import datetime
 from shutil import copy2
 import unittest
 from qgis.core import (
-    QGis,
+    Qgis,
     QgsVectorLayer,
     QgsPoint,
+    QgsPointXY,
     QgsGeometry,
-    QgsFeature)
+    QgsFeature,
+    QgsWkbTypes
+)
 from qgis.PyQt.QtCore import QVariant
 
 from stream_utilities import (
-    list_to_str,
-    str_to_list,
-    add_layer_attribute,
-    extract_nodes,
-    create_nodes_layer,
-    get_nearby_nodes,
     add_associated_nodes,
+    add_layer_attribute,
     check_associated_attributes,
+    console_progress_callback,
+    create_nodes_layer,
+    extract_nodes,
+    get_nearby_nodes,
     identify_wells,
     identify_sinks,
     identify_branches,
@@ -48,9 +50,12 @@ from stream_utilities import (
     identify_features,
     console_progress_callback,
     identify_intersections,
-    preprocess_layer)
+    list_to_str,
+    str_to_list,
+    preprocess_layer,
+)
 
-from test.utilities_for_testing import get_qgis_app
+from utilities_for_testing import get_qgis_app
 
 QGIS_APP = get_qgis_app()
 
@@ -83,7 +88,7 @@ def get_random_string(length=7):
     :returns: random string
     :rtype: str
     """
-    return hashlib.sha512(str(datetime.now())).hexdigest()[:length]
+    return hashlib.sha512(str(datetime.now()).encode('utf-8')).hexdigest()[:length]
 
 
 def remove_temp_layer(shapefile_path):
@@ -159,7 +164,7 @@ def get_shapefile_layer(shapefile_path, title):
 
 
     :returns: A layer
-    :rtype: QGISVectorLayer
+    :rtype: QgsVectorLayer
     """
     layer = QgsVectorLayer(shapefile_path, title, 'ogr')
     return layer
@@ -175,7 +180,7 @@ def get_temp_shapefile_layer(shapefile_path, title, temp_dir=TEMP_DIR):
     :type title: str
 
     :returns: A layer
-    :rtype: QGISVectorLayer
+    :rtype: QgsVectorLayer
 
     """
     temp_shapefile = copy_temp_layer(shapefile_path, temp_dir)
@@ -267,7 +272,7 @@ class TestStreamUtilities(unittest.TestCase):
         layer = self.jawa_nodes_layer
         attribute_name = 'new_att'
         add_layer_attribute(layer, attribute_name, QVariant.Int)
-        id_index = layer.fieldNameIndex(attribute_name)
+        id_index = layer.fields().indexFromName(attribute_name)
         message = 'New attribute has not been added yet.'
         self.assertTrue(id_index > -1, message)
 
@@ -278,26 +283,27 @@ class TestStreamUtilities(unittest.TestCase):
             'Title should be %s' % layer.name())
         assert layer.isValid(), 'Layer is not valid'
         assert layer.featureCount() == 6, 'Feature count is not equal to 6'
-        assert layer.geometryType() == QGis.Line, (
-            'Geometry type should be %s' % QGis.Line)
+        assert layer.geometryType() == QgsWkbTypes.LineGeometry, (
+            'Geometry type should be %s' % QgsWkbTypes.LineGeometry)
 
     def test_extract_nodes(self):
         """Test for extracting nodes."""
         expected_nodes = [
-            (5, QgsPoint(110.23989972376222113, -7.43262727664988976),
-             QgsPoint(110.25117617289369321, -7.77253167189859795)),
-            (4, QgsPoint(110.24634340898020923, -7.77092075059410181),
-             QgsPoint(110.47509423421867325, -7.97067499235163623)),
-            (3, QgsPoint(110.47670515552316317, -7.96745314974264396),
-             QgsPoint(110.52181095204906569, -8.14626541454172681)),
-            (2, QgsPoint(110.46865054900068515, -7.96745314974264396),
-             QgsPoint(110.69579045293465924, -7.75964430146262796)),
-            (0, QgsPoint(110.73123072163357961, -7.47773307317578428),
-             QgsPoint(110.69417953163015511, -7.75803338015813182)),
-            (1, QgsPoint(110.69256861032566519, -7.75964430146262796),
-             QgsPoint(110.97286891730800562, -7.7483678523311541)),
+            (6, QgsPointXY(110.23989972376222113, -7.43262727664988976),
+             QgsPointXY(110.25117617289369321, -7.77253167189859795)),
+            (5, QgsPointXY(110.24634340898020923, -7.77092075059410181),
+             QgsPointXY(110.47509423421867325, -7.97067499235163623)),
+            (4, QgsPointXY(110.47670515552316317, -7.96745314974264396),
+             QgsPointXY(110.52181095204906569, -8.14626541454172681)),
+            (3, QgsPointXY(110.46865054900068515, -7.96745314974264396),
+             QgsPointXY(110.69579045293465924, -7.75964430146262796)),
+            (1, QgsPointXY(110.73123072163357961, -7.47773307317578428),
+             QgsPointXY(110.69417953163015511, -7.75803338015813182)),
+            (2, QgsPointXY(110.69256861032566519, -7.75964430146262796),
+             QgsPointXY(110.97286891730800562, -7.7483678523311541)),
         ]
         layer = self.sungai_layer
+        layer = preprocess_layer(layer)
         nodes = extract_nodes(layer=layer)
         for node in expected_nodes:
             assert node in nodes, 'Node %s not found,' % str(node)
@@ -309,12 +315,14 @@ class TestStreamUtilities(unittest.TestCase):
         """Test for extracting nodes using dgn dataset."""
 
         layer = self.dgn_layer
+        layer = preprocess_layer(layer)
         nodes = extract_nodes(layer=layer)
         self.assertEqual(len(nodes), 4115)
 
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
         layer = self.sungai_layer
+        layer = preprocess_layer(layer)
         nodes = extract_nodes(layer=layer)
         point_layer = create_nodes_layer(nodes=nodes, name='Node layer')
 
@@ -326,22 +334,22 @@ class TestStreamUtilities(unittest.TestCase):
         message = 'Feature count is not equal to 12'
         self.assertEqual(point_layer.featureCount(), 12, message)
 
-        assert point_layer.geometryType() == QGis.Point, (
-            'Geometry type should be %s' % QGis.Point)
+        assert point_layer.geometryType() == QgsWkbTypes.PointGeometry, (
+            'Geometry type should be %s' % QgsWkbTypes.PointGeometry)
 
         expected_nodes = [
-            [0, 0, 'upstream'],
-            [1, 0, 'downstream'],
-            [2, 1, 'upstream'],
-            [3, 1, 'downstream'],
-            [4, 2, 'upstream'],
-            [5, 2, 'downstream'],
-            [6, 3, 'upstream'],
-            [7, 3, 'downstream'],
-            [8, 4, 'upstream'],
-            [9, 4, 'downstream'],
-            [10, 5, 'upstream'],
-            [11, 5, 'downstream']
+            [0, 1, 'upstream'],
+            [1, 1, 'downstream'],
+            [2, 2, 'upstream'],
+            [3, 2, 'downstream'],
+            [4, 3, 'upstream'],
+            [5, 3, 'downstream'],
+            [6, 4, 'upstream'],
+            [7, 4, 'downstream'],
+            [8, 5, 'upstream'],
+            [9, 5, 'downstream'],
+            [10, 6, 'upstream'],
+            [11, 6, 'downstream']
         ]
 
         real_nodes = point_layer.getFeatures()
@@ -368,10 +376,10 @@ class TestStreamUtilities(unittest.TestCase):
         expected_downstream_nodes = [5]
         message = ('Expect upstream nearby nodes %s but got %s' % (
             expected_upstream_nodes, upstream_nodes))
-        self.assertItemsEqual(upstream_nodes, expected_upstream_nodes, message)
+        self.assertEqual(upstream_nodes, expected_upstream_nodes, message)
         message = ('Expect downstream nearby nodes %s but got %s' % (
             expected_downstream_nodes, downstream_nodes))
-        self.assertItemsEqual(
+        self.assertEqual(
             downstream_nodes, expected_downstream_nodes, message)
 
     def test_check_associated_attributes(self):
@@ -418,8 +426,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_wells(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        well_index = nodes_layer.fieldNameIndex('well')
+        id_index = nodes_layer.fields().indexFromName('id')
+        well_index = nodes_layer.fields().indexFromName('well')
 
         expected_well = [0, 10]
 
@@ -440,8 +448,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_sinks(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        sink_index = nodes_layer.fieldNameIndex('sink')
+        id_index = nodes_layer.fields().indexFromName('id')
+        sink_index = nodes_layer.fields().indexFromName('sink')
 
         expected_sink = [3, 7]
 
@@ -462,8 +470,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_branches(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        branch_index = nodes_layer.fieldNameIndex('branch')
+        id_index = nodes_layer.fields().indexFromName('id')
+        branch_index = nodes_layer.fields().indexFromName('branch')
 
         expected_branch = [4, 6, 9]
 
@@ -484,8 +492,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_confluences(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        confluence_index = nodes_layer.fieldNameIndex('confluence')
+        id_index = nodes_layer.fields().indexFromName('id')
+        confluence_index = nodes_layer.fields().indexFromName('confluence')
 
         expected_confluence = [1, 2, 5]
 
@@ -510,8 +518,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_pseudo_nodes(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        pseudo_node_index = nodes_layer.fieldNameIndex('pseudo')
+        id_index = nodes_layer.fields().indexFromName('id')
+        pseudo_node_index = nodes_layer.fields().indexFromName('pseudo')
 
         expected_pseudo_node = [8, 11]
 
@@ -536,8 +544,8 @@ class TestStreamUtilities(unittest.TestCase):
         identify_watersheds(nodes_layer)
         features = nodes_layer.getFeatures()
 
-        id_index = nodes_layer.fieldNameIndex('id')
-        watershed_index = nodes_layer.fieldNameIndex('watershed')
+        id_index = nodes_layer.fields().indexFromName('id')
+        watershed_index = nodes_layer.fields().indexFromName('watershed')
 
         expected_watershed = []
 
@@ -561,6 +569,7 @@ class TestStreamUtilities(unittest.TestCase):
         """Test for identify_self_intersections."""
         line_intersect = os.path.join(DATA_TEST_DIR, 'line_intersect.shp')
         line_intersect = get_temp_shapefile_layer(line_intersect, 'lines')
+        line_intersect = preprocess_layer(line_intersect)
 
         data_provider = line_intersect.dataProvider()
         features = data_provider.getFeatures()
@@ -618,47 +627,47 @@ class TestStreamUtilities(unittest.TestCase):
 
         features_count = output_layer.featureCount()
         expected_result = [
-            [QgsPoint(4505079.78066084068268538, 5820617.32926965225487947),
+            [QgsPointXY(4505079.78066084068268538, 5820617.32926965225487947),
              'Watershed'],
-            [QgsPoint(4505796.71872960310429335, 5819594.76427788194268942),
+            [QgsPointXY(4505796.71872960310429335, 5819594.76427788194268942),
              'Unseparated'],
-            [QgsPoint(4505201.38892469275742769, 5818932.09107278566807508),
+            [QgsPointXY(4505201.38892469275742769, 5818932.09107278566807508),
              'Unclear Bifurcation'],
-            [QgsPoint(4505994.16670085769146681, 5818944.59937320277094841),
+            [QgsPointXY(4505994.16670085769146681, 5818944.59937320277094841),
              'Confluence'],
-            [QgsPoint(4505423.69021992385387421, 5819349.8841874785721302),
+            [QgsPointXY(4505423.69021992385387421, 5819349.8841874785721302),
              'Pseudo node'],
-            [QgsPoint(4504424.25703522842377424, 5819771.00726572517305613),
+            [QgsPointXY(4504424.25703522842377424, 5819771.00726572517305613),
              'Branch'],
-            [QgsPoint(4504424.25681891199201345, 5821004.36726346984505653),
+            [QgsPointXY(4504424.25681891199201345, 5821004.36726346984505653),
              'Well'],
-            [QgsPoint(4506321.54563129413872957, 5820690.89381018560379744),
+            [QgsPointXY(4506321.54563129413872957, 5820690.89381018560379744),
              'Sink'],
-            [QgsPoint(4505706.96817480307072401, 5820597.46010562963783741),
+            [QgsPointXY(4505706.96817480307072401, 5820597.46010562963783741),
              'Self Intersection'],
-            [QgsPoint(4504954.79498676210641861, 5819664.31516459211707115),
+            [QgsPointXY(4504954.79498676210641861, 5819664.31516459211707115),
              'Intersection'],
-            [QgsPoint(4504516.27684732060879469, 5820388.85559526737779379),
+            [QgsPointXY(4504516.27684732060879469, 5820388.85559526737779379),
              'Segment Center'],
-            [QgsPoint(4505459.87090463936328888, 5820124.74861902091652155),
+            [QgsPointXY(4505459.87090463936328888, 5820124.74861902091652155),
              'Segment Center'],
-            [QgsPoint(4505597.77781277894973755, 5818938.34522299282252789),
+            [QgsPointXY(4505597.77781277894973755, 5818938.34522299282252789),
              'Segment Center'],
-            [QgsPoint(4505298.45680753327906132, 5818640.22502889111638069),
+            [QgsPointXY(4505298.45680753327906132, 5818640.22502889111638069),
              'Segment Center'],
-            [QgsPoint(4505874.24493211694061756, 5818746.94614691846072674),
+            [QgsPointXY(4505874.24493211694061756, 5818746.94614691846072674),
              'Segment Center'],
-            [QgsPoint(4505905.3135033342987299, 5820416.27267749048769474),
+            [QgsPointXY(4505905.3135033342987299, 5820416.27267749048769474),
              'Segment Center'],
-            [QgsPoint(4504960.94927519094198942, 5819710.47232702653855085),
+            [QgsPointXY(4504960.94927519094198942, 5819710.47232702653855085),
              'Segment Center'],
-            [QgsPoint(4506065.1831744248047471, 5819712.94692023564130068),
+            [QgsPointXY(4506065.1831744248047471, 5819712.94692023564130068),
              'Segment Center'],
-            [QgsPoint(4504974.16828893031924963, 5819660.41915996465831995),
+            [QgsPointXY(4504974.16828893031924963, 5819660.41915996465831995),
              'Segment Center'],
-            [QgsPoint(4504515.96725786849856377, 5819123.59523478243499994),
+            [QgsPointXY(4504515.96725786849856377, 5819123.59523478243499994),
              'Segment Center'],
-            [QgsPoint(4505754.27464655786752701, 5818549.32406418491154909),
+            [QgsPointXY(4505754.27464655786752701, 5818549.32406418491154909),
              'Sink']
         ]
 
@@ -717,28 +726,28 @@ class TestStreamUtilities(unittest.TestCase):
         print('wells', num_wells)
         # fix_print_with_import
         # fix_print_with_import
-print('sinks', num_sinks)
+        print('sinks', num_sinks)
         # fix_print_with_import
         # fix_print_with_import
-print('branches', num_branches)
+        print('branches', num_branches)
         # fix_print_with_import
         # fix_print_with_import
-print('confluences', num_confluences)
+        print('confluences', num_confluences)
         # fix_print_with_import
         # fix_print_with_import
-print('pseudo nodes', num_pseudo_nodes)
+        print('pseudo nodes', num_pseudo_nodes)
         # fix_print_with_import
         # fix_print_with_import
-print('watersheds', num_watersheds)
+        print('watersheds', num_watersheds)
         # fix_print_with_import
         # fix_print_with_import
-print('self intersections', num_self_intersections)
+        print('self intersections', num_self_intersections)
         # fix_print_with_import
         # fix_print_with_import
-print('segment center', num_segment_center)
+        print('segment center', num_segment_center)
         # fix_print_with_import
         # fix_print_with_import
-print('unseparated', num_unseparated)
+        print('unseparated', num_unseparated)
 
         feature_count = output_layer.featureCount()
         message = (
@@ -773,6 +782,7 @@ print('unseparated', num_unseparated)
         """Test identify_intersections."""
         line_intersect = os.path.join(DATA_TEST_DIR, 'lines.shp')
         line_layer = get_temp_shapefile_layer(line_intersect, 'lines')
+        line_layer = preprocess_layer(line_layer)
 
         intersections = identify_intersections(line_layer)
         self.assertEqual(len(intersections), 22, '%s' % len(intersections))
