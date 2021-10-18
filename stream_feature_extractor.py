@@ -200,6 +200,7 @@ class StreamFeatureExtractor(object):
             callback=self.run,
             parent=self.iface.mainWindow(),
             add_to_menu=True)
+        self.actions.append(self.run_action)
 
         self.options_action = self.add_action(
             icon_path,
@@ -208,6 +209,7 @@ class StreamFeatureExtractor(object):
             parent=self.iface.mainWindow(),
             add_to_menu=True,
             add_to_toolbar=False)
+        self.actions.append(self.options_action)
 
         self.help_action = self.add_action(
             icon_path,
@@ -216,15 +218,18 @@ class StreamFeatureExtractor(object):
             parent=self.iface.mainWindow(),
             add_to_menu=True,
             add_to_toolbar=False)
+        self.actions.append(self.help_action)
 
         if self.iface.activeLayer() is not None:
             self.layer_changed(self.iface.activeLayer())
+        else:
+            self.run_action.setEnabled(False)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(MENU_RUN_LABEL),
+            self.iface.removePluginVectorMenu(
+                self.menu,
                 action)
             self.iface.removeToolBarIcon(action)
 
