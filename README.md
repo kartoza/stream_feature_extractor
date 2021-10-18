@@ -5,7 +5,7 @@ from a stream network. The easiest way to install this plugin is to use
 the QGIS plugin manager to install it (just search for 'stream' in the
 plugin manager).
 
-QGIS 3.16    [![Build1][1]][2]
+![QGIS 3.16](https://github.com/kartoza/stream_feature_extractor/actions/workflows/new_pr.yml/badge.svg?branch=develop)
 
 
 [1]: https://travis-ci.org/kartoza/stream_feature_extractor.svg?branch=develop
