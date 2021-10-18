@@ -1,7 +1,6 @@
 name: Test on QGIS 3.16
 
-on:
-  - pull_request
+on: [push, pull_request]
 
 jobs:
   ci:
@@ -13,11 +12,12 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
 
-      - name: Build docker image
+      - name: Pull docker image and run tests
         working-directory: ./
         shell: bash
         env:
           DEFAULT_BRANCH: develop
+          QGIS_TESTING_IMAGE: samtwesa/qgis-testing-environment-docker:release-3_16
         run: |
           docker pull samtwesa/qgis-testing-environment-docker:release-3_16
-          ./run-docker-test.sh
+          source ${{ github.workspace }}/run-docker-tests-actions.sh
