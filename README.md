@@ -10,8 +10,8 @@ QGIS 3.16    [![Build1][1]][7]
 QGIS 3.20    [![Build2][2]][7]
 
 
-[1]: https://travis-matrix-badges.herokuapp.com/repos/kartoza/stream_feature_extractor/branches/tests/1
-[2]: https://travis-matrix-badges.herokuapp.com/repos/kartoza/stream_feature_extractor/branches/tests/2
+[1]: https://travis-matrix-badges.herokuapp.com/repos/kartoza/stream_feature_extractor/branches/develop/1
+[2]: https://travis-matrix-badges.herokuapp.com/repos/kartoza/stream_feature_extractor/branches/develop/2
 [7]: https://travis-ci.org/kartoza/stream_feature_extractor/
 
 Visit our [home page](https://github.com/kartoza/stream_feature_extractor) for more details.
