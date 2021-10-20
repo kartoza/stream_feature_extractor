@@ -6,8 +6,8 @@
  A tool to extract features from a stream network.
                               -------------------
         begin                : 2014-05-07
-        copyright            : (C) 2014 by Linfiniti Consulting CC.
-        email                : tim@linfiniti.com
+        copyright            : (C) Kartoza (Pty) Ltd.
+        email                : tim@kartoza.com
  ***************************************************************************/
 
 /***************************************************************************

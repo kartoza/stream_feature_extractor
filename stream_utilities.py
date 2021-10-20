@@ -11,7 +11,7 @@
 from builtins import str
 from builtins import range
 
-__author__ = 'Ismail Sunni <ismail@linfiniti.com>'
+__author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '17/04/2014'
 __license__ = "GPL"
