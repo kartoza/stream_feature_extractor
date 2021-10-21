@@ -28,6 +28,8 @@ Fixed a language translation issue
 
 Processing can correctly be applied to multilinestring files
 
+Error submitting now correctly disables
+
 Sphinx documenation updated
 
 Bug fixes
