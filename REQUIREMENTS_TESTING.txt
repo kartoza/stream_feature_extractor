@@ -1,0 +1,5 @@
+# For tests execution:
+deepdiff==4.0.8
+mock==3.0.5
+flake8==3.7.9
+pep257==0.7.0

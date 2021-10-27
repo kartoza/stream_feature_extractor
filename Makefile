@@ -245,3 +245,25 @@ compile_qml_styles:
 	@echo "Compile qml styles for supported locales."
 	@echo "-----------------------------------------"
 	@PYTHONPATH=. python scripts/translate_style.py $(LOCALES)
+
+# Run pep257 style checking
+#http://pypi.python.org/pypi/pep257
+# http://pep257.readthedocs.io/en/latest/error_codes.html
+# D104 will be disabled.
+pep257:
+	@echo
+	@echo "-----------"
+	@echo "PEP257 issues"
+	@echo "-----------"
+	@pep257 --version
+	@pep257 --ignore=D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
+
+
+# Run flake8 style checking
+flake8:
+	@echo
+	@echo "-----------"
+	@echo "Flake8 issues"
+	@echo "-----------"
+	@python3 -m flake8 --version
+	@python3 -m flake8
