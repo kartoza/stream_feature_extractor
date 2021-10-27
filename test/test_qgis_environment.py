@@ -55,6 +55,7 @@ class QGISTest(unittest.TestCase):
         title = 'TestRaster'
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()
+        expected_auth_id = 'OGC:CRS84'
         self.assertEqual(auth_id, expected_auth_id)
 
 if __name__ == '__main__':
