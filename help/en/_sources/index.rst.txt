@@ -20,7 +20,7 @@ Contents:
    options_dialog
    features
    intermediate_layer
-
+   plugin_tests
 
 Contributing
 ------------

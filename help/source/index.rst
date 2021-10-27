@@ -20,7 +20,6 @@ Contents:
    options_dialog
    features
    intermediate_layer
-   install_docker
    plugin_tests
 
 Contributing
