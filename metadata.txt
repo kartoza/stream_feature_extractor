@@ -32,6 +32,10 @@ Error submitting now correctly disables
 
 Sphinx documenation updated
 
+Updates to the test-suite
+
+GitHub actions
+
 Bug fixes
 
 # Tags are comma separated with spaces allowed
