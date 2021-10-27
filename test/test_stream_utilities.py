@@ -317,7 +317,7 @@ class TestStreamUtilities(unittest.TestCase):
         layer = self.dgn_layer
         layer = preprocess_layer(layer)
         nodes = extract_nodes(layer=layer)
-        self.assertEqual(len(nodes), 4115)
+        self.assertEqual(len(nodes), 4116)
 
     def test_create_nodes_layer(self):
         """Test for creating nodes layer."""
