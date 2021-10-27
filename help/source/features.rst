@@ -18,7 +18,7 @@ feature each node represents.
 -----------------------------
 
    A node that has one upstream and one downstream node. The node is
-   superflous as it can be represented by one line instead of two.
+   superfluous as it can be represented by one line instead of two.
 
    .. image:: /static/pseudo_node.png
       :align: center
