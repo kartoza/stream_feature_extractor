@@ -9,7 +9,7 @@ on:
       - synchronize
       - edited
     branches:
-      - develop
+      - dev_test_suite
 
 env:
   # Global environment variable
