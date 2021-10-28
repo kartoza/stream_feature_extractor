@@ -1,23 +1,71 @@
-name: Test on QGIS 3.16
+# Adapted from previous .travis.yml file in this repo
+name: Test
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - edited
+    branches:
+      - dev_test_suite
+
+env:
+  # Global environment variable
+  IMAGE: qgis/qgis
+  WITH_PYTHON_PEP: "true"
+  MUTE_LOGS: "true"
 
 jobs:
-  ci:
-    name: CI
-    runs-on: ubuntu-20.04
-    env:
-      IMAGE_NAME: ${{ github.repository }}
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
+  test:
+    runs-on: ubuntu-latest
 
-      - name: Pull docker image and run tests
-        working-directory: ./
-        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        qgis_version_tag: 
+          - latest
+          - release-3_10
+          - release-3_12
+          - release-3_14
+          - release-3_16
+          - release-3_18
+          - release-3_20
+          - final-3_20_0
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      
+      - name: Preparing docker-compose environment
         env:
-          DEFAULT_BRANCH: develop
-          QGIS_TESTING_IMAGE: samtwesa/qgis-testing-environment-docker:release-3_16
+          QGIS_VERSION_TAG: ${{ matrix.qgis_version_tag }}
         run: |
-          docker pull samtwesa/qgis-testing-environment-docker:release-3_16
-          source ${{ github.workspace }}/run-docker-tests-actions.sh
+          cat << EOF > .env
+          QGIS_VERSION_TAG=${QGIS_VERSION_TAG}
+          IMAGE=${IMAGE}
+          ON_TRAVIS=true
+          MUTE_LOGS=${MUTE_LOGS}
+          WITH_PYTHON_PEP=${WITH_PYTHON_PEP}
+          EOF
+      - name: Preparing test environment
+        run: |
+          cat .env
+          docker pull "${IMAGE}":${{ matrix.qgis_version_tag }}
+          pip install -U pip
+          pip install -U pep257
+          pip install -U flake8
+          docker-compose up -d
+          sleep 10
+      
+      - name: Lint test
+        run: |
+          make pep257
+      
+      - name: Run test suite
+        run: |
+          docker-compose exec -T qgis-testing-environment qgis_testrunner.sh test_suite.test_package
