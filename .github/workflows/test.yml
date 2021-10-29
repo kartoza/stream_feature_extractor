@@ -3,6 +3,9 @@ name: Test
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - develop
   pull_request:
     types:
       - opened
