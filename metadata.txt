@@ -19,24 +19,18 @@ email=tim@kartoza.com
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-changelog=v2.0.0
-Code converted to Python 3
-
-Plugin can now be installed in QGIS 3
-
-Fixed a language translation issue
-
-Processing can correctly be applied to multilinestring files
-
-Error submitting now correctly disables
-
-Sphinx documenation updated
-
-Updates to the test-suite
-
-GitHub actions
-
-Bug fixes
+changelog=
+	v2.0.0:
+	- Code converted to Python 3
+	- Plugin can now be installed in QGIS 3
+	- Fixed a language translation issue
+	- Processing can correctly be applied to multilinestring files
+	- Error submitting now correctly disables
+	- Sphinx documenation updated
+	- Updates to the test-suite
+	- GitHub actions
+	- Sentry logging
+	- Bug fixes
 
 # Tags are comma separated with spaces allowed
 tags=stream,well,catchment,sink,confluence,branch
