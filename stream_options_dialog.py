@@ -24,7 +24,7 @@ import os
 
 from PyQt5.QtWidgets import QDialog
 from qgis.PyQt import uic
-from qgis.PyQt.QtCore import QSettings
+from qgis.core import QgsSettings
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
@@ -45,7 +45,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        settings = QSettings()
+        settings = QgsSettings()
         self.distance.setValue(
             settings.value(
                 'stream-feature-extractor/search-distance', 0, type=float)
@@ -65,7 +65,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Event handler for when ok is pressed."""
-        settings = QSettings()
+        settings = QgsSettings()
         settings.setValue(
             'stream-feature-extractor/search-distance',
             self.distance.value()
