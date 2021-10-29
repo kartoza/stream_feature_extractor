@@ -23,7 +23,7 @@ from datetime import date
 import getpass
 from tempfile import mkstemp
 
-from qgis.PyQt import QtCore
+from qgis.core import QgsSettings
 
 third_party_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'third_party'))
@@ -157,9 +157,9 @@ def setup_logger(sentry_url, log_file=None):
     # logging messages will be sent to the sentry host.
     # We will only log exceptions. You need to either:
     #  * Set env var 'SENTRY' present (value can be anything)
-    #  * Enable the 'plugins/use_sentry' QSettings option
+    #  * Enable the 'plugins/use_sentry' QgsSettings option
     # before this will be enabled.
-    settings = QtCore.QSettings()
+    settings = QgsSettings()
     flag = settings.value('stream-feature-extractor/sentry-logging', False)
 
     # This test is done because the setting for the value is string sometimes
