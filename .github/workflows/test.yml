@@ -24,6 +24,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Run tests on QGIS
 
     strategy:
       fail-fast: false
