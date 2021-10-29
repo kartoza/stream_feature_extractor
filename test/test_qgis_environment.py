@@ -9,7 +9,7 @@
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -51,7 +51,7 @@ class QGISTest(unittest.TestCase):
         self.assertEqual(auth_id, expected_auth_id)
 
         # now test for a loaded layer
-        path = os.path.join(os.path.dirname(__file__), 'tenbytenraster.asc')
+        path = os.path.join(os.path.dirname(__file__), 'tenbytenraster.tif')
         title = 'TestRaster'
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()

@@ -20,7 +20,8 @@ Contents:
    options_dialog
    features
    intermediate_layer
-
+   install_docker
+   plugin_tests
 
 Contributing
 ------------
@@ -28,7 +29,7 @@ Contributing
 If you would like to contribute an enhancement, bug fix, translation etc. to
 this plugin, please make a fork of the repository on github at:
 
-http://github.com/timlinux/stream-feature-extractor
+https://github.com/kartoza/stream_feature_extractor
 
 Then make your improvements and make a github pull request. Please follow
 the existing coding conventions if you want us to include your changes.
@@ -36,17 +37,11 @@ the existing coding conventions if you want us to include your changes.
 This plugin was implemented by:
 ...............................
 
-**Linfiniti Consulting CC.**
-http://linfiniti.com
+**Kartoza (Pty) Ltd.**
+https://kartoza.com/
 
 **Tim Sutton**
-tim@linfiniti.com
-
-and
-
-**Ismail Sunni**
-ismail@linfiniti.com
-
+tim@kartoza.com
 
 Under subcontract to:
 .....................
