@@ -155,9 +155,8 @@ def setup_logger(sentry_url, log_file=None):
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to the sentry host.
-    # We will only log exceptions. You need to either:
-    #  * Set env var 'SENTRY' present (value can be anything)
-    #  * Enable the 'plugins/use_sentry' QgsSettings option
+    # We will only log exceptions.
+    # Enable the 'plugins/use_sentry' QgsSettings option
     # before this will be enabled.
     settings = QgsSettings()
     flag = settings.value(key='stream-feature-extractor/sentry-logging', defaultValue=False, type=bool)
