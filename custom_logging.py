@@ -160,32 +160,18 @@ def setup_logger(sentry_url, log_file=None):
     #  * Enable the 'plugins/use_sentry' QgsSettings option
     # before this will be enabled.
     settings = QgsSettings()
-    flag = settings.value('stream-feature-extractor/sentry-logging', False)
+    flag = settings.value(key='stream-feature-extractor/sentry-logging', defaultValue=False, type=bool)
 
-    # This test is done because the setting for the value is string sometimes
-    # This happens when the setting was set from the plugin options dialog
-    if type(flag) is bool:
-        # Setting is of type boolean
-        if flag:
-            client = Client(sentry_url)
-            sentry_handler = SentryHandler(client)
-            sentry_handler.setFormatter(formatter)
-            sentry_handler.setLevel(logging.ERROR)
-            if add_logging_handler_once(logger, sentry_handler):
-                logger.debug('Sentry logging enabled')
-        else:
-            logger.debug('Sentry logging disabled')
+    if flag:
+        client = Client(sentry_url)
+        sentry_handler = SentryHandler(client)
+        sentry_handler.setFormatter(formatter)
+        sentry_handler.setLevel(logging.ERROR)
+        if add_logging_handler_once(logger, sentry_handler):
+            logger.debug('Sentry logging enabled')
     else:
-        # Setting is stored as a string
-        if flag.lower() == "true":
-            client = Client(sentry_url)
-            sentry_handler = SentryHandler(client)
-            sentry_handler.setFormatter(formatter)
-            sentry_handler.setLevel(logging.ERROR)
-            if add_logging_handler_once(logger, sentry_handler):
-                logger.debug('Sentry logging enabled')
-        else:
-            logger.debug('Sentry logging disabled')
+        logger.debug('Sentry logging disabled')
+
     # Set formatters
     file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
