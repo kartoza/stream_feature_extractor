@@ -23,8 +23,8 @@ changelog=
 	v2.0.0:
 	- Code converted to Python 3
 	- Plugin can now be installed in QGIS 3
-	- Multilinestring geometry vector files can now be used as input
-	- Error submitting now correctly disables
+	- Multilinestring geometry vector files can now be used as input in QGIS 3 versions
+	- Fixed error reporting logic, user can now correctly enable/disable error submission to the remote server
 	- Sphinx documenation updated
 	- Updates to the test-suite
 	- GitHub actions
