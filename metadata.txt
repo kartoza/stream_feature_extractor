@@ -23,8 +23,7 @@ changelog=
 	v2.0.0:
 	- Code converted to Python 3
 	- Plugin can now be installed in QGIS 3
-	- Fixed a language translation issue
-	- Processing can correctly be applied to multilinestring files
+	- Multilinestring geometry vector files can now be used as input
 	- Error submitting now correctly disables
 	- Sphinx documenation updated
 	- Updates to the test-suite
