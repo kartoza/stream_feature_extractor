@@ -9,7 +9,7 @@
 
 
 from builtins import range
-__author__ = 'Ismail Sunni <ismail@linfiniti.com>'
+__author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '21/05/2014'
 __license__ = "GPL"

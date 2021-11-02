@@ -19,14 +19,23 @@ email=tim@kartoza.com
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=
+	v2.0.0:
+	- Code converted to Python 3
+	- Plugin can now be installed in QGIS 3
+	- Multilinestring geometry vector files can now be used as input in QGIS 3 versions
+	- Fixed error reporting logic, user can now correctly enable/disable error submission to the remote server
+	- Sphinx documenation updated
+	- Updates to the test-suite
+	- Sentry logging links updated
+	- Bug fixes
 
 # Tags are comma separated with spaces allowed
 tags=stream,well,catchment,sink,confluence,branch
 
-homepage=https://github.com/timlinux/stream-feature-extractor
-tracker=https://github.com/timlinux/stream-feature-extractor/issues
-repository=git://github.com/timlinux/stream-feature-extractor.git
+homepage=https://github.com/kartoza/stream_feature_extractor
+tracker=https://github.com/kartoza/stream_feature_extractor/issues
+repository=https://github.com/kartoza/stream_feature_extractor
 icon=icon.png
 # experimental flag
 experimental=False
