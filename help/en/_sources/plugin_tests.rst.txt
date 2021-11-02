@@ -3,8 +3,8 @@
 Testing the plugin
 ==================
 
-The plugin or changes to the plugin can be tested using gitHub Actions (https://github.com/kartoza/stream_feature_extractor/actions).
-Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to exisiting
+The plugin or changes to the plugin can be tested using Github Actions (https://github.com/kartoza/stream_feature_extractor/actions).
+Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to existing
 data in the '/test' folder. The following QGIS versions are tested:
 
     1. 3.10;
@@ -12,15 +12,16 @@ data in the '/test' folder. The following QGIS versions are tested:
     3. 3.14;
     4. 3.16 LTR;
     5. 3.18;
-    6. 3.20; and
-    7. latest version.
+    6. 3.20;
+    7. 3.22; and
+    8. latest version.
 
 Manual testing
 --------------
 Tests can manually be performed, but the action should execute automatically. Here is the steps for manual
 execution:
 
-1. On the repository click on the Actions tab, and select the 'Test' worksflow (will execute .github/workflows/test_2.yml);
+1. On the repository click on the Actions tab, and select the 'Test' worksflow (will execute .github/workflows/test.yml);
 2. Click on the Run workflow drop-down and select the Branch you want to perform the test on;
 3. Click Run workflow;
 
@@ -88,7 +89,7 @@ to the job list for testing. First the qgis/qgis DockerHub needs to be checked f
 
 Now the user can add the tag to the workflow:
 
-1. Go to '.github/workflows/test_2.yml';
+1. Go to '.github/workflows/test.yml';
 2. Click on the edit button (highlighted in red):
 
    .. image:: /examples/edit_button.png

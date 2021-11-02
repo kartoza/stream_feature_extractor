@@ -10,7 +10,7 @@ To install Stream Feature Extractor, use the plugin manager in QGIS:
 
 1. In QGIS, go to Plugins --> Manage and Install Plugins;
 2. Select the All tab;
-3. In the search bar, type 'streame feature extractor';
+3. In the search bar, type 'stream feature extractor';
 4. Select the plugin and click on the Install button.
 
    .. image:: /examples/plugin_install.png

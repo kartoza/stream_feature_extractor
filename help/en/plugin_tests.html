@@ -38,8 +38,8 @@
             
   <section id="testing-the-plugin">
 <span id="plugin-tests-label"></span><h1>Testing the plugin<a class="headerlink" href="#testing-the-plugin" title="Permalink to this headline">¶</a></h1>
-<p>The plugin or changes to the plugin can be tested using gitHub Actions (<a class="reference external" href="https://github.com/kartoza/stream_feature_extractor/actions">https://github.com/kartoza/stream_feature_extractor/actions</a>).
-Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to exisiting
+<p>The plugin or changes to the plugin can be tested using Github Actions (<a class="reference external" href="https://github.com/kartoza/stream_feature_extractor/actions">https://github.com/kartoza/stream_feature_extractor/actions</a>).
+Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to existing
 data in the ‘/test’ folder. The following QGIS versions are tested:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -48,7 +48,8 @@ data in the ‘/test’ folder. The following QGIS versions are tested:</p>
 <li><p>3.14;</p></li>
 <li><p>3.16 LTR;</p></li>
 <li><p>3.18;</p></li>
-<li><p>3.20; and</p></li>
+<li><p>3.20;</p></li>
+<li><p>3.22; and</p></li>
 <li><p>latest version.</p></li>
 </ol>
 </div></blockquote>
@@ -57,7 +58,7 @@ data in the ‘/test’ folder. The following QGIS versions are tested:</p>
 <p>Tests can manually be performed, but the action should execute automatically. Here is the steps for manual
 execution:</p>
 <ol class="arabic">
-<li><p>On the repository click on the Actions tab, and select the ‘Test’ worksflow (will execute .github/workflows/test_2.yml);</p></li>
+<li><p>On the repository click on the Actions tab, and select the ‘Test’ worksflow (will execute .github/workflows/test.yml);</p></li>
 <li><p>Click on the Run workflow drop-down and select the Branch you want to perform the test on;</p></li>
 <li><p>Click Run workflow;</p>
 <img alt="_images/github_actions.png" class="align-center" src="_images/github_actions.png" />
@@ -115,7 +116,7 @@ to the job list for testing. First the qgis/qgis DockerHub needs to be checked f
 </ol>
 <p>Now the user can add the tag to the workflow:</p>
 <ol class="arabic">
-<li><p>Go to ‘.github/workflows/test_2.yml’;</p></li>
+<li><p>Go to ‘.github/workflows/test.yml’;</p></li>
 <li><p>Click on the edit button (highlighted in red):</p>
 <img alt="_images/edit_button.png" class="align-center" src="_images/edit_button.png" />
 </li>
