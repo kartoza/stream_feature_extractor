@@ -27,8 +27,7 @@ changelog=
 	- Fixed error reporting logic, user can now correctly enable/disable error submission to the remote server
 	- Sphinx documenation updated
 	- Updates to the test-suite
-	- GitHub actions
-	- Sentry logging
+	- Sentry logging links updated
 	- Bug fixes
 
 # Tags are comma separated with spaces allowed
