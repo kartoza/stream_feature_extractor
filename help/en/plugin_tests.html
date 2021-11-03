@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Testing the plugin &#8212; StreamFeatureExtractor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Intermediate Layer" href="intermediate_layer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intermediate_layer.html" title="Intermediate Layer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Testing the plugin</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="testing-the-plugin">
+<span id="plugin-tests-label"></span><h1>Testing the plugin<a class="headerlink" href="#testing-the-plugin" title="Permalink to this headline">¶</a></h1>
+<p>The plugin or changes to the plugin can be tested using Github Actions (<a class="reference external" href="https://github.com/kartoza/stream_feature_extractor/actions">https://github.com/kartoza/stream_feature_extractor/actions</a>).
+Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to existing
+data in the ‘/test’ folder. The following QGIS versions are tested:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>3.10;</p></li>
+<li><p>3.12;</p></li>
+<li><p>3.14;</p></li>
+<li><p>3.16 LTR;</p></li>
+<li><p>3.18;</p></li>
+<li><p>3.20;</p></li>
+<li><p>3.22; and</p></li>
+<li><p>latest version.</p></li>
+</ol>
+</div></blockquote>
+<section id="manual-testing">
+<h2>Manual testing<a class="headerlink" href="#manual-testing" title="Permalink to this headline">¶</a></h2>
+<p>Tests can manually be performed, but the action should execute automatically. Here is the steps for manual
+execution:</p>
+<ol class="arabic">
+<li><p>On the repository click on the Actions tab, and select the ‘Test’ worksflow (will execute .github/workflows/test.yml);</p></li>
+<li><p>Click on the Run workflow drop-down and select the Branch you want to perform the test on;</p></li>
+<li><p>Click Run workflow;</p>
+<img alt="_images/github_actions.png" class="align-center" src="_images/github_actions.png" />
+</li>
+<li><p>Processing might take a while, especially if the docker images needs to be pulled;</p></li>
+<li><p>If processing is done, check if the one of the jobs succeeded or failed.</p></li>
+</ol>
+<p>Failed:</p>
+<blockquote>
+<div><img alt="_images/failed.png" class="align-center" src="_images/failed.png" />
+</div></blockquote>
+<p>Success:</p>
+<blockquote>
+<div><img alt="_images/success.png" class="align-center" src="_images/success.png" />
+</div></blockquote>
+</section>
+<section id="failed">
+<h2>Failed<a class="headerlink" href="#failed" title="Permalink to this headline">¶</a></h2>
+<p>If the testing failed, the user needs to investigate the cause of the error. Here is a quick guide on how
+to do this:</p>
+<ol class="arabic">
+<li><p>Select the test which failed;</p></li>
+<li><p>Select the job which failed (e.g. ‘test (release-3_16)’);</p></li>
+<li><p>The user will be presented with the job steps. Select the job which failed (e.g. ‘Run test suite’);</p>
+<img alt="_images/job_steps.png" class="align-center" src="_images/job_steps.png" />
+</li>
+<li><p>A list of print lines will be shown, with the error at the end;</p>
+<img alt="_images/error_msg.png" class="align-center" src="_images/error_msg.png" />
+</li>
+</ol>
+<p>5. Investigate the code to which the error relates to the method performed during that test. Having a look at the
+data used for the test may also be useful.</p>
+</section>
+<section id="success">
+<h2>Success<a class="headerlink" href="#success" title="Permalink to this headline">¶</a></h2>
+<p>There should be no issue if the tests does not fail. The jobs will be similar to the following:</p>
+<blockquote>
+<div><img alt="_images/jobs_success.png" class="align-center" src="_images/jobs_success.png" />
+</div></blockquote>
+<p>The plugin and any updates to the plugin should work with no issue for each of the QGIS versions in the above list.</p>
+</section>
+<section id="adding-additional-qgis-versions-for-testing">
+<h2>Adding additional QGIS versions for testing<a class="headerlink" href="#adding-additional-qgis-versions-for-testing" title="Permalink to this headline">¶</a></h2>
+<p>The user may want to add more or newer versions (which were originally not included in the job list)
+to the job list for testing. First the qgis/qgis DockerHub needs to be checked for the tags. This can be done as follows:</p>
+<ol class="arabic">
+<li><p>Go to <a class="reference external" href="https://hub.docker.com/r/qgis/qgis/">https://hub.docker.com/r/qgis/qgis/</a></p></li>
+<li><p>Click on the Tags tab;</p>
+<img alt="_images/docker_qgis_repo.png" class="align-center" src="_images/docker_qgis_repo.png" />
+</li>
+<li><p>The user will be presented with a page which lists all QGIS docker images with their associated tags (shown in red);</p></li>
+<li><p>Copy the ‘release-version’ characters. ‘release-3_20’ for the QGIS version 3.20 in this example:</p>
+<img alt="_images/docker_tag.png" class="align-center" src="_images/docker_tag.png" />
+</li>
+</ol>
+<p>Now the user can add the tag to the workflow:</p>
+<ol class="arabic">
+<li><p>Go to ‘.github/workflows/test.yml’;</p></li>
+<li><p>Click on the edit button (highlighted in red):</p>
+<img alt="_images/edit_button.png" class="align-center" src="_images/edit_button.png" />
+</li>
+<li><p>Add the copied tag to the ‘qgis_version_tag’ list:</p>
+<img alt="_images/tag_jobs.png" class="align-center" src="_images/tag_jobs.png" />
+</li>
+<li><p>Save/commit the change;</p></li>
+<li><p>The testing will now be performed using the added QGIS version.</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Testing the plugin</a><ul>
+<li><a class="reference internal" href="#manual-testing">Manual testing</a></li>
+<li><a class="reference internal" href="#failed">Failed</a></li>
+<li><a class="reference internal" href="#success">Success</a></li>
+<li><a class="reference internal" href="#adding-additional-qgis-versions-for-testing">Adding additional QGIS versions for testing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intermediate_layer.html"
+                        title="previous chapter">Intermediate Layer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/plugin_tests.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intermediate_layer.html" title="Intermediate Layer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">StreamFeatureExtractor 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Testing the plugin</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kartoza (Pty) Ltd..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

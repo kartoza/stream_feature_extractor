@@ -18,7 +18,7 @@ feature each node represents.
 -----------------------------
 
    A node that has one upstream and one downstream node. The node is
-   superflous as it can be represented by one line instead of two.
+   superfluous as it can be represented by one line instead of two.
 
    .. image:: /static/pseudo_node.png
       :align: center
@@ -26,7 +26,7 @@ feature each node represents.
 3. Well / *Quelle*
 ------------------
 
-   A node that has 1 upstream node and 0 downstream nodes.
+   A node that has one upstream node and zero downstream nodes.
 
    .. image:: /static/well.png
       :align: center
@@ -34,7 +34,7 @@ feature each node represents.
 4. Sink / *Senke*
 -----------------
 
-   A node that has no upstream node and 1 or more downstream nodes.
+   A node that has no upstream node and one or more downstream nodes.
 
    .. image:: /static/sink.png
       :align: center
@@ -42,7 +42,7 @@ feature each node represents.
 5. Watershed / *Top*
 --------------------
 
-   A node that has more than one upstream node and 0 downstream nodes.
+   A node that has more than one upstream node and zero downstream nodes.
 
    .. image:: /static/watershed.png
       :align: center
@@ -50,7 +50,7 @@ feature each node represents.
 6. Unseparated / *Ungetrennter*
 -------------------------------
 
-   Only 1 upstream node or only 1 downstream node and intersects with
+   Only one upstream node or only one downstream node and intersects with
    one or more other lines. Note that in the lines below, there is only one
    node under the star, the other line has no node at the position of the
    star.

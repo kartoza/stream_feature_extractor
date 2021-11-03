@@ -8,18 +8,20 @@ Installation
 ------------
 To install Stream Feature Extractor, use the plugin manager in QGIS:
 
-    `Plugins --> Fetch Python Plugins`
+1. In QGIS, go to Plugins --> Manage and Install Plugins;
+2. Select the All tab;
+3. In the search bar, type 'stream feature extractor';
+4. Select the plugin and click on the Install button.
 
-Search for 'Stream Feature Extractor', select it and click the install button.
-The plugin will now be added to your plugins menu.
-
+   .. image:: /examples/plugin_install.png
+      :align: center
 
 Extracting Features
 -------------------
 
 1. Load a vector line layer to QGIS and select it.
 
-2. Find Stream Feature Extractor icon in tool bar, click it to extract the
+2. Find Stream Feature Extractor icon in toolbar, click it to extract the
    features from your layer.
 
    .. image:: /static/toolbar_icon.png
