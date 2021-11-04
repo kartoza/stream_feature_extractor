@@ -12,6 +12,13 @@ This plugin is Free and Open Source Software and is released under the GPL V2.
 See the LICENSE file included with the plugin (and in this repository) for
 more information about this license.
 
+# Feature extraction
+
+
+![Plugin](https://github.com/kartoza/stream_feature_extractor/help/source/static/branch.png)
+
+
+
 # Contributing
 
 If you would like to contribute an enhancement, bug fix, translation etc. to
