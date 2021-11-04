@@ -12,12 +12,18 @@ This plugin is Free and Open Source Software and is released under the GPL V2.
 See the LICENSE file included with the plugin (and in this repository) for
 more information about this license.
 
-# Feature extraction
+# Feature definitions
+There are 11 types of features which can be extracted from a stream network:
 
+1. Crossing: When two lines cross each other
 
-![Plugin](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/branch.png)
+![crossing](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/crossing.png)
 
+2. Pseudo node: A node that has one upstream and one downstream node. The node is superfluous as it can be represented by one line instead of two.
 
+![pseudo_node](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/pseudo_node.png)
+
+3. 
 
 # Contributing
 
