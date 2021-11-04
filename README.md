@@ -59,6 +59,33 @@ There are 11 types of features which can be extracted from a stream network:
 
 ![self_intersection](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/self_intersection.png)
 
+# Installation of the plugin
+The easiest approach will be to install the plugin using the QGIS plugin manager:
+1. In QGIS, go to Plugins > Manage and install plugins;
+2. Select the All tab;
+3. In the search bar, type 'stream feature extractor'; and
+4. Select the plugin and click on the Install button.
+
+![plugin_management](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/plugin_install.png)
+
+# How to extract features
+The plugin is user-friendly and extractions can be done as follows:
+1. Load a vector line layer to QGIS;
+2. Select the layer; and
+3. Click on the stream feature extractor icon in the toolbar. The features will be extracted for the selected layer.
+
+![icon](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/toolbar_icon.png)
+
+4. (optional method) Vector > Stream feature extractor > Extract stream features from current layer.
+
+# Available options
+Possible parameters or settings for the plugin can be set. Go to Vector > Stream feature extractor > Options. The following can be set:
+1. Search distance: This is the distance used to determine if nodes converged or not. Note: The distance is calculated in map units of your stream network;
+2. Show intermediate node count layer: An intermediate layer which were used to extract the feature is loaded to QGIS; and
+3. Enabling this will submit errors to the server for debugging.
+
+![options](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/options_dialog.png)
+
 # Contributing
 
 If you would like to contribute an enhancement, bug fix, translation etc. to
