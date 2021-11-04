@@ -139,15 +139,38 @@ There should be no issue if the tests does not fail. The jobs will be similar to
 The plugin and any updates to the plugin should work with no issue for each of the QGIS versions in the above list.
 
 ## Adding additional QGIS versions for testing
+The user may want to add more or newer versions (which were originally not included in the job list) to the job list for testing. First the qgis/qgis DockerHub needs to be checked for the tags. This can be done as follows:
+1. Go to https://hub.docker.com/r/qgis/qgis/
+2. Click on the Tags tab;
+
+![qgis_repo](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/docker_qgis_repo.png)
+
+3. The user will be presented with a page which lists all QGIS docker images with their associated tags (shown in red);
+4. Copy the ‘release-version’ characters. ‘release-3_20’ for the QGIS version 3.20 in this example:
+
+![tag](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/docker_tag.png)
+
+Now the user can add the tag to the workflow:
+1. Go to ‘.github/workflows/test.yml’;
+2. Click on the edit button (highlighted in red):
+
+![edit](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/edit_button.png)
+
+3. Add the copied tag to the ‘qgis_version_tag’ list:
+
+![tag_jobs](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/tag_jobs.png)
+
+4. Save/commit the change; and
+5. The testing will now be performed using the added QGIS version.
 
 # Contributing
 
 If you would like to contribute an enhancement, bug fix, translation etc. to
-this plugin, please make a fork of the repository on github at:
+this plugin, please make a fork of the repository on Github at:
 
 https://github.com/kartoza/stream_feature_extractor
 
-Then make your improvements and make a github pull request. Please follow
+Then make your improvements and make a Github pull request. Please follow
 the existing coding conventions if you want us to include your changes.
 
 ## This plugin was implemented by:
