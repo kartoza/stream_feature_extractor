@@ -15,7 +15,7 @@ more information about this license.
 # Feature extraction
 
 
-![Plugin](https://github.com/kartoza/stream_feature_extractor/help/source/static/branch.png)
+![Plugin](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/branch.png)
 
 
 
