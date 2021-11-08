@@ -60,7 +60,7 @@ from utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 # For tests only to ensure sentry logging is on
-# Normaly this is configured via QSettings
+# Normaly this is configured via QgsSettings
 os.environ['SENTRY'] = '1'
 
 TEMP_DIR = os.path.join(

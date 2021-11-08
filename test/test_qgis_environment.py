@@ -19,7 +19,8 @@ import unittest
 from qgis.core import (
     QgsProviderRegistry,
     QgsCoordinateReferenceSystem,
-    QgsRasterLayer)
+    QgsRasterLayer,
+    QgsSettings)
 
 from utilities_for_testing import get_qgis_app
 QGIS_APP = get_qgis_app()
@@ -56,6 +57,22 @@ class QGISTest(unittest.TestCase):
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()
         self.assertEqual(auth_id, expected_auth_id)
+
+    def test_qgs_settings(self):
+        """Test that QGIS QgsSettings can correctly read existing settings or use default values correctly.
+        """
+        settings = QgsSettings()
+
+        search_dis = settings.value("stream-feature-extractor/search-distance", 0, type=float)
+        intermediate_layer = settings.value("stream-feature-extractor/load-intermediate-layer", False, type=bool)
+        error_logging = settings.value("stream-feature-extractor/sentry-logging", False, type=bool)
+
+        self.assertTrue(0 <= search_dis <= 1)
+
+        self.assertIsInstance(intermediate_layer, bool)
+
+        self.assertIsInstance(error_logging, bool)
+
 
 if __name__ == '__main__':
     unittest.main()

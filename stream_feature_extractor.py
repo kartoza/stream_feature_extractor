@@ -27,10 +27,10 @@ from builtins import object
 
 from qgis.core import Qgis
 
-from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, qVersion, QCoreApplication, QUrl
+from qgis.PyQt.QtCore import Qt, QTranslator, qVersion, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QProgressBar
-from qgis.core import QgsProject, QgsMapLayer
+from qgis.core import QgsProject, QgsMapLayer, QgsSettings
 
 from .stream_help_dialog import HelpDialog
 from .stream_options_dialog import OptionsDialog
@@ -70,7 +70,7 @@ class StreamFeatureExtractor(object):
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        self.locale = QSettings().value("locale/userLocale")[0:2]
+        self.locale = QgsSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
@@ -288,7 +288,7 @@ class StreamFeatureExtractor(object):
                 progress_bar.setMaximum(maximum)
                 progress_bar.setValue(current)
 
-        settings = QSettings()
+        settings = QgsSettings()
         distance = settings.value(
             'stream-feature-extractor/search-distance', 0, type=float)
         load_intermediate_layer = settings.value(
