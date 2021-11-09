@@ -24,8 +24,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Running tests on QGIS ${{ matrix.qgis_version_tag }}
-
+    name: Running tests on QGIS ${{ matrix.qgis_version_tag }} with python ${{ matrix.python }}
     strategy:
       fail-fast: false
       matrix:
@@ -38,6 +37,9 @@ jobs:
           - release-3_18
           - release-3_20
           - final-3_22_0
+        python:
+          - 3.8.1
+          - 3.9.0
 
     steps:
 
