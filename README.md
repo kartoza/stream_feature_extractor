@@ -23,7 +23,7 @@ There are 11 types of features which can be extracted from a stream network:
 
 ![pseudo_node](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/pseudo_node.png)
 
-3. Well: A node that has one downstream node and zero upstream nodes.
+3. Well or Source: A node that has one downstream node and zero upstream nodes.
 
 ![well](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/well.png)
 
