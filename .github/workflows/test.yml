@@ -1,5 +1,5 @@
 # Adapted from previous .travis.yml file in this repo
-name: Test
+name: Continous Integration
 
 on:
   workflow_dispatch:
@@ -24,6 +24,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Running tests on QGIS ${{ matrix.qgis_version_tag }}
 
     strategy:
       fail-fast: false
