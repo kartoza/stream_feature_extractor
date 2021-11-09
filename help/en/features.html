@@ -44,10 +44,10 @@
 <span id="features-label"></span><h1>Feature Definitions<a class="headerlink" href="#feature-definitions" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the logic used for determining what type (if any) of
 feature each node represents.</p>
-<section id="crossing-kreuzung">
-<h2>1. Crossing / <em>Kreuzung</em><a class="headerlink" href="#crossing-kreuzung" title="Permalink to this headline">¶</a></h2>
+<section id="crossing-or-intersection-kreuzung">
+<h2>1. Crossing or Intersection / <em>Kreuzung</em><a class="headerlink" href="#crossing-or-intersection-kreuzung" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>When two lines cross each other.</p>
+<div><p>If two lines cross each other (without a node).</p>
 <img alt="_images/crossing.png" class="align-center" src="_images/crossing.png" />
 </div></blockquote>
 </section>
@@ -59,34 +59,33 @@ superfluous as it can be represented by one line instead of two.</p>
 <img alt="_images/pseudo_node.png" class="align-center" src="_images/pseudo_node.png" />
 </div></blockquote>
 </section>
-<section id="well-quelle">
-<h2>3. Well / <em>Quelle</em><a class="headerlink" href="#well-quelle" title="Permalink to this headline">¶</a></h2>
+<section id="well-or-source-quelle">
+<h2>3. Well or Source / <em>Quelle</em><a class="headerlink" href="#well-or-source-quelle" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>A node that has one upstream node and zero downstream nodes.</p>
+<div><p>A node that has one downstream node and zero upstream nodes.</p>
 <img alt="_images/well.png" class="align-center" src="_images/well.png" />
 </div></blockquote>
 </section>
 <section id="sink-senke">
 <h2>4. Sink / <em>Senke</em><a class="headerlink" href="#sink-senke" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>A node that has no upstream node and one or more downstream nodes.</p>
+<div><p>A node that has no downstream node and one or more upstream nodes.</p>
 <img alt="_images/sink.png" class="align-center" src="_images/sink.png" />
 </div></blockquote>
 </section>
 <section id="watershed-top">
 <h2>5. Watershed / <em>Top</em><a class="headerlink" href="#watershed-top" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>A node that has more than one upstream node and zero downstream nodes.</p>
+<div><p>A node that has more than one downstream node and zero upstream nodes.</p>
 <img alt="_images/watershed.png" class="align-center" src="_images/watershed.png" />
 </div></blockquote>
 </section>
 <section id="unseparated-ungetrennter">
 <h2>6. Unseparated / <em>Ungetrennter</em><a class="headerlink" href="#unseparated-ungetrennter" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Only one upstream node or only one downstream node and intersects with
-one or more other lines. Note that in the lines below, there is only one
-node under the star, the other line has no node at the position of the
-star.</p>
+<div><p>Only one upstream node or only one downstream node and intersects with one or more other lines.
+Note that in the lines below, there is only one node under the star, the other line has no node
+at the position of the star.</p>
 <img alt="_images/unseparated.png" class="align-center" src="_images/unseparated.png" />
 </div></blockquote>
 </section>
@@ -98,34 +97,32 @@ but the number of upstream and downstream nodes are same.</p>
 <img alt="_images/unclear_bifurcation.png" class="align-center" src="_images/unclear_bifurcation.png" />
 </div></blockquote>
 </section>
-<section id="tributary-branch-verzweigung">
-<h2>8. Tributary, Branch / <em>Verzweigung</em><a class="headerlink" href="#tributary-branch-verzweigung" title="Permalink to this headline">¶</a></h2>
+<section id="distributary-or-branch-verzweigung">
+<h2>8. Distributary or Branch / <em>Verzweigung</em><a class="headerlink" href="#distributary-or-branch-verzweigung" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>It has more upstream nodes than downstream nodes. The minimum number of
-downstream nodes is one.</p>
+<div><p>It has more downstream nodes than upstream nodes. The minimum number of upstream nodes is one.</p>
 <img alt="_images/branch.png" class="align-center" src="_images/branch.png" />
 </div></blockquote>
 </section>
 <section id="confluence-zusammenfluss">
 <h2>9. Confluence / <em>Zusammenfluss</em><a class="headerlink" href="#confluence-zusammenfluss" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>It has more downstream nodes than upstream nodes. The minimum number of
-upstream nodes is one.</p>
+<div><p>It has more upstream nodes than downstream nodes. The minimum number of downstream nodes is one.</p>
 <img alt="_images/confluence.png" class="align-center" src="_images/confluence.png" />
 </div></blockquote>
 </section>
-<section id="segment-center-segmentmitte">
-<h2>10. Segment Center / <em>Segmentmitte</em><a class="headerlink" href="#segment-center-segmentmitte" title="Permalink to this headline">¶</a></h2>
+<section id="segment-centre-segmentmitte">
+<h2>10. Segment Centre / <em>Segmentmitte</em><a class="headerlink" href="#segment-centre-segmentmitte" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Segment center is the linear center of a line. The tool finds the point
-in the line that has distance half of the length of the line.</p>
+<div><p>Segment centre is the linear centre of a line.
+The tool finds the point in the line that is half way along the line.</p>
 <img alt="_images/segment_center.png" class="align-center" src="_images/segment_center.png" />
 </div></blockquote>
 </section>
 <section id="self-intersection-selbstkreuzung">
 <h2>11. Self Intersection / <em>Selbstkreuzung</em><a class="headerlink" href="#self-intersection-selbstkreuzung" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Same with intersection, but this time the line intersects with itself.</p>
+<div><p>Same as intersection (crossing), but this time the line intersects with itself.</p>
 <img alt="_images/self_intersection.png" class="align-center" src="_images/self_intersection.png" />
 </div></blockquote>
 </section>
@@ -141,16 +138,16 @@ in the line that has distance half of the length of the line.</p>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Feature Definitions</a><ul>
-<li><a class="reference internal" href="#crossing-kreuzung">1. Crossing / <em>Kreuzung</em></a></li>
+<li><a class="reference internal" href="#crossing-or-intersection-kreuzung">1. Crossing or Intersection / <em>Kreuzung</em></a></li>
 <li><a class="reference internal" href="#pseudo-node-pseudonode">2. Pseudo node / <em>Pseudonode</em></a></li>
-<li><a class="reference internal" href="#well-quelle">3. Well / <em>Quelle</em></a></li>
+<li><a class="reference internal" href="#well-or-source-quelle">3. Well or Source / <em>Quelle</em></a></li>
 <li><a class="reference internal" href="#sink-senke">4. Sink / <em>Senke</em></a></li>
 <li><a class="reference internal" href="#watershed-top">5. Watershed / <em>Top</em></a></li>
 <li><a class="reference internal" href="#unseparated-ungetrennter">6. Unseparated / <em>Ungetrennter</em></a></li>
 <li><a class="reference internal" href="#unclear-bifurcation-unklare-bifurkation">7. Unclear bifurcation / <em>Unklare Bifurkation</em></a></li>
-<li><a class="reference internal" href="#tributary-branch-verzweigung">8. Tributary, Branch / <em>Verzweigung</em></a></li>
+<li><a class="reference internal" href="#distributary-or-branch-verzweigung">8. Distributary or Branch / <em>Verzweigung</em></a></li>
 <li><a class="reference internal" href="#confluence-zusammenfluss">9. Confluence / <em>Zusammenfluss</em></a></li>
-<li><a class="reference internal" href="#segment-center-segmentmitte">10. Segment Center / <em>Segmentmitte</em></a></li>
+<li><a class="reference internal" href="#segment-centre-segmentmitte">10. Segment Centre / <em>Segmentmitte</em></a></li>
 <li><a class="reference internal" href="#self-intersection-selbstkreuzung">11. Self Intersection / <em>Selbstkreuzung</em></a></li>
 </ul>
 </li>
