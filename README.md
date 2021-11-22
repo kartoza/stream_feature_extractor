@@ -12,6 +12,33 @@ This plugin is Free and Open Source Software and is released under the GPL V2.
 See the LICENSE file included with the plugin (and in this repository) for
 more information about this license.
 
+# Installation of the plugin
+The easiest approach will be to install the plugin using the QGIS plugin manager:
+1. In QGIS, go to Plugins > Manage and install plugins;
+2. Select the All tab;
+3. In the search bar, type 'stream feature extractor'; and
+4. Select the plugin and click on the Install button.
+
+![plugin_management](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/plugin_install.png)
+
+# How to extract features
+The plugin is user-friendly and extractions can be done as follows:
+1. Load a vector line layer to QGIS;
+2. Select the layer; and
+3. Click on the stream feature extractor icon in the toolbar. The features will be extracted for the selected layer.
+
+![icon](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/toolbar_icon.png)
+
+4. (optional method) Vector > Stream feature extractor > Extract stream features from current layer.
+
+# Available options
+Possible parameters or settings for the plugin can be set. Go to Vector > Stream feature extractor > Options. The following can be set:
+1. Search distance: This is the distance used to determine if nodes converged or not. Note: The distance is calculated in map units of your stream network;
+2. Show intermediate node count layer: An intermediate layer which were used to extract the feature is loaded to QGIS; and
+3. Enabling this will submit errors to the server for debugging.
+
+![options](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/options_dialog.png)
+
 # Feature definitions
 There are 11 types of features which can be extracted from a stream network:
 
@@ -59,33 +86,6 @@ There are 11 types of features which can be extracted from a stream network:
 
 ![self_intersection](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/self_intersection.png)
 
-# Installation of the plugin
-The easiest approach will be to install the plugin using the QGIS plugin manager:
-1. In QGIS, go to Plugins > Manage and install plugins;
-2. Select the All tab;
-3. In the search bar, type 'stream feature extractor'; and
-4. Select the plugin and click on the Install button.
-
-![plugin_management](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/plugin_install.png)
-
-# How to extract features
-The plugin is user-friendly and extractions can be done as follows:
-1. Load a vector line layer to QGIS;
-2. Select the layer; and
-3. Click on the stream feature extractor icon in the toolbar. The features will be extracted for the selected layer.
-
-![icon](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/toolbar_icon.png)
-
-4. (optional method) Vector > Stream feature extractor > Extract stream features from current layer.
-
-# Available options
-Possible parameters or settings for the plugin can be set. Go to Vector > Stream feature extractor > Options. The following can be set:
-1. Search distance: This is the distance used to determine if nodes converged or not. Note: The distance is calculated in map units of your stream network;
-2. Show intermediate node count layer: An intermediate layer which were used to extract the feature is loaded to QGIS; and
-3. Enabling this will submit errors to the server for debugging.
-
-![options](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/static/options_dialog.png)
-
 # Testing plugin
 The plugin or changes to the plugin can be tested using Github Actions (https://github.com/kartoza/stream_feature_extractor/actions).
 Tests will be performed on each of the methods (e.g. feature extraction) by comparing the result to existing data in the ‘/test’ folder. The following QGIS versions are tested:
@@ -98,7 +98,18 @@ Tests will be performed on each of the methods (e.g. feature extraction) by comp
 7. 3.22; and
 8. latest version.
 
-## Manual testing
+## Local testing
+To perform local testing the 'run-docker-tests.sh' can be used. The shell script can be used as follows:
+1. Open your terminal/console;
+2. Go to the root directory of the plugin;
+3. Type "./run-docker-test.sh" and press enter;
+4. The result should be as follows:
+
+![segment_center](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/local_testing.png)
+
+5. If there is any errors the user will need to investigate.
+
+## Github actions
 Tests can manually be performed, but the action should execute automatically. Here is the steps for manual execution:
 1. On the repository click on the Actions tab, and select the ‘Test’ worksflow (will execute .github/workflows/test.yml);
 2. Click on the Run workflow drop-down and select the Branch you want to perform the test on;
@@ -137,31 +148,6 @@ There should be no issue if the tests does not fail. The jobs will be similar to
 ![jobs_success](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/jobs_success.png)
 
 The plugin and any updates to the plugin should work with no issue for each of the QGIS versions in the above list.
-
-## Adding additional QGIS versions for testing
-The user may want to add more or newer versions (which were originally not included in the job list) to the job list for testing. First the qgis/qgis DockerHub needs to be checked for the tags. This can be done as follows:
-1. Go to https://hub.docker.com/r/qgis/qgis/
-2. Click on the Tags tab;
-
-![qgis_repo](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/docker_qgis_repo.png)
-
-3. The user will be presented with a page which lists all QGIS docker images with their associated tags (shown in red);
-4. Copy the ‘release-version’ characters. ‘release-3_20’ for the QGIS version 3.20 in this example:
-
-![tag](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/docker_tag.png)
-
-Now the user can add the tag to the workflow:
-1. Go to ‘.github/workflows/test.yml’;
-2. Click on the edit button (highlighted in red):
-
-![edit](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/edit_button.png)
-
-3. Add the copied tag to the ‘qgis_version_tag’ list:
-
-![tag_jobs](https://github.com/kartoza/stream_feature_extractor/blob/develop/help/source/examples/tag_jobs.png)
-
-4. Save/commit the change; and
-5. The testing will now be performed using the added QGIS version.
 
 # Contributing
 
